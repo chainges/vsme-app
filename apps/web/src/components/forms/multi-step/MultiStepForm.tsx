@@ -18,6 +18,7 @@ import type {
 import { cn } from '@/lib/utils'
 import NavigationControls from './NavigationControls'
 import ProgressIndicator from './ProgressIndicator'
+import StepRenderer from './StepRenderer'
 import type { MultiStepFormProps } from './types'
 
 /**
@@ -270,8 +271,6 @@ export function MultiStepForm<T = any>({
   const renderCurrentStep = () => {
     if (!currentStepConfig) return null
 
-    // This is where we would render the step fields
-    // For now, we'll return a placeholder that integrates with the existing field system
     return (
       <div className="space-y-6 p-6">
         <div className="space-y-2">
@@ -285,21 +284,11 @@ export function MultiStepForm<T = any>({
           )}
         </div>
 
-        {/* Field rendering will be implemented in the next story */}
-        <div className="space-y-4">
-          <div className="rounded-lg border-2 border-dashed border-muted p-8 text-center">
-            <p className="text-muted-foreground">
-              Step fields will be rendered here by StepRenderer component
-              <br />
-              (Implementation planned for Story 9)
-            </p>
-            <p className="text-xs text-muted-foreground mt-2">
-              Current step: {currentStepConfig.id}
-              <br />
-              Fields: {currentStepConfig.fields.length} configured
-            </p>
-          </div>
-        </div>
+        <StepRenderer 
+          step={currentStepConfig}
+          formInstance={form}
+          disabled={isLoading || isValidating}
+        />
       </div>
     )
   }

@@ -1,3 +1,4 @@
+import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
@@ -5,7 +6,83 @@ import { z } from 'zod'
 
 import MultiStepForm from './MultiStepForm'
 import { LocalStorageProvider } from '@/lib/forms/storage'
+import { fieldRegistry } from '@/lib/forms/field-registry'
 import type { MultiStepFormConfig, FieldDefinition } from '@/lib/forms/types'
+
+// Mock field components for testing
+const MockTextField: React.FC<any> = ({ field, definition }) => (
+  <div data-testid={`field-${definition.name}`}>
+    <label htmlFor={definition.name}>{definition.label}</label>
+    <input
+      id={definition.name}
+      name={definition.name}
+      type={definition.type === 'email' ? 'email' : 'text'}
+      placeholder={definition.placeholder}
+      value={field.state.value || ''}
+      onChange={(e) => field.handleChange(e.target.value)}
+    />
+  </div>
+)
+
+const MockSelectField: React.FC<any> = ({ field, definition }) => (
+  <div data-testid={`field-${definition.name}`}>
+    <label htmlFor={definition.name}>{definition.label}</label>
+    <select
+      id={definition.name}
+      name={definition.name}
+      value={field.state.value || ''}
+      onChange={(e) => field.handleChange(e.target.value)}
+    >
+      <option value="">Select an option</option>
+      {definition.options?.map((option: any) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  </div>
+)
+
+const MockCheckboxField: React.FC<any> = ({ field, definition }) => (
+  <div data-testid={`field-${definition.name}`}>
+    <label>
+      <input
+        type="checkbox"
+        checked={field.state.value || false}
+        onChange={(e) => field.handleChange(e.target.checked)}
+      />
+      {definition.label}
+    </label>
+  </div>
+)
+
+// Mock TanStack Forms for testing
+const mockUseField = vi.fn((name: string) => ({
+  state: {
+    value: '',
+    meta: { errors: [] }
+  },
+  handleChange: vi.fn(),
+  handleBlur: vi.fn(),
+}))
+
+const mockFormInstance = {
+  useField: mockUseField,
+  state: {
+    values: {},
+    isValid: true,
+    isSubmitting: false,
+    errors: [],
+    isTouched: false,
+  },
+  handleSubmit: vi.fn(),
+  setFieldValue: vi.fn(),
+  setFieldMeta: vi.fn(),
+}
+
+vi.mock('@tanstack/react-form', () => ({
+  useForm: vi.fn(() => mockFormInstance),
+}))
 
 // Mock the storage provider for testing
 vi.mock('@/lib/forms/storage', () => ({
@@ -126,6 +203,17 @@ describe('MultiStepForm', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     config = createTestConfig()
+    
+    // Set up field registry with mock components
+    fieldRegistry.clear()
+    fieldRegistry.register({ type: 'text', component: MockTextField })
+    fieldRegistry.register({ type: 'email', component: MockTextField })
+    fieldRegistry.register({ type: 'select', component: MockSelectField })
+    fieldRegistry.register({ type: 'checkbox', component: MockCheckboxField })
+  })
+  
+  afterEach(() => {
+    fieldRegistry.clear()
   })
 
   describe('Component Rendering', () => {
@@ -151,11 +239,13 @@ describe('MultiStepForm', () => {
       expect(screen.getByText('Tell us about yourself')).toBeInTheDocument()
     })
 
-    it('shows correct step information in placeholder', () => {
+    it('renders fields from step configuration', () => {
       render(<MultiStepForm config={config} />)
 
-      expect(screen.getByText(/Current step: personal-info/)).toBeInTheDocument()
-      expect(screen.getByText(/Fields: 3 configured/)).toBeInTheDocument()
+      // Check that fields from the current step are rendered
+      expect(screen.getByLabelText('First Name')).toBeInTheDocument()
+      expect(screen.getByLabelText('Last Name')).toBeInTheDocument()
+      expect(screen.getByLabelText('Email')).toBeInTheDocument()
     })
 
     it('applies custom className', () => {
@@ -465,8 +555,10 @@ describe('MultiStepForm', () => {
     it('maintains compatibility with existing form field types', () => {
       render(<MultiStepForm config={config} />)
 
-      // Should show field count from configuration
-      expect(screen.getByText(/Fields: 3 configured/)).toBeInTheDocument()
+      // Should render actual form fields instead of placeholder text
+      expect(screen.getByTestId('field-personalInfo.firstName')).toBeInTheDocument()
+      expect(screen.getByTestId('field-personalInfo.lastName')).toBeInTheDocument()
+      expect(screen.getByTestId('field-personalInfo.email')).toBeInTheDocument()
     })
 
     it('follows existing component composition pattern', () => {

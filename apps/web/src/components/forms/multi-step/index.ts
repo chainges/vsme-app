@@ -21,6 +21,10 @@ export {
 export type { ProgressIndicatorProps } from './ProgressIndicator'
 export { default as ProgressIndicator } from './ProgressIndicator'
 
+// Step rendering components
+export { default as StepRenderer } from './StepRenderer'
+export { default as FieldRenderer } from './FieldRenderer'
+
 // Demo components
 export { default as ProgressNavigationDemo } from './ProgressNavigationDemo'
 export { default as MultiStepFormDemo } from './MultiStepFormDemo'
