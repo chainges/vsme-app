@@ -134,10 +134,23 @@ bun check            # Run Biome linting and formatting
 
 ### Testing
 ```bash
-bun test            # Run test suite in watch mode
-bun test:run        # Run all tests once
+bun test            # Run test suite in watch mode (TDD-optimized)
+bun test:run        # Run all tests once (CI/production)
 bun test:ui         # Open Vitest UI for test debugging
+bun test --coverage # Generate coverage reports
 ```
+
+**📚 Comprehensive Testing Documentation:**
+- **🚀 [Quick Start Guide](./docs/reference/testing-quick-start-guide.md)** - Write your first test in 15 minutes
+- **🔴 [TDD Process Guide](./docs/reference/tdd-process-guide.md)** - Complete RED-GREEN-REFACTOR methodology  
+- **📚 [Testing Pattern Library](./docs/reference/testing-patterns/)** - Copy-paste patterns for all testing scenarios
+
+**Pattern Categories:**
+- [Component Patterns](./docs/reference/testing-patterns/component/) - React component testing with TDD
+- [Utility Patterns](./docs/reference/testing-patterns/utility/) - Pure function and business logic testing
+- [Hook Patterns](./docs/reference/testing-patterns/hook/) - Custom React hook testing
+- [API Patterns](./docs/reference/testing-patterns/api/) - API endpoint testing with MSW
+- [Integration Patterns](./docs/reference/testing-patterns/integration/) - Multi-component system testing
 
 ### Database (Schema Only - Not Connected)
 ```bash

@@ -11,7 +11,7 @@ _This document consolidates all coding standards, best practices, and developmen
 2. **Consider edge cases** and error scenarios  
 3. **Follow the rules below** strictly
 4. **Validate accessibility requirements**
-5. **Use TDD cycle** where tests come before functions (when testing framework is implemented)
+5. **Follow TDD methodology** - Write tests before implementation using [TDD Process Guide](./tdd-process-guide.md)
 
 ### **Code Quality Standards**
 - **Biome**: Fast linting and formatting (extends ultracite config)
@@ -191,13 +191,40 @@ _This document consolidates all coding standards, best practices, and developmen
 
 ## 🧪 **Testing Best Practices**
 
-### **Test Structure**
+### **📚 Comprehensive Testing Documentation**
+
+**Essential Guides:**
+- **🚀 [Testing Quick Start Guide](./testing-quick-start-guide.md)** - Write your first test in 15 minutes
+- **🔴 [TDD Process Guide](./tdd-process-guide.md)** - Complete RED-GREEN-REFACTOR methodology
+- **📚 [Testing Pattern Library](./testing-patterns/)** - Copy-paste patterns for all scenarios
+
+**Pattern Categories:**
+- [Component Patterns](./testing-patterns/component/) - React component testing with TDD
+- [Utility Patterns](./testing-patterns/utility/) - Pure function and business logic testing  
+- [Hook Patterns](./testing-patterns/hook/) - Custom React hook testing
+- [API Patterns](./testing-patterns/api/) - API endpoint testing with MSW
+- [Integration Patterns](./testing-patterns/integration/) - Multi-component system testing
+
+### **Test Structure Standards**
 - Don't use export or module.exports in test files
-- Don't use focused tests
-- Make sure the assertion function, like expect, is placed inside an it() function call
-- Don't use disabled tests
-- Don't nest describe() blocks too deeply in test files
+- Don't use focused tests (`test.only`, `describe.only`)
+- Make sure the assertion function, like expect, is placed inside an `it()` function call
+- Don't use disabled tests (`test.skip`, `describe.skip`) - remove or fix them
+- Don't nest describe() blocks too deeply in test files (max 3 levels)
 - Don't have duplicate hooks in describe blocks
+
+### **TDD Methodology Requirements**
+- **Follow RED-GREEN-REFACTOR cycle** - Write failing test first, minimal implementation, then improve
+- **Test-first development** - Write tests before implementation code
+- **Small iterations** - Keep TDD cycles short (minutes, not hours)
+- **Commit at GREEN phase** - Commit when tests pass for safe refactoring
+
+### **Test Quality Standards**
+- **Test user behavior, not implementation** - Focus on what users experience
+- **Use accessibility-focused queries** - Prefer `getByRole`, `getByLabelText` over `getByTestId`
+- **Test error states and edge cases** - Don't only test happy path
+- **Mock external dependencies** - Database, APIs, file system operations
+- **Use descriptive test names** - Explain what behavior is being tested
 
 ### **Test Implementation**
 - Don't use callbacks in asynchronous tests and hooks
