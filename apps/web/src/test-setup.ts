@@ -58,6 +58,57 @@ Object.defineProperty(globalThis, 'navigator', {
   configurable: true,
 })
 
+// Mock @radix-ui/react-select
+vi.mock('@radix-ui/react-select', async () => {
+  const actual = await vi.importActual('@radix-ui/react-select')
+  return {
+    ...actual,
+    Root: ({ children, onValueChange, value, disabled }: any) => 
+      React.createElement('div', { 'data-testid': 'select-root', role: 'combobox', 'aria-expanded': false }, children),
+    Trigger: ({ children, ...props }: any) => 
+      React.createElement('button', { 
+        ...props, 
+        'data-testid': 'select-trigger',
+        role: 'combobox',
+        'aria-expanded': false
+      }, children),
+    Content: ({ children, ...props }: any) => 
+      React.createElement('div', { 
+        ...props, 
+        'data-testid': 'select-content',
+        role: 'listbox'
+      }, children),
+    Portal: ({ children }: any) => children,
+    Viewport: ({ children, ...props }: any) => 
+      React.createElement('div', { ...props, 'data-testid': 'select-viewport' }, children),
+    Item: ({ children, value, ...props }: any) => 
+      React.createElement('div', { 
+        ...props, 
+        'data-testid': 'select-item',
+        'data-value': value,
+        role: 'option'
+      }, children),
+    ItemText: ({ children }: any) => 
+      React.createElement('span', null, children),
+    ItemIndicator: ({ children }: any) => 
+      React.createElement('span', { 'data-testid': 'select-indicator' }, children),
+    Value: ({ placeholder }: any) => 
+      React.createElement('span', { 'data-testid': 'select-value' }, placeholder),
+    Icon: ({ children }: any) => 
+      React.createElement('span', { 'data-testid': 'select-icon' }, children),
+    ScrollUpButton: ({ children, ...props }: any) => 
+      React.createElement('div', { ...props, 'data-testid': 'select-scroll-up' }, children),
+    ScrollDownButton: ({ children, ...props }: any) => 
+      React.createElement('div', { ...props, 'data-testid': 'select-scroll-down' }, children),
+    Group: ({ children, ...props }: any) => 
+      React.createElement('div', { ...props, 'data-testid': 'select-group' }, children),
+    Label: ({ children, ...props }: any) => 
+      React.createElement('div', { ...props, 'data-testid': 'select-label' }, children),
+    Separator: (props: any) => 
+      React.createElement('div', { ...props, 'data-testid': 'select-separator' })
+  }
+})
+
 // Mock ResizeObserver for Radix UI components
 class MockResizeObserver {
   observe() {}
