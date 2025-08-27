@@ -140,10 +140,10 @@ globalThis.IntersectionObserver = MockIntersectionObserver as any
 
 // Mock clearTimeout and setTimeout with proper types
 if (!globalThis.clearTimeout) {
-  globalThis.clearTimeout = vi.fn()
+  globalThis.clearTimeout = vi.fn() as any
 }
 if (!globalThis.setTimeout) {
-  globalThis.setTimeout = vi.fn()
+  globalThis.setTimeout = vi.fn() as any
 }
 
 // Mock DOMRect for getBoundingClientRect
@@ -165,10 +165,10 @@ class MockDOMRect {
 if (typeof globalThis.window !== 'undefined') {
   // Add timer functions
   if (!globalThis.window.clearTimeout) {
-    globalThis.window.clearTimeout = vi.fn()
+    globalThis.window.clearTimeout = vi.fn() as any
   }
   if (!globalThis.window.setTimeout) {
-    globalThis.window.setTimeout = vi.fn()
+    globalThis.window.setTimeout = vi.fn() as any
   }
   
   // Add observer classes
