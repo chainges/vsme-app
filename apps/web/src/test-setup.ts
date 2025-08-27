@@ -1,6 +1,25 @@
 import '@testing-library/jest-dom'
 import { beforeEach, vi } from 'vitest'
 import React from 'react'
+import { JSDOM } from 'jsdom'
+
+// Set up JSDOM environment if not already present
+if (typeof globalThis.window === 'undefined') {
+  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
+    url: 'http://localhost:3000',
+    pretendToBeVisual: true,
+    resources: 'usable'
+  })
+  
+  globalThis.window = dom.window as any
+  globalThis.document = dom.window.document
+  globalThis.navigator = dom.window.navigator
+  globalThis.HTMLElement = dom.window.HTMLElement
+  globalThis.Element = dom.window.Element
+  globalThis.Node = dom.window.Node
+  globalThis.history = dom.window.history
+  globalThis.location = dom.window.location
+}
 
 // Make React available globally for JSX
 globalThis.React = React
@@ -28,35 +47,29 @@ const localStorageMock = {
   key: vi.fn(),
 }
 
-// Mock navigator
-const navigatorMock = {
-  userAgent: 'test-user-agent',
+// Set up global mocks and DOM properties
+if (typeof globalThis.window !== 'undefined') {
+  // Enhance existing window with mocks
+  Object.defineProperty(globalThis.window, 'localStorage', {
+    value: localStorageMock,
+    writable: true,
+    configurable: true,
+  })
+  
+  // Ensure localStorage is also available globally
+  Object.defineProperty(globalThis, 'localStorage', {
+    value: localStorageMock,
+    writable: true,
+    configurable: true,
+  })
+  
+  // Add missing navigator properties
+  if (!globalThis.window.navigator) {
+    globalThis.window.navigator = {
+      userAgent: 'test-user-agent',
+    } as any
+  }
 }
-
-// Mock window object
-const windowMock = {
-  localStorage: localStorageMock,
-  navigator: navigatorMock,
-} as any
-
-// Set up global mocks
-Object.defineProperty(globalThis, 'window', {
-  value: windowMock,
-  writable: true,
-  configurable: true,
-})
-
-Object.defineProperty(globalThis, 'localStorage', {
-  value: localStorageMock,
-  writable: true,
-  configurable: true,
-})
-
-Object.defineProperty(globalThis, 'navigator', {
-  value: navigatorMock,
-  writable: true,
-  configurable: true,
-})
 
 // Mock @radix-ui/react-select
 vi.mock('@radix-ui/react-select', async () => {
@@ -148,13 +161,20 @@ class MockDOMRect {
   }
 }
 
-// Add window methods to the window mock
-Object.assign(windowMock, {
-  clearTimeout: vi.fn(),
-  setTimeout: vi.fn(),
-  ResizeObserver: MockResizeObserver,
-  IntersectionObserver: MockIntersectionObserver,
-})
+// Add additional methods to the window object
+if (typeof globalThis.window !== 'undefined') {
+  // Add timer functions
+  if (!globalThis.window.clearTimeout) {
+    globalThis.window.clearTimeout = vi.fn()
+  }
+  if (!globalThis.window.setTimeout) {
+    globalThis.window.setTimeout = vi.fn()
+  }
+  
+  // Add observer classes
+  globalThis.window.ResizeObserver = MockResizeObserver as any
+  globalThis.window.IntersectionObserver = MockIntersectionObserver as any
+}
 
 // Mock element methods for DOM interactions
 if (typeof Element !== 'undefined') {

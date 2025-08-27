@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm } from '@tanstack/react-form'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 import type { z } from 'zod'
 
@@ -81,8 +81,7 @@ export function MultiStepForm<T = any>({
 
   // TanStack Form setup with Zod validation
   const form = useForm({
-    validatorAdapter: zodValidator,
-    defaultValues: {} as Partial<T>,
+    defaultValues: (config.defaultValues || {}) as Partial<T>,
     onSubmit: async ({ value }) => {
       setIsLoading(true)
       try {
@@ -98,32 +97,65 @@ export function MultiStepForm<T = any>({
     },
   })
 
-  // Load saved data on mount
+  // Enhanced form state debugging 
   useEffect(() => {
+    console.log('=== FORM STATE DEBUG ===', {
+      currentStep,
+      formValues: form.state.values,
+      formValuesStringified: JSON.stringify(form.state.values, null, 2),
+      isDirty: form.state.isDirty,
+      isTouched: form.state.isTouched,
+      formMethods: Object.keys(form).filter(key => typeof form[key] === 'function')
+    })
+  }, [form.state.values, form.state.isDirty, form.state.isTouched, currentStep])
+
+  // Load saved data on mount - only once
+  const [hasLoadedData, setHasLoadedData] = useState(false)
+  
+  useEffect(() => {
+    if (hasLoadedData) return // Prevent multiple loads
+    
     const loadSavedData = async () => {
       try {
+        console.log('MultiStepForm - Loading saved data (initial load)...')
         const savedData = await storageProvider.load(config.id)
+        console.log('MultiStepForm - Saved data loaded:', savedData)
+        
         if (savedData) {
-          // Restore form data
-          form.setFieldValue('', savedData.data || {})
+          // Restore form data using proper API
+          console.log('MultiStepForm - Restoring form data:', savedData.data)
+          // Reset the form with the saved data instead of using setFieldValue incorrectly
+          form.reset(savedData.data || {})
           
           // Restore current step if available
           if (savedData.currentStep !== undefined) {
+            console.log('MultiStepForm - Restoring current step:', savedData.currentStep)
             setCurrentStep(Math.min(savedData.currentStep, config.steps.length - 1))
           }
+        } else {
+          console.log('MultiStepForm - No saved data found, using defaults')
         }
+        
+        setHasLoadedData(true)
       } catch (error) {
         console.error('Failed to load saved form data:', error)
+        setHasLoadedData(true) // Mark as loaded even if failed to prevent infinite retries
       }
     }
 
     loadSavedData()
-  }, [config.id, config.steps.length, storageProvider, form])
+  }, [config.id, hasLoadedData, storageProvider])
 
   // Save form data automatically when step changes or data changes
   const saveFormData = useCallback(async () => {
     try {
       const currentData = form.state.values
+      console.log('MultiStepForm - Saving form data:', {
+        currentData,
+        currentStep,
+        timestamp: Date.now()
+      })
+      
       await storageProvider.save(config.id, {
         data: currentData,
         currentStep,
@@ -134,16 +166,20 @@ export function MultiStepForm<T = any>({
       if (config.onSave) {
         await config.onSave(currentData as Partial<T>)
       }
+      
+      console.log('MultiStepForm - Form data saved successfully')
     } catch (error) {
       console.error('Failed to save form data:', error)
     }
   }, [form.state.values, currentStep, config.id, config.onSave, storageProvider])
 
-  // Auto-save when data changes
+  // Auto-save when data changes - but only after initial load
   useEffect(() => {
+    if (!hasLoadedData) return // Don't save until initial data is loaded
+    
     const timeoutId = setTimeout(saveFormData, 500) // Debounce saves
     return () => clearTimeout(timeoutId)
-  }, [saveFormData])
+  }, [saveFormData, hasLoadedData])
 
   // Validate current step
   const validateCurrentStep = useCallback(async (): Promise<boolean> => {
@@ -156,11 +192,11 @@ export function MultiStepForm<T = any>({
       
       if (!result.success) {
         // Set field errors from validation
-        result.error.errors.forEach((error) => {
-          const fieldPath = error.path.join('.')
+        result.error.issues.forEach((issue) => {
+          const fieldPath = issue.path.join('.')
           form.setFieldMeta(fieldPath, (prev) => ({
             ...prev,
-            errors: [error.message],
+            errors: [issue.message],
           }))
         })
         return false
@@ -249,14 +285,13 @@ export function MultiStepForm<T = any>({
     data: form.state.values as Partial<T>,
     isValid: form.state.isValid,
     isSubmitting: form.state.isSubmitting || isLoading,
-    errors: form.state.errors,
+    errors: {}, // TODO: Properly map TanStack Forms errors to Record<string, string[]>
     touched: form.state.isTouched ? { [currentStepConfig?.id || 'root']: true } : {},
   }), [
     currentStep,
     form.state.values,
     form.state.isValid,
     form.state.isSubmitting,
-    form.state.errors,
     form.state.isTouched,
     isLoading,
     currentStepConfig?.id,
@@ -287,7 +322,7 @@ export function MultiStepForm<T = any>({
         <StepRenderer 
           step={currentStepConfig}
           formInstance={form}
-          disabled={isLoading || isValidating}
+          disabled={isLoading || isValidating || !hasLoadedData}
         />
       </div>
     )

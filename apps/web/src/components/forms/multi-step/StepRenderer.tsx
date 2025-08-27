@@ -86,25 +86,26 @@ export const StepRenderer = React.memo<StepRendererProps>(({
     )
   }
 
-  // Memoize the rendered fields to prevent unnecessary re-renders
-  const renderedFields = useMemo(() => {
-    return step.fields.map((fieldDefinition, index) => {
-      // Create field API using TanStack Forms
-      const fieldApi = formInstance.useField(fieldDefinition.name)
-      
-      // Generate unique key for React reconciliation
-      const fieldKey = `${step.id}-${fieldDefinition.name}-${index}`
-      
-      return (
-        <FieldRenderer
-          key={fieldKey}
-          definition={fieldDefinition}
-          fieldApi={fieldApi}
-          disabled={disabled}
-        />
-      )
-    })
-  }, [step, formInstance, disabled])
+  // Render the fields directly without memoization since they contain hook calls
+  const renderedFields = step.fields.map((fieldDefinition, index) => {
+    // Generate unique key for React reconciliation
+    const fieldKey = `${step.id}-${fieldDefinition.name}-${index}`
+    
+    return (
+      <formInstance.Field
+        key={fieldKey}
+        name={fieldDefinition.name}
+      >
+        {(fieldApi) => (
+          <FieldRenderer
+            definition={fieldDefinition}
+            fieldApi={fieldApi}
+            disabled={disabled}
+          />
+        )}
+      </formInstance.Field>
+    )
+  })
 
   return (
     <div className={cn('space-y-6', className)}>

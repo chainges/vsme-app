@@ -12,6 +12,8 @@ import SelectField from './SelectField'
 import TextareaField from './TextareaField'
 import CheckboxField from './CheckboxField'
 import NumberField from './NumberField'
+import RadioField from './RadioField'
+import { FieldArray } from './FieldArray'
 
 /**
  * Text field renderer configuration
@@ -62,6 +64,22 @@ const checkboxFieldRenderer: FieldTypeRenderer = {
 }
 
 /**
+ * Radio field renderer configuration
+ */
+const radioFieldRenderer: FieldTypeRenderer = {
+  type: 'radio',
+  component: RadioField as any,
+}
+
+/**
+ * FieldArray renderer configuration
+ */
+const fieldArrayRenderer: FieldTypeRenderer = {
+  type: 'fieldArray',
+  component: FieldArray as any,
+}
+
+/**
  * Register all field renderers with the registry
  * Call this once during app initialization
  */
@@ -76,6 +94,8 @@ export function registerAllFieldRenderers() {
   fieldRegistry.register(selectFieldRenderer)
   fieldRegistry.register(textareaFieldRenderer)
   fieldRegistry.register(checkboxFieldRenderer)
+  fieldRegistry.register(radioFieldRenderer)
+  fieldRegistry.register(fieldArrayRenderer)
   
   console.log('Field renderers registered:', {
     text: true,
@@ -84,6 +104,8 @@ export function registerAllFieldRenderers() {
     select: true,
     textarea: true,
     checkbox: true,
+    radio: true,
+    fieldArray: true,
   })
 }
 

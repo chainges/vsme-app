@@ -50,6 +50,42 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       ? getErrorMessage(field.state.meta.errors[0])
       : ''
 
+    // Ensure we have a proper string value for the controlled component
+    const currentValue = field.state.value ?? ''
+    const inputValue = typeof currentValue === 'string' ? currentValue : String(currentValue)
+    
+    console.log(`=== TextField ${name} RENDER ===`, {
+      fieldStateValue: field.state.value,
+      currentValue,
+      inputValue,
+      inputValueType: typeof inputValue,
+      inputValueLength: inputValue.length
+    })
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value
+      
+      console.log(`=== TextField ${name} CHANGE EVENT ===`, {
+        eventTargetValue: newValue,
+        eventTargetValueType: typeof newValue,
+        eventTargetValueLength: newValue.length,
+        currentInputValue: inputValue,
+        currentFieldValue: field.state.value
+      })
+      
+      // Ensure we're passing a string to handleChange
+      field.handleChange(newValue)
+    }
+
+    const handleBlur = () => {
+      console.log(`=== TextField ${name} BLUR ===`, {
+        finalValue: field.state.value,
+        finalValueType: typeof field.state.value,
+        finalValueLength: typeof field.state.value === 'string' ? field.state.value.length : 'N/A'
+      })
+      field.handleBlur()
+    }
+
     return (
       <div className={cn('space-y-2', className)}>
         <Label
@@ -76,12 +112,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           id={name}
           maxLength={maxLength}
           name={name}
-          onBlur={field.handleBlur}
-          onChange={(e) => field.handleChange(e.target.value)}
+          onBlur={handleBlur}
+          onChange={handleChange}
           placeholder={placeholder}
           ref={ref}
           type={type}
-          value={field.state.value || ''}
+          value={inputValue}
           {...props}
         />
 

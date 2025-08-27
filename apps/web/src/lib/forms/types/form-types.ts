@@ -39,6 +39,7 @@ export interface MultiStepFormConfig<T = any> {
   title: string
   description?: string
   steps: FormStep<T>[]
+  defaultValues?: Partial<T>
   onSubmit: (data: T) => Promise<void> | void
   onSave?: (data: Partial<T>) => Promise<void> | void
   storage?: StorageProvider
