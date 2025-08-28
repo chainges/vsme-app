@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
+import SubsidiaryManager from "./subsidiary-manager";
 
 // Define the form schema for each step
 const companyInfoSchema = z.object({
@@ -32,6 +33,13 @@ const companyInfoSchema = z.object({
   country: z.string().min(2, "Country is required"),
 });
 
+// Define subsidiary schema
+const subsidiarySchema = z.object({
+  name: z.string().min(2, "Subsidiary name must be at least 2 characters"),
+  organizationNumber: z.string().min(9, "Organization number must be valid"),
+  address: z.string().min(5, "Address must be at least 5 characters"),
+});
+
 const reportingSetupSchema = z.object({
   reportingYear: z.string().min(4, "Please select a reporting year"),
   reportingOption: z.enum(["basic", "basic-comprehensive"], {
@@ -40,9 +48,20 @@ const reportingSetupSchema = z.object({
   reportBasis: z.enum(["individual", "consolidated"], {
     message: "Please specify if the report is individual or consolidated",
   }).default("individual"),
-  hasOmittedInfo: z.boolean().default(true),
-  subsidiaries: z.string().optional(),
-});
+  subsidiaries: z.array(subsidiarySchema).optional(),
+}).refine(
+  (data) => {
+    // If reportBasis is "consolidated", at least one subsidiary should be provided
+    if (data.reportBasis === "consolidated" && (!data.subsidiaries || data.subsidiaries.length === 0)) {
+      return false;
+    }
+    return true;
+  },
+  {
+    message: "At least one subsidiary is required when reporting on consolidated basis",
+    path: ["subsidiaries"],
+  }
+);
 
 const sustainabilityBaseSchema = z.object({
   hasPracticesPolicies: z.boolean(),
@@ -71,6 +90,9 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   const [formData, setFormData] = useState<Partial<FormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  
+  // Use the form data hook
+  const { getEnrichedDefaults } = useFormData();
 
   // Define the steps
   const steps = [
@@ -126,8 +148,6 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
           { label: "Individual basis", value: "individual" },
           { label: "Consolidated basis", value: "consolidated" },
         ]},
-        { name: "hasOmittedInfo", label: "Information Omitted", type: "checkbox", description: "Check if any information has been omitted." },
-        { name: "subsidiaries", label: "Subsidiaries (if consolidated)", type: "textarea", placeholder: "List subsidiary names and registered addresses..." },
       ],
     },
     {
@@ -167,6 +187,7 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
     formState: { errors },
     reset,
     control,
+    watch,
   } = useForm<any>({
     resolver: zodResolver(currentStepSchema as any),
     defaultValues,
@@ -176,6 +197,9 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   useEffect(() => {
     reset(defaultValues);
   }, [step, reset]);
+  
+  // Watch reportBasis for conditional rendering
+  const reportBasis = watch("reportBasis");
 
   // Calculate progress percentage
   const progress = ((step + 1) / steps.length) * 100;
@@ -270,8 +294,9 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
               </div>
 
               <form onSubmit={handleSubmit(handleNextStep)} className="space-y-4">
-                {steps[step].fields.map((field: any) => (
-                  <div key={field.name} className="space-y-2">
+                {steps[step].fields.map((field: any) => {
+                  return (
+                    <div key={field.name} className="space-y-2">
                     <Label htmlFor={field.name}>{field.label}</Label>
                     
                     {field.type === "select" && (
@@ -355,7 +380,15 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
                       </p>
                     )}
                   </div>
-                ))}
+                  );
+                })}
+
+                {/* Conditionally render SubsidiaryManager for consolidated reports */}
+                {step === 1 && reportBasis === "consolidated" && (
+                  <div className="space-y-2">
+                    <SubsidiaryManager control={control} errors={errors} />
+                  </div>
+                )}
 
                 <div className="flex justify-between pt-4">
                   <Button

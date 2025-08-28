@@ -9,7 +9,7 @@ export default function GeneralInfoPage() {
       
       <section>
       <MultiStepForm
-  className="max-w-md mx-auto"
+  className="mx-auto"
   onSubmit={(data) => {
     // Handle form submission
     console.log("Form data:", data);

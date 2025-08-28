@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 
 // Types for API responses
+interface SubsidiaryData {
+  name: string;
+  organizationNumber: string;
+  address: string;
+}
+
 interface CompanyFinancialData {
   balanceSheetSize?: number;
   turnover?: number;
@@ -11,6 +17,7 @@ interface CompanyFinancialData {
 interface ReportingData {
   lastReportingYear?: number;
   previousReportBasis?: 'individual' | 'consolidated';
+  previousSubsidiaries?: SubsidiaryData[];
 }
 
 interface SustainabilityData {
@@ -112,13 +119,13 @@ export const useFormData = () => {
           ...formData,
           // Static defaults
           reportBasis: formData.reportBasis || "individual",
-          hasOmittedInfo: formData.hasOmittedInfo !== undefined ? formData.hasOmittedInfo : true,
-          // reportingOption: formData.reportingOption || "basic",
+          reportingOption: formData.reportingOption || "basic",
           
           // API data (if available)
           ...(reportingData && {
             reportingYear: formData.reportingYear || reportingData.lastReportingYear?.toString(),
             reportBasis: formData.reportBasis || reportingData.previousReportBasis || "individual",
+            subsidiaries: formData.subsidiaries || reportingData.previousSubsidiaries || [],
           }),
         };
 
