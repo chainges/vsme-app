@@ -1,50 +1,62 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useFormData } from "@/hooks/use-form-data";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
 
 // Define the form schema for each step
-const personalInfoSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+const companyInfoSchema = z.object({
+  organizationName: z.string().min(2, "Organization name must be at least 2 characters"),
+  organizationNumber: z.string().min(9, "Organization number must be valid"),
+  website: z.url("Please enter a valid website URL").optional().or(z.literal("")),
+  contactPersonName: z.string().min(2, "Contact person name must be at least 2 characters"),
+  // contactPersonTitle: z.string().min(2, "Contact person title must be at least 2 characters"),
+  contactPersonEmail: z.email("Please enter a valid email address"),
+  legalForm: z.string().min(2, "Legal form is required"),
+  naceCode: z.string().min(5, "NACE code is required - xx.xxx"),
+  balanceSheetSize: z.coerce.number().min(1, "Balance sheet size is required"),
+  turnover: z.coerce.number().min(1, "Turnover is required"),
+  numberOfEmployees: z.coerce.number().min(1, "Number of employees must be at least 1"),
+  country: z.string().min(2, "Country is required"),
 });
 
-const addressSchema = z.object({
-  address: z.string().min(5, "Address must be at least 5 characters"),
-  city: z.string().min(2, "City must be at least 2 characters"),
-  zipCode: z.string().min(5, "Zip code must be at least 5 characters"),
+const reportingSetupSchema = z.object({
+  reportingYear: z.string().min(4, "Please select a reporting year"),
+  reportingOption: z.enum(["basic", "basic-comprehensive"], {
+    message: "Please select a reporting option",
+  }),
+  reportBasis: z.enum(["individual", "consolidated"], {
+    message: "Please specify if the report is individual or consolidated",
+  }).default("individual"),
+  hasOmittedInfo: z.boolean().default(true),
+  subsidiaries: z.string().optional(),
 });
 
-const accountBaseSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
-  confirmPassword: z.string(),
+const sustainabilityBaseSchema = z.object({
+  hasPracticesPolicies: z.boolean(),
+  sustainabilityCertifications: z.string().optional(),
+  practicesDescription: z.string().min(10, "Please provide a description of at least 10 characters").optional(),
 });
 
-const accountSchema = accountBaseSchema.refine(data => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+const sustainabilitySchema = sustainabilityBaseSchema;
 
 // Combine all schemas for the final form data
 const formSchema = z.object({
-  ...personalInfoSchema.shape,
-  ...addressSchema.shape,
-  ...accountBaseSchema.shape,
+  ...companyInfoSchema.shape,
+  ...reportingSetupSchema.shape,
+  ...sustainabilityBaseSchema.shape,
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -63,36 +75,70 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   // Define the steps
   const steps = [
     {
-      id: "personal",
-      title: "Personal Information",
-      description: "Tell us about yourself",
-      schema: personalInfoSchema,
+      id: "company-info",
+      title: "Company Information",
+      description: "Basic organization details",
+      schema: companyInfoSchema,
       fields: [
-        { name: "firstName", label: "First Name", type: "text", placeholder: "John" },
-        { name: "lastName", label: "Last Name", type: "text", placeholder: "Doe" },
-        { name: "email", label: "Email", type: "email", placeholder: "john.doe@example.com" },
+        { name: "organizationName", label: "Organization Name", type: "text", placeholder: "ACME Corporation AS" },
+        { name: "organizationNumber", label: "Organization Number", type: "text", placeholder: "123456789" },
+        { name: "legalForm", label: "Legal Form", type: "select", placeholder: "Select legal form", options: [
+            { label: "Aksjeselskap (AS)", value: "as" },
+            { label: "Allmennaksjeselskap (ASA)", value: "asa" },
+            { label: "Ansvarlig selskap (ANS)", value: "ans" },
+            { label: "Enkeltpersonforetak (ENK)", value: "enk" },
+            { label: "Other", value: "other" },
+          ]},
+        { name: "website", label: "Website (Optional)", type: "url", placeholder: "https://www.acme.com" },
+        { name: "contactPersonName", label: "Contact Person Name", type: "text", placeholder: "John Smith" },
+        // { name: "contactPersonTitle", label: "Contact Person Title", type: "text", placeholder: "Sustainability Manager" },
+        { name: "contactPersonEmail", label: "Contact Person Email", type: "email", placeholder: "john.smith@acme.com" },
+        
+        { name: "naceCode", label: "NACE Code", type: "text", placeholder: "62.010" },
+        { name: "balanceSheetSize", label: "Balance Sheet Size (€)", type: "number", placeholder: "#"},
+        { name: "turnover", label: "Annual Turnover (€)", type: "number", placeholder: "#"},
+        { name: "numberOfEmployees", label: "Number of Employees", type: "number", placeholder: "#"},
+        { name: "country", label: "Country", type: "select", placeholder: "Select country", options: [
+          { label: "Norway", value: "norway" },
+          { label: "Sweden", value: "sweden" },
+          { label: "Denmark", value: "denmark" },
+          { label: "Finland", value: "finland" },
+          { label: "Other EU Country", value: "other-eu" },
+        ]},
       ],
     },
     {
-      id: "address",
-      title: "Address Information",
-      description: "Where do you live?",
-      schema: addressSchema,
+      id: "reporting-setup",
+      title: "Reporting Setup",
+      description: "Configure your sustainability report",
+      schema: reportingSetupSchema,
       fields: [
-        { name: "address", label: "Address", type: "text", placeholder: "123 Main St" },
-        { name: "city", label: "City", type: "text", placeholder: "New York" },
-        { name: "zipCode", label: "Zip Code", type: "text", placeholder: "10001" },
+        { name: "reportingYear", label: "Reporting Year", type: "select", placeholder: "Select year", options: [
+          { label: "2024", value: "2024" },
+          { label: "2023", value: "2023" },
+          { label: "2022", value: "2022" },
+        ]},
+        { name: "reportingOption", label: "Reporting Option", type: "select", placeholder: "Select reporting option", options: [
+          { label: "Basic Module only", value: "basic" },
+          { label: "Basic and Comprehensive Module", value: "basic-comprehensive" },
+        ]},
+        { name: "reportBasis", label: "Report Basis", type: "select", options: [
+          { label: "Individual basis", value: "individual" },
+          { label: "Consolidated basis", value: "consolidated" },
+        ]},
+        { name: "hasOmittedInfo", label: "Information Omitted", type: "checkbox", description: "Check if any information has been omitted." },
+        { name: "subsidiaries", label: "Subsidiaries (if consolidated)", type: "textarea", placeholder: "List subsidiary names and registered addresses..." },
       ],
     },
     {
-      id: "account",
-      title: "Account Setup",
-      description: "Create your account",
-      schema: accountSchema,
+      id: "sustainability",
+      title: "Sustainability Practices",
+      description: "Your current sustainability initiatives",
+      schema: sustainabilitySchema,
       fields: [
-        { name: "username", label: "Username", type: "text", placeholder: "johndoe" },
-        { name: "password", label: "Password", type: "password", placeholder: "••••••••" },
-        { name: "confirmPassword", label: "Confirm Password", type: "password", placeholder: "••••••••" },
+        { name: "hasPracticesPolicies", label: "Sustainability Practices", type: "checkbox", description: "We have practices, policies, or future initiatives for transitioning towards a more sustainable economy" },
+        { name: "sustainabilityCertifications", label: "Sustainability Certifications", type: "textarea", placeholder: "Describe any sustainability-related certifications or labels..." },
+        { name: "practicesDescription", label: "Practices Description", type: "textarea", placeholder: "Describe your sustainability practices, policies, or initiatives..." },
       ],
     },
   ];
@@ -100,29 +146,53 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   // Get the current step schema
   const currentStepSchema = steps[step].schema;
 
+  // Helper function to extract default values - now delegates to hook
+  const getSchemaDefaults = (schema: any, existingData: any = {}) => {
+    const defaults = getEnrichedDefaults(step, existingData);
+    console.log(`Applied defaults for step ${step}:`, defaults);
+    return defaults;
+  };
+
+
+  // Merge schema defaults with form data
+  const defaultValues = getSchemaDefaults(currentStepSchema, formData);
+  
+  // Debug: Log default values
+  console.log("Step:", step, "Default values:", defaultValues);
+
   // Setup form with the current step schema
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<any>({
     resolver: zodResolver(currentStepSchema as any),
-    defaultValues: formData,
+    defaultValues,
   });
+
+  // Reset form with default values when step changes
+  useEffect(() => {
+    reset(defaultValues);
+  }, [step, reset]);
 
   // Calculate progress percentage
   const progress = ((step + 1) / steps.length) * 100;
 
   // Handle next step
   const handleNextStep = (data: any) => {
+    console.log("Form submission data:", data);
+    console.log("Current step:", step);
+    console.log("Form errors:", errors);
+    
     const updatedData = { ...formData, ...data };
+    console.log("Updated form data:", updatedData)
     setFormData(updatedData);
 
     if (step < steps.length - 1) {
       setStep(step + 1);
-      // Reset form with the updated data for the next step
-      reset(updatedData);
+      // Don't need to reset here as the useForm will reinitialize with new defaultValues
     } else {
       // Final step submission
       setIsSubmitting(true);
@@ -151,7 +221,7 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   };
 
   return (
-    <div className={cn("w-full max-w-md mx-auto p-6 rounded-lg shadow-lg bg-card/40", className)}>
+    <div className={cn("w-full max-w-xl mx-auto p-6 rounded-lg shadow-lg bg-card/40", className)}>
       {!isComplete ? (
         <>
           {/* Progress bar */}
@@ -200,16 +270,85 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
               </div>
 
               <form onSubmit={handleSubmit(handleNextStep)} className="space-y-4">
-                {steps[step].fields.map((field) => (
+                {steps[step].fields.map((field: any) => (
                   <div key={field.name} className="space-y-2">
                     <Label htmlFor={field.name}>{field.label}</Label>
-                    <Input
-                      id={field.name}
-                      type={field.type}
-                      placeholder={field.placeholder}
-                      {...register(field.name as any)}
-                      className={cn(errors[field.name as string] && "border-destructive")}
-                    />
+                    
+                    {field.type === "select" && (
+                      <Controller
+                        name={field.name}
+                        control={control}
+                        render={({ field: controllerField }) => (
+                          <Select 
+                            onValueChange={controllerField.onChange} 
+                            value={controllerField.value || ""}
+                            defaultValue={controllerField.value || ""}
+                          >
+                            <SelectTrigger className={cn("w-full", errors[field.name as string] && "border-destructive")}>
+                              <SelectValue placeholder={field.placeholder} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {field.options?.map((option: any) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                    )}
+                    
+                    {field.type === "checkbox" && (
+                      <div className="flex items-start space-x-2">
+                        <Controller
+                          name={field.name}
+                          control={control}
+                          render={({ field: controllerField }) => {
+                            console.log(`Checkbox ${field.name} value:`, controllerField.value);
+                            return (
+                              <Checkbox
+                                id={field.name}
+                                checked={Boolean(controllerField.value)}
+                                onCheckedChange={controllerField.onChange}
+                                className={cn(errors[field.name as string] && "border-destructive")}
+                              />
+                            );
+                          }}
+                        />
+                        {field.description && (
+                          <div className="grid gap-1.5 leading-none">
+                            <label
+                              htmlFor={field.name}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {field.description}
+                            </label>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {field.type === "textarea" && (
+                      <Textarea
+                        id={field.name}
+                        placeholder={field.placeholder}
+                        {...register(field.name as any)}
+                        className={cn(errors[field.name as string] && "border-destructive")}
+                        rows={3}
+                      />
+                    )}
+                    
+                    {["text", "number", "email", "url", "password"].includes(field.type) && (
+                      <Input
+                        id={field.name}
+                        type={field.type}
+                        placeholder={field.placeholder}
+                        {...register(field.name as any)}
+                        className={cn(errors[field.name as string] && "border-destructive")}
+                      />
+                    )}
+                    
                     {errors[field.name as string] && (
                       <p className="text-sm text-destructive">
                         {errors[field.name as string]?.message as string}
@@ -252,9 +391,9 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4">
             <CheckCircle2 className="h-8 w-8 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold mb-2">Form Submitted!</h2>
+          <h2 className="text-2xl font-bold mb-2">Setup Complete!</h2>
           <p className="text-muted-foreground mb-6">
-            Thank you for completing the form. We&apos;ll be in touch soon.
+            Your sustainability reporting setup is complete. You can now proceed to enter your sustainability data.
           </p>
           <Button onClick={() => {
             setStep(0);
