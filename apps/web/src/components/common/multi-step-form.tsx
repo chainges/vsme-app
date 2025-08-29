@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { useFormData } from '@/hooks/use-form-data'
-import { motion, AnimatePresence } from 'framer-motion'
-import { z } from 'zod'
-import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
@@ -18,9 +18,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
-import { CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react'
+import { useFormData } from '@/hooks/use-form-data'
+import { cn } from '@/lib/utils'
 import SubsidiaryManager from './subsidiary-manager'
 
 // Define the form schema for each step
@@ -276,14 +276,14 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   const currentStepSchema = steps[step].schema
 
   // Helper function to extract default values - now delegates to hook
-  const getSchemaDefaults = (schema: any, existingData: any = {}) => {
+  const getSchemaDefaults = (existingData: any = {}) => {
     const defaults = getEnrichedDefaults(step, existingData)
     console.log(`Applied defaults for step ${step}:`, defaults)
     return defaults
   }
 
   // Merge schema defaults with form data
-  const defaultValues = getSchemaDefaults(currentStepSchema, formData)
+  const defaultValues = getSchemaDefaults(formData)
 
   // Debug: Log default values
   console.log('Step:', step, 'Default values:', defaultValues)
@@ -296,6 +296,7 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
     reset,
     control,
     watch,
+    trigger,
   } = useForm<any>({
     resolver: zodResolver(currentStepSchema as any),
     defaultValues,
@@ -304,7 +305,7 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   // Reset form with default values when step changes
   useEffect(() => {
     reset(defaultValues)
-  }, [step, reset])
+  }, [defaultValues, reset])
 
   // Watch reportBasis for conditional rendering
   const reportBasis = watch('reportBasis')
@@ -353,37 +354,63 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   }
 
   return (
-    <div className={cn('w-full max-w-xl mx-auto p-6 rounded-lg shadow-lg bg-card/40', className)}>
-      {!isComplete ? (
+    <div className={cn('mx-auto w-full max-w-xl rounded-lg bg-card/40 p-6 shadow-lg', className)}>
+      {isComplete ? (
+        <motion.div
+          animate={{ opacity: 1, scale: 1 }}
+          className="py-10 text-center"
+          initial={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+            <CheckCircle2 className="h-8 w-8 text-primary" />
+          </div>
+          <h2 className="mb-2 font-bold text-2xl">Setup Complete!</h2>
+          <p className="mb-6 text-muted-foreground">
+            Your sustainability reporting setup is complete. You can now proceed to enter your
+            sustainability data.
+          </p>
+          <Button
+            onClick={() => {
+              setStep(0)
+              setFormData({})
+              setIsComplete(false)
+              reset({})
+            }}
+          >
+            Start Over
+          </Button>
+        </motion.div>
+      ) : (
         <>
           {/* Progress bar */}
           <div className="mb-8">
-            <div className="flex justify-between mb-2">
-              <span className="text-sm font-medium">
+            <div className="mb-2 flex justify-between">
+              <span className="font-medium text-sm">
                 Step {step + 1} of {steps.length}
               </span>
-              <span className="text-sm font-medium">{Math.round(progress)}%</span>
+              <span className="font-medium text-sm">{Math.round(progress)}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress className="h-2" value={progress} />
           </div>
 
           {/* Step indicators */}
-          <div className="flex justify-between mb-8">
+          <div className="mb-8 flex justify-between">
             {steps.map((s, i) => (
-              <div key={s.id} className="flex flex-col items-center">
+              <div className="flex flex-col items-center" key={s.id}>
                 <div
                   className={cn(
-                    'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold',
-                    i < step
-                      ? 'bg-primary text-primary-foreground'
-                      : i === step
-                        ? 'bg-primary text-primary-foreground ring-2 ring-primary/30'
-                        : 'bg-secondary text-secondary-foreground'
+                    'flex h-8 w-8 items-center justify-center rounded-full font-bold text-xs',
+                    {
+                      'bg-primary text-primary-foreground': i < step,
+                      'bg-primary text-primary-foreground ring-2 ring-primary/30': i === step,
+                      'bg-secondary text-secondary-foreground': i > step,
+                    }
                   )}
                 >
                   {i < step ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
                 </div>
-                <span className="text-xs mt-1 hidden sm:block">{s.title}</span>
+                <span className="mt-1 hidden text-xs sm:block">{s.title}</span>
               </div>
             ))}
           </div>
@@ -391,33 +418,33 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
           {/* Form */}
           <AnimatePresence mode="wait">
             <motion.div
-              key={step}
-              initial="hidden"
               animate="visible"
               exit="exit"
-              variants={variants}
+              initial="hidden"
+              key={step}
               transition={{ duration: 0.3 }}
+              variants={variants}
             >
               <div className="mb-6">
-                <h2 className="text-xl font-bold">{steps[step].title}</h2>
-                <p className="text-sm text-muted-foreground">{steps[step].description}</p>
+                <h2 className="font-bold text-xl">{steps[step].title}</h2>
+                <p className="text-muted-foreground text-sm">{steps[step].description}</p>
               </div>
 
-              <form onSubmit={handleSubmit(handleNextStep)} className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit(handleNextStep)}>
                 {steps[step].fields.map((field: any) => {
                   return (
-                    <div key={field.name} className="space-y-2">
+                    <div className="space-y-2" key={field.name}>
                       <Label htmlFor={field.name}>{field.label}</Label>
 
                       {field.type === 'select' && (
                         <Controller
-                          name={field.name}
                           control={control}
+                          name={field.name}
                           render={({ field: controllerField }) => (
                             <Select
+                              defaultValue={controllerField.value || ''}
                               onValueChange={controllerField.onChange}
                               value={controllerField.value || ''}
-                              defaultValue={controllerField.value || ''}
                             >
                               <SelectTrigger
                                 className={cn(
@@ -442,18 +469,18 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
                       {field.type === 'checkbox' && (
                         <div className="flex items-start space-x-2">
                           <Controller
-                            name={field.name}
                             control={control}
+                            name={field.name}
                             render={({ field: controllerField }) => {
                               console.log(`Checkbox ${field.name} value:`, controllerField.value)
                               return (
                                 <Checkbox
-                                  id={field.name}
                                   checked={Boolean(controllerField.value)}
-                                  onCheckedChange={controllerField.onChange}
                                   className={cn(
                                     errors[field.name as string] && 'border-destructive'
                                   )}
+                                  id={field.name}
+                                  onCheckedChange={controllerField.onChange}
                                 />
                               )
                             }}
@@ -461,8 +488,8 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
                           {field.description && (
                             <div className="grid gap-1.5 leading-none">
                               <label
+                                className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 htmlFor={field.name}
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                               >
                                 {field.description}
                               </label>
@@ -484,15 +511,15 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
                       {['text', 'number', 'email', 'url', 'password'].includes(field.type) && (
                         <Input
                           id={field.name}
-                          type={field.type}
                           placeholder={field.placeholder}
+                          type={field.type}
                           {...register(field.name as any)}
                           className={cn(errors[field.name as string] && 'border-destructive')}
                         />
                       )}
 
                       {errors[field.name as string] && (
-                        <p className="text-sm text-destructive">
+                        <p className="text-destructive text-sm">
                           {errors[field.name as string]?.message as string}
                         </p>
                       )}
@@ -509,15 +536,15 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
 
                 <div className="flex justify-between pt-4">
                   <Button
+                    className={cn(step === 0 && 'invisible')}
+                    disabled={step === 0}
+                    onClick={handlePrevStep}
                     type="button"
                     variant="outline"
-                    onClick={handlePrevStep}
-                    disabled={step === 0}
-                    className={cn(step === 0 && 'invisible')}
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back
                   </Button>
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button disabled={isSubmitting} type="submit">
                     {step === steps.length - 1 ? (
                       isSubmitting ? (
                         'Submitting...'
@@ -535,32 +562,6 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
             </motion.div>
           </AnimatePresence>
         </>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-center py-10"
-        >
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4">
-            <CheckCircle2 className="h-8 w-8 text-primary" />
-          </div>
-          <h2 className="text-2xl font-bold mb-2">Setup Complete!</h2>
-          <p className="text-muted-foreground mb-6">
-            Your sustainability reporting setup is complete. You can now proceed to enter your
-            sustainability data.
-          </p>
-          <Button
-            onClick={() => {
-              setStep(0)
-              setFormData({})
-              setIsComplete(false)
-              reset({})
-            }}
-          >
-            Start Over
-          </Button>
-        </motion.div>
       )}
     </div>
   )

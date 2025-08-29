@@ -1,7 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
-import SubsidiaryManager from '@/components/common/subsidiary-manager'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useForm } from 'react-hook-form'
+import { describe, expect, it } from 'vitest'
+import SubsidiaryManager from '@/components/common/subsidiary-manager'
 
 // Test wrapper component
 function TestWrapper({ withTrigger = false }: { withTrigger?: boolean } = {}) {
@@ -15,19 +15,13 @@ function TestWrapper({ withTrigger = false }: { withTrigger?: boolean } = {}) {
     },
   })
 
-  const triggerFn = withTrigger 
+  const triggerFn = withTrigger
     ? async (fieldName?: string | string[]) => {
         return await trigger(fieldName as any)
       }
     : undefined
 
-  return (
-    <SubsidiaryManager 
-      control={control} 
-      errors={errors} 
-      trigger={triggerFn}
-    />
-  )
+  return <SubsidiaryManager control={control} errors={errors} trigger={triggerFn} />
 }
 
 describe('SubsidiaryManager', () => {
@@ -114,8 +108,8 @@ describe('SubsidiaryManager', () => {
     fireEvent.click(submitButton)
 
     await waitFor(() => {
-      expect(screen.getByText('Name must be at least 2 characters')).toBeInTheDocument()
-      expect(screen.getByText('Organization number must be at least 9 characters')).toBeInTheDocument()
+      expect(screen.getByText('Subsidiary name must be at least 2 characters')).toBeInTheDocument()
+      expect(screen.getByText('Organization number must be valid')).toBeInTheDocument()
       expect(screen.getByText('Address must be at least 5 characters')).toBeInTheDocument()
     })
   })
@@ -172,10 +166,11 @@ describe('SubsidiaryManager', () => {
 
     // Check for edit and delete buttons
     const editButtons = screen.getAllByRole('button')
-    const editButton = editButtons.find(button => 
-      button.querySelector('svg') && 
-      button.getAttribute('aria-label') === null &&
-      button.textContent === ''
+    const editButton = editButtons.find(
+      (button) =>
+        button.querySelector('svg') &&
+        button.getAttribute('aria-label') === null &&
+        button.textContent === ''
     )
     expect(editButton).toBeInTheDocument()
   })
@@ -204,11 +199,8 @@ describe('SubsidiaryManager', () => {
 
     // Find and click edit button (first button with no text content)
     const buttons = screen.getAllByRole('button')
-    const editButton = buttons.find(btn => 
-      btn.textContent === '' && 
-      btn.querySelector('svg')
-    )
-    
+    const editButton = buttons.find((btn) => btn.textContent === '' && btn.querySelector('svg'))
+
     if (editButton) {
       fireEvent.click(editButton)
     }

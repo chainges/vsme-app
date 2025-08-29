@@ -1,19 +1,24 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { type Control, useFieldArray } from 'react-hook-form'
+import { type Control, useFieldArray, useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
-interface Subsidiary {
-  name: string
-  organizationNumber: string
-  address: string
-}
+// Subsidiary schema - matches the one in multi-step-form.tsx
+const subsidiarySchema = z.object({
+  name: z.string().min(2, 'Subsidiary name must be at least 2 characters'),
+  organizationNumber: z.string().min(9, 'Organization number must be valid'),
+  address: z.string().min(5, 'Address must be at least 5 characters'),
+})
+
+type Subsidiary = z.infer<typeof subsidiarySchema>
 
 interface SubsidiaryManagerProps {
   control: Control<any>
@@ -29,44 +34,41 @@ export default function SubsidiaryManager({ control, errors, trigger }: Subsidia
 
   const [isAddingNew, setIsAddingNew] = useState(false)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
-  const [newSubsidiary, setNewSubsidiary] = useState<Subsidiary>({
-    name: '',
-    organizationNumber: '',
-    address: '',
+
+  // Use a separate form for the add/edit form with Zod validation
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors: formErrors },
+  } = useForm<Subsidiary>({
+    resolver: zodResolver(subsidiarySchema as any),
+    defaultValues: {
+      name: '',
+      organizationNumber: '',
+      address: '',
+    },
   })
-  const [validationErrors, setValidationErrors] = useState<{
-    name?: string
-    organizationNumber?: string
-    address?: string
-  }>({})
 
-  const validateSubsidiary = (subsidiary: Subsidiary): boolean => {
-    const validationErrs: typeof validationErrors = {}
+  const handleAddSubsidiary = async (data: Subsidiary) => {
+    append(data)
+    reset()
+    setIsAddingNew(false)
 
-    if (!subsidiary.name || subsidiary.name.trim().length < 2) {
-      validationErrs.name = 'Name must be at least 2 characters'
+    // Trigger validation on the main form
+    if (trigger) {
+      await trigger('subsidiaries')
     }
-
-    if (!subsidiary.organizationNumber || subsidiary.organizationNumber.trim().length < 9) {
-      validationErrs.organizationNumber = 'Organization number must be at least 9 characters'
-    }
-
-    if (!subsidiary.address || subsidiary.address.trim().length < 5) {
-      validationErrs.address = 'Address must be at least 5 characters'
-    }
-
-    setValidationErrors(validationErrs)
-    return Object.keys(validationErrs).length === 0
   }
 
-  const handleAddSubsidiary = async () => {
-    if (validateSubsidiary(newSubsidiary)) {
-      append(newSubsidiary)
-      setNewSubsidiary({ name: '', organizationNumber: '', address: '' })
+  const handleSaveEdit = async (data: Subsidiary) => {
+    if (editingIndex !== null) {
+      update(editingIndex, data)
+      reset()
+      setEditingIndex(null)
       setIsAddingNew(false)
-      setValidationErrors({})
 
-      // Trigger validation on the form to update any conditional validation
+      // Trigger validation on the main form
       if (trigger) {
         await trigger('subsidiaries')
       }
@@ -74,45 +76,27 @@ export default function SubsidiaryManager({ control, errors, trigger }: Subsidia
   }
 
   const handleCancelAdd = () => {
-    setNewSubsidiary({ name: '', organizationNumber: '', address: '' })
+    reset()
     setIsAddingNew(false)
-    setValidationErrors({})
+  }
+
+  const handleCancelEdit = () => {
+    reset()
+    setEditingIndex(null)
+    setIsAddingNew(false)
   }
 
   const handleEditSubsidiary = (index: number) => {
     const subsidiary = fields[index] as unknown as Subsidiary
-    setNewSubsidiary(subsidiary)
+    reset(subsidiary)
     setEditingIndex(index)
     setIsAddingNew(true)
-    setValidationErrors({})
-  }
-
-  const handleSaveEdit = async () => {
-    if (editingIndex !== null && validateSubsidiary(newSubsidiary)) {
-      update(editingIndex, newSubsidiary)
-      setNewSubsidiary({ name: '', organizationNumber: '', address: '' })
-      setEditingIndex(null)
-      setIsAddingNew(false)
-      setValidationErrors({})
-
-      // Trigger validation on the form
-      if (trigger) {
-        await trigger('subsidiaries')
-      }
-    }
-  }
-
-  const handleCancelEdit = () => {
-    setNewSubsidiary({ name: '', organizationNumber: '', address: '' })
-    setEditingIndex(null)
-    setIsAddingNew(false)
-    setValidationErrors({})
   }
 
   const handleDeleteSubsidiary = async (index: number) => {
     remove(index)
 
-    // Trigger validation on the form
+    // Trigger validation on the main form
     if (trigger) {
       await trigger('subsidiaries')
     }
@@ -120,9 +104,9 @@ export default function SubsidiaryManager({ control, errors, trigger }: Subsidia
 
   const startAddingNew = () => {
     if (!isAddingNew) {
+      reset({ name: '', organizationNumber: '', address: '' })
       setIsAddingNew(true)
       setEditingIndex(null)
-      setValidationErrors({})
     }
   }
 
@@ -205,75 +189,74 @@ export default function SubsidiaryManager({ control, errors, trigger }: Subsidia
               {editingIndex !== null ? 'Edit Subsidiary' : 'Add New Subsidiary'}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label className="text-sm" htmlFor="new-subsidiary-name">
-                  Company Name *
-                </Label>
-                <Input
-                  className={cn(validationErrors.name && 'border-destructive')}
-                  id="new-subsidiary-name"
-                  onChange={(e) => setNewSubsidiary((prev) => ({ ...prev, name: e.target.value }))}
-                  placeholder="Enter subsidiary company name"
-                  value={newSubsidiary.name}
-                />
-                {validationErrors.name && (
-                  <p className="text-destructive text-sm">{validationErrors.name}</p>
-                )}
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label className="text-sm" htmlFor="subsidiary-name">
+                    Company Name *
+                  </Label>
+                  <Input
+                    {...register('name')}
+                    className={cn(formErrors.name && 'border-destructive')}
+                    id="subsidiary-name"
+                    placeholder="Enter subsidiary company name"
+                  />
+                  {formErrors.name && (
+                    <p className="text-destructive text-sm">{formErrors.name.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm" htmlFor="subsidiary-org-number">
+                    Organization Number *
+                  </Label>
+                  <Input
+                    {...register('organizationNumber')}
+                    className={cn(formErrors.organizationNumber && 'border-destructive')}
+                    id="subsidiary-org-number"
+                    placeholder="123456789"
+                  />
+                  {formErrors.organizationNumber && (
+                    <p className="text-destructive text-sm">
+                      {formErrors.organizationNumber.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm" htmlFor="new-subsidiary-org-number">
-                  Organization Number *
+                <Label className="text-sm" htmlFor="subsidiary-address">
+                  Registered Address *
                 </Label>
                 <Input
-                  className={cn(validationErrors.organizationNumber && 'border-destructive')}
-                  id="new-subsidiary-org-number"
-                  onChange={(e) =>
-                    setNewSubsidiary((prev) => ({ ...prev, organizationNumber: e.target.value }))
-                  }
-                  placeholder="123456789"
-                  value={newSubsidiary.organizationNumber}
+                  {...register('address')}
+                  className={cn(formErrors.address && 'border-destructive')}
+                  id="subsidiary-address"
+                  placeholder="Street address, City, Country"
                 />
-                {validationErrors.organizationNumber && (
-                  <p className="text-destructive text-sm">{validationErrors.organizationNumber}</p>
+                {formErrors.address && (
+                  <p className="text-destructive text-sm">{formErrors.address.message}</p>
                 )}
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label className="text-sm" htmlFor="new-subsidiary-address">
-                Registered Address *
-              </Label>
-              <Input
-                className={cn(validationErrors.address && 'border-destructive')}
-                id="new-subsidiary-address"
-                onChange={(e) => setNewSubsidiary((prev) => ({ ...prev, address: e.target.value }))}
-                placeholder="Street address, City, Country"
-                value={newSubsidiary.address}
-              />
-              {validationErrors.address && (
-                <p className="text-destructive text-sm">{validationErrors.address}</p>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2 pt-2">
-              <Button
-                onClick={editingIndex !== null ? handleSaveEdit : handleAddSubsidiary}
-                size="sm"
-                type="button"
-              >
-                {editingIndex !== null ? 'Update' : 'Add'} Subsidiary
-              </Button>
-              <Button
-                onClick={editingIndex !== null ? handleCancelEdit : handleCancelAdd}
-                size="sm"
-                type="button"
-                variant="outline"
-              >
-                Cancel
-              </Button>
+              <div className="flex items-center gap-2 pt-2">
+                <Button 
+                  onClick={handleSubmit(editingIndex !== null ? handleSaveEdit : handleAddSubsidiary)}
+                  size="sm" 
+                  type="button"
+                >
+                  {editingIndex !== null ? 'Update' : 'Add'} Subsidiary
+                </Button>
+                <Button
+                  onClick={editingIndex !== null ? handleCancelEdit : handleCancelAdd}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -15,7 +15,7 @@ export default function DemoPage() {
   const [email, setEmail] = useState('')
 
   return (
-    <div className="container mx-auto py-10 max-w-md">
+    <div className="container mx-auto max-w-md py-10">
       <Card>
         <CardHeader>
           <CardTitle>Inline Editable Fields</CardTitle>
@@ -23,38 +23,38 @@ export default function DemoPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">Name</label>
-            <InlineEditableInput value={name} onChange={setName} placeholder="Enter your name" />
+            <label className="font-medium text-muted-foreground text-sm">Name</label>
+            <InlineEditableInput onChange={setName} placeholder="Enter your name" value={name} />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">Title</label>
-            <InlineEditableInput value={title} onChange={setTitle} placeholder="Enter your title" />
+            <label className="font-medium text-muted-foreground text-sm">Title</label>
+            <InlineEditableInput onChange={setTitle} placeholder="Enter your title" value={title} />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">Bio</label>
+            <label className="font-medium text-muted-foreground text-sm">Bio</label>
             <InlineEditableInput
-              value={bio}
+              className="min-h-[60px]"
               onChange={setBio}
               placeholder="Enter your bio"
-              className="min-h-[60px]"
+              value={bio}
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">Bio2</label>
+            <label className="font-medium text-muted-foreground text-sm">Bio2</label>
             <InlineEditableTextarea
-              value={bio2}
+              className="min-h-[60px]"
               onChange={setBio2}
               placeholder="Enter your bio2"
-              className="min-h-[60px]"
+              value={bio2}
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-muted-foreground">Email</label>
-            <InlineEditableInput value={email} onChange={setEmail} placeholder="Enter your email" />
+            <label className="font-medium text-muted-foreground text-sm">Email</label>
+            <InlineEditableInput onChange={setEmail} placeholder="Enter your email" value={email} />
           </div>
         </CardContent>
       </Card>

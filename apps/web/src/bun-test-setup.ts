@@ -3,8 +3,8 @@
  * Simplified setup for Bun's test runner
  */
 
-import React from 'react'
 import { JSDOM } from 'jsdom'
+import React from 'react'
 
 // Set up JSDOM environment for DOM testing
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
