@@ -39,12 +39,7 @@ export function FormField({ field, control, register, errors }: FormFieldProps) 
               onValueChange={controllerField.onChange}
               value={controllerField.value || ''}
             >
-              <SelectTrigger
-                className={cn(
-                  'w-full',
-                  hasError && 'border-destructive'
-                )}
-              >
+              <SelectTrigger className={cn('w-full', hasError && 'border-destructive')}>
                 <SelectValue placeholder={field.placeholder} />
               </SelectTrigger>
               <SelectContent>
@@ -107,9 +102,7 @@ export function FormField({ field, control, register, errors }: FormFieldProps) 
       )}
 
       {hasError && (
-        <p className="text-destructive text-sm">
-          {errors[field.name]?.message as string}
-        </p>
+        <p className="text-destructive text-sm">{errors[field.name]?.message as string}</p>
       )}
     </div>
   )

@@ -13,27 +13,27 @@ export interface UseMultiStepFormReturn {
   // Form state
   formData: Partial<FormData>
   setFormData: (data: Partial<FormData>) => void
-  
+
   // Submission state
   submissionState: FormSubmissionState
-  
+
   // Current step form instance
   form: ReturnType<typeof useForm>
-  
+
   // Step navigation
   step: number
   setStep: (step: number) => void
   isFirstStep: boolean
   isLastStep: boolean
   progress: number
-  
+
   // Step handlers
   handleNextStep: (data: any) => void
   handlePrevStep: () => void
   handleRestart: () => void
-  
+
   // Current step configuration
-  currentStepConfig: typeof stepConfigurations[number]
+  currentStepConfig: (typeof stepConfigurations)[number]
 }
 
 export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseMultiStepFormReturn {
@@ -50,7 +50,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
 
   // Get current step configuration
   const currentStepConfig = stepConfigurations[step]
-  
+
   // Helper function to extract default values
   const getSchemaDefaults = (existingData: any = {}) => {
     const defaults = getEnrichedDefaults(step, existingData)
@@ -90,7 +90,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
     if (isLastStep) {
       // Final step submission
       setSubmissionState({ isSubmitting: true, isComplete: false })
-      
+
       setTimeout(() => {
         if (onSubmit) {
           onSubmit(updatedData as FormData)
@@ -121,25 +121,25 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
     // Form state
     formData,
     setFormData,
-    
+
     // Submission state
     submissionState,
-    
+
     // Current step form instance
     form,
-    
+
     // Step navigation
     step,
     setStep,
     isFirstStep,
     isLastStep,
     progress,
-    
+
     // Step handlers
     handleNextStep,
     handlePrevStep,
     handleRestart,
-    
+
     // Current step configuration
     currentStepConfig,
   }

@@ -1,19 +1,13 @@
 import { describe, expect, it } from 'vitest'
+import { type CompanyInfoData, companyInfoSchema } from '../schemas/company-info'
 import {
-  companyInfoSchema,
-  type CompanyInfoData,
-} from '../schemas/company-info'
-import {
-  reportingSetupSchema,
-  subsidiarySchema,
   type ReportingSetupData,
+  reportingSetupSchema,
   type SubsidiaryData,
+  subsidiarySchema,
 } from '../schemas/reporting-setup'
-import {
-  sustainabilitySchema,
-  type SustainabilityData,
-} from '../schemas/sustainability'
-import { formSchema, type FormData } from '../types'
+import { type SustainabilityData, sustainabilitySchema } from '../schemas/sustainability'
+import { type FormData, formSchema } from '../types'
 
 describe('Company Info Schema', () => {
   const validCompanyData: CompanyInfoData = {
@@ -64,9 +58,7 @@ describe('Company Info Schema', () => {
     const result = companyInfoSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe(
-        'Organization name must be at least 2 characters'
-      )
+      expect(result.error.issues[0].message).toBe('Organization name must be at least 2 characters')
     }
   })
 
@@ -149,9 +141,7 @@ describe('Subsidiary Schema', () => {
     const result = subsidiarySchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe(
-        'Subsidiary name must be at least 2 characters'
-      )
+      expect(result.error.issues[0].message).toBe('Subsidiary name must be at least 2 characters')
     }
   })
 
@@ -279,7 +269,8 @@ describe('Sustainability Schema', () => {
   const validSustainabilityData: SustainabilityData = {
     hasPracticesPolicies: true,
     sustainabilityCertifications: 'ISO 14001, B Corp Certification',
-    practicesDescription: 'We have implemented comprehensive sustainability practices including energy efficiency measures.',
+    practicesDescription:
+      'We have implemented comprehensive sustainability practices including energy efficiency measures.',
   }
 
   it('should validate valid sustainability data', () => {
@@ -322,7 +313,7 @@ describe('Sustainability Schema', () => {
   it('should validate boolean hasPracticesPolicies', () => {
     const trueBooleanData = { ...validSustainabilityData, hasPracticesPolicies: true }
     const falseBooleanData = { ...validSustainabilityData, hasPracticesPolicies: false }
-    
+
     expect(sustainabilitySchema.safeParse(trueBooleanData).success).toBe(true)
     expect(sustainabilitySchema.safeParse(falseBooleanData).success).toBe(true)
   })

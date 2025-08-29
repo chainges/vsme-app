@@ -11,9 +11,7 @@ vi.mock('@/hooks/use-form-data', () => ({
 
 describe('useStepNavigation', () => {
   it('should initialize with default values', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3 }))
 
     expect(result.current.step).toBe(0)
     expect(result.current.isFirstStep).toBe(true)
@@ -22,9 +20,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should initialize with custom initial step', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3, initialStep: 1 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3, initialStep: 1 }))
 
     expect(result.current.step).toBe(1)
     expect(result.current.isFirstStep).toBe(false)
@@ -33,9 +29,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should navigate to next step', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3 }))
 
     act(() => {
       result.current.nextStep()
@@ -47,9 +41,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should not go past last step', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3, initialStep: 2 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3, initialStep: 2 }))
 
     expect(result.current.isLastStep).toBe(true)
 
@@ -61,9 +53,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should navigate to previous step', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3, initialStep: 1 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3, initialStep: 1 }))
 
     act(() => {
       result.current.prevStep()
@@ -74,9 +64,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should not go before first step', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3 }))
 
     expect(result.current.isFirstStep).toBe(true)
 
@@ -88,9 +76,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should go to specific step', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 5 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 5 }))
 
     act(() => {
       result.current.goToStep(3)
@@ -101,9 +87,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should not go to invalid step index', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3 }))
 
     // Try to go to negative step
     act(() => {
@@ -119,9 +103,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should calculate progress correctly', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 4 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 4 }))
 
     expect(result.current.progress).toBe(25) // Step 1 of 4
 
@@ -142,9 +124,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should update step using setStep', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 3 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 3 }))
 
     act(() => {
       result.current.setStep(2)
@@ -155,9 +135,7 @@ describe('useStepNavigation', () => {
   })
 
   it('should handle single step scenario', () => {
-    const { result } = renderHook(() => 
-      useStepNavigation({ totalSteps: 1 })
-    )
+    const { result } = renderHook(() => useStepNavigation({ totalSteps: 1 }))
 
     expect(result.current.step).toBe(0)
     expect(result.current.isFirstStep).toBe(true)

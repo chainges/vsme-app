@@ -11,11 +11,11 @@ interface CompletionScreenProps {
   className?: string
 }
 
-export function CompletionScreen({ 
-  title = "Setup Complete!",
-  description = "Your sustainability reporting setup is complete. You can now proceed to enter your sustainability data.",
+export function CompletionScreen({
+  title = 'Setup Complete!',
+  description = 'Your sustainability reporting setup is complete. You can now proceed to enter your sustainability data.',
   onRestart,
-  className 
+  className,
 }: CompletionScreenProps) {
   return (
     <motion.div
@@ -28,14 +28,8 @@ export function CompletionScreen({
         <CheckCircle2 className="h-8 w-8 text-primary" />
       </div>
       <h2 className="mb-2 font-bold text-2xl">{title}</h2>
-      <p className="mb-6 text-muted-foreground">
-        {description}
-      </p>
-      {onRestart && (
-        <Button onClick={onRestart}>
-          Start Over
-        </Button>
-      )}
+      <p className="mb-6 text-muted-foreground">{description}</p>
+      {onRestart && <Button onClick={onRestart}>Start Over</Button>}
     </motion.div>
   )
 }

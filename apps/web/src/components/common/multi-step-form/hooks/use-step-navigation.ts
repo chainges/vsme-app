@@ -16,9 +16,9 @@ export interface UseStepNavigationReturn {
   progress: number
 }
 
-export function useStepNavigation({ 
-  totalSteps, 
-  initialStep = 0 
+export function useStepNavigation({
+  totalSteps,
+  initialStep = 0,
 }: UseStepNavigationProps): UseStepNavigationReturn {
   const [step, setStep] = useState(initialStep)
 
