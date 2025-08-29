@@ -1,16 +1,29 @@
 import { z } from 'zod'
+import { sustainabilityInitiativesSchema } from '@/lib/forms/validation/sustainability-schemas'
+import { businessModelSchema } from './schemas/business-model'
 import { companyInfoSchema } from './schemas/company-info'
-import { reportingSetupSchema } from './schemas/reporting-setup'
 import { sustainabilitySchema } from './schemas/sustainability'
 
 // Combined form schema for the complete form data
 export const formSchema = z.object({
   ...companyInfoSchema.shape,
-  ...reportingSetupSchema.shape,
+  ...businessModelSchema.shape,
   ...sustainabilitySchema.shape,
+  initiatives: sustainabilityInitiativesSchema.optional().default([]),
 })
 
 export type FormData = z.infer<typeof formSchema>
+
+// Extend FormData to include initiatives
+export interface ExtendedFormData extends FormData {
+  initiatives: Array<{
+    type: string
+    responsiblePerson: string
+    goal: string
+    description: string
+    isSelected: boolean
+  }>
+}
 
 // Field type definitions
 export interface BaseField {
@@ -63,20 +76,23 @@ export interface MultiStepFormProps {
   onSubmit?: (data: FormData) => void
 }
 
-// Step navigation hook return type
-export interface UseStepNavigationReturn {
-  step: number
-  setStep: (step: number) => void
-  handleNextStep: () => void
-  handlePrevStep: () => void
-  isFirstStep: boolean
-  isLastStep: boolean
-  progress: number
-}
-
 // Form submission state
 export interface FormSubmissionState {
   isSubmitting: boolean
   isComplete: boolean
   error?: string
+}
+
+// Form navigation props
+export interface FormNavigationProps {
+  isFirstStep: boolean
+  isLastStep: boolean
+  isSubmitting: boolean
+  onPrevious: () => void
+  onNext?: () => void
+  className?: string
+  previousLabel?: string
+  nextLabel?: string
+  submitLabel?: string
+  submittingLabel?: string
 }

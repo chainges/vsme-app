@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { type CompanyInfoData, companyInfoSchema } from '../schemas/company-info'
 import {
-  type ReportingSetupData,
-  reportingSetupSchema,
+  type BusinessModelData,
+  businessModelSchema,
   type SubsidiaryData,
   subsidiarySchema,
-} from '../schemas/reporting-setup'
+} from '../schemas/business-model'
+import { type CompanyInfoData, companyInfoSchema } from '../schemas/company-info'
 import { type SustainabilityData, sustainabilitySchema } from '../schemas/sustainability'
 import { type FormData, formSchema } from '../types'
 
@@ -101,8 +101,8 @@ describe('Company Info Schema', () => {
   it('should coerce string numbers to numbers', () => {
     const dataWithStringNumbers = {
       ...validCompanyData,
-      balanceSheetSize: '1_000_000' as any,
-      turnover: '5_000_000' as any,
+      balanceSheetSize: '1000000' as any,
+      turnover: '5000000' as any,
       numberOfEmployees: '50' as any,
     }
     const result = companyInfoSchema.safeParse(dataWithStringNumbers)
@@ -164,16 +164,16 @@ describe('Subsidiary Schema', () => {
   })
 })
 
-describe('Reporting Setup Schema', () => {
-  const validReportingData: ReportingSetupData = {
-    reportingYear: '2024',
-    reportingOption: 'basic',
+describe('Business Model Schema', () => {
+  const validBusinessModelData: BusinessModelData = {
+    businessModelDescription:
+      'We provide software solutions for sustainability reporting and compliance management.',
     reportBasis: 'individual',
   }
 
-  const validConsolidatedData: ReportingSetupData = {
-    reportingYear: '2024',
-    reportingOption: 'basic-comprehensive',
+  const validConsolidatedData: BusinessModelData = {
+    businessModelDescription:
+      'Global technology company with multiple subsidiaries providing integrated solutions.',
     reportBasis: 'consolidated',
     subsidiaries: [
       {
@@ -184,22 +184,21 @@ describe('Reporting Setup Schema', () => {
     ],
   }
 
-  it('should validate individual reporting setup', () => {
-    const result = reportingSetupSchema.safeParse(validReportingData)
+  it('should validate individual business model', () => {
+    const result = businessModelSchema.safeParse(validBusinessModelData)
     expect(result.success).toBe(true)
   })
 
-  it('should validate consolidated reporting with subsidiaries', () => {
-    const result = reportingSetupSchema.safeParse(validConsolidatedData)
+  it('should validate consolidated business model with subsidiaries', () => {
+    const result = businessModelSchema.safeParse(validConsolidatedData)
     expect(result.success).toBe(true)
   })
 
   it('should apply default value for reportBasis', () => {
     const dataWithoutBasis = {
-      reportingYear: '2024',
-      reportingOption: 'basic' as const,
+      businessModelDescription: 'Software company providing sustainability solutions.',
     }
-    const result = reportingSetupSchema.safeParse(dataWithoutBasis)
+    const result = businessModelSchema.safeParse(dataWithoutBasis)
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data.reportBasis).toBe('individual')
@@ -208,10 +207,10 @@ describe('Reporting Setup Schema', () => {
 
   it('should reject consolidated reporting without subsidiaries', () => {
     const invalidData = {
-      ...validReportingData,
+      ...validBusinessModelData,
       reportBasis: 'consolidated' as const,
     }
-    const result = reportingSetupSchema.safeParse(invalidData)
+    const result = businessModelSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error.issues[0].message).toBe(
@@ -222,11 +221,11 @@ describe('Reporting Setup Schema', () => {
 
   it('should reject consolidated reporting with empty subsidiaries array', () => {
     const invalidData = {
-      ...validReportingData,
+      ...validBusinessModelData,
       reportBasis: 'consolidated' as const,
       subsidiaries: [],
     }
-    const result = reportingSetupSchema.safeParse(invalidData)
+    const result = businessModelSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error.issues[0].message).toBe(
@@ -235,27 +234,20 @@ describe('Reporting Setup Schema', () => {
     }
   })
 
-  it('should reject invalid reporting year', () => {
-    const invalidData = { ...validReportingData, reportingYear: '20' }
-    const result = reportingSetupSchema.safeParse(invalidData)
+  it('should reject short business model description', () => {
+    const invalidData = { ...validBusinessModelData, businessModelDescription: 'Too short' }
+    const result = businessModelSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe('Please select a reporting year')
-    }
-  })
-
-  it('should reject invalid reporting option', () => {
-    const invalidData = { ...validReportingData, reportingOption: 'invalid' as any }
-    const result = reportingSetupSchema.safeParse(invalidData)
-    expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0].message).toBe('Please select a reporting option')
+      expect(result.error.issues[0].message).toBe(
+        'Please provide a business model description of at least 10 characters'
+      )
     }
   })
 
   it('should reject invalid report basis', () => {
-    const invalidData = { ...validReportingData, reportBasis: 'invalid' as any }
-    const result = reportingSetupSchema.safeParse(invalidData)
+    const invalidData = { ...validBusinessModelData, reportBasis: 'invalid' as any }
+    const result = businessModelSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error.issues[0].message).toBe(
@@ -333,9 +325,9 @@ describe('Combined Form Schema', () => {
     turnover: 5_000_000,
     numberOfEmployees: 50,
     country: 'norway',
-    // Reporting Setup
-    reportingYear: '2024',
-    reportingOption: 'basic',
+    // Business Model
+    businessModelDescription:
+      'We provide comprehensive software solutions for sustainability reporting and compliance management.',
     reportBasis: 'individual',
     // Sustainability
     hasPracticesPolicies: true,

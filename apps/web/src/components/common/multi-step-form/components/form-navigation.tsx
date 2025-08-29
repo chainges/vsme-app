@@ -3,24 +3,14 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
-interface FormNavigationProps {
-  isFirstStep: boolean
-  isLastStep: boolean
-  isSubmitting: boolean
-  onPrevious: () => void
-  className?: string
-  previousLabel?: string
-  nextLabel?: string
-  submitLabel?: string
-  submittingLabel?: string
-}
+import type { FormNavigationProps } from '../../types'
 
 export function FormNavigation({
   isFirstStep,
   isLastStep,
   isSubmitting,
   onPrevious,
+  onNext,
   className,
   previousLabel = "Back",
   nextLabel = "Next",
@@ -39,7 +29,11 @@ export function FormNavigation({
         <ArrowLeft className="mr-2 h-4 w-4" /> {previousLabel}
       </Button>
       
-      <Button disabled={isSubmitting} type="submit">
+      <Button 
+        disabled={isSubmitting} 
+        onClick={onNext}
+        type="button"
+      >
         {isLastStep ? (
           isSubmitting ? (
             submittingLabel

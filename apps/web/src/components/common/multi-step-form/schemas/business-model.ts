@@ -9,12 +9,11 @@ export const subsidiarySchema = z.object({
 
 export type SubsidiaryData = z.infer<typeof subsidiarySchema>
 
-// Base reporting setup schema without refinement
-const reportingSetupBaseSchema = z.object({
-  reportingYear: z.string().min(4, 'Please select a reporting year'),
-  reportingOption: z.enum(['basic', 'basic-comprehensive'], {
-    message: 'Please select a reporting option',
-  }),
+// Base business model schema without refinement
+const businessModelBaseSchema = z.object({
+  businessModelDescription: z
+    .string()
+    .min(10, 'Please provide a business model description of at least 10 characters'),
   reportBasis: z
     .enum(['individual', 'consolidated'], {
       message: 'Please specify if the report is individual or consolidated',
@@ -24,7 +23,7 @@ const reportingSetupBaseSchema = z.object({
 })
 
 // Apply refinement separately for form compatibility
-export const reportingSetupSchema = reportingSetupBaseSchema.refine(
+export const businessModelSchema = businessModelBaseSchema.refine(
   (data) => {
     // If reportBasis is "consolidated", at least one subsidiary should be provided
     if (
@@ -41,32 +40,15 @@ export const reportingSetupSchema = reportingSetupBaseSchema.refine(
   }
 )
 
-export type ReportingSetupData = z.infer<typeof reportingSetupSchema>
+export type BusinessModelData = z.infer<typeof businessModelSchema>
 
-export const reportingSetupFields = [
+export const businessModelFields = [
   {
-    name: 'reportingYear',
-    label: 'Reporting Year',
-    type: 'select',
-    placeholder: 'Select year',
-    options: [
-      { label: '2024', value: '2024' },
-      { label: '2023', value: '2023' },
-      { label: '2022', value: '2022' },
-    ],
-  },
-  {
-    name: 'reportingOption',
-    label: 'Reporting Option',
-    type: 'select',
-    placeholder: 'Select reporting option',
-    options: [
-      { label: 'Basic Module only', value: 'basic' },
-      {
-        label: 'Basic and Comprehensive Module',
-        value: 'basic-comprehensive',
-      },
-    ],
+    name: 'businessModelDescription',
+    label: 'Business Model Description',
+    type: 'textarea',
+    placeholder:
+      'Describe your business model, including key activities, value propositions, and target customers...',
   },
   {
     name: 'reportBasis',
@@ -79,10 +61,10 @@ export const reportingSetupFields = [
   },
 ] as const
 
-export const reportingSetupStepConfig = {
-  id: 'reporting-setup',
-  title: 'Reporting Setup',
-  description: 'Configure your sustainability report',
-  schema: reportingSetupSchema,
-  fields: reportingSetupFields,
+export const businessModelStepConfig = {
+  id: 'business-model',
+  title: 'Business Model',
+  description: 'Describe your business model and reporting structure',
+  schema: businessModelSchema,
+  fields: businessModelFields,
 } as const

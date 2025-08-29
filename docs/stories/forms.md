@@ -118,14 +118,13 @@
 - Contactperson name, contactperson email
 
 **Step 2: Strategy & Governance**  
-- Sustainability strategy description
-- Governance structure and oversight
-- Risk management approach
+- Business model description
+- Reporting basis - Individual, Consolidated
+- Subsidiaries
 
 **Step 3: Business Context**
-- Business model and value chain description
-- Stakeholder engagement process
-- Materiality assessment methodology
+- Sustainability initiatives
+- Initiative details - Responsible person, goal, description
 
 ### Technical Implementation Details [Source: Stories 4.1.8 & 4.1.9 completion]
 

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { JSDOM } from 'jsdom'
 import React from 'react'
-import { beforeEach, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Set up JSDOM environment if not already present
 if (typeof globalThis.window === 'undefined') {

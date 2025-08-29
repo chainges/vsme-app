@@ -2,10 +2,12 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { InitiativeManager } from '../forms/sustainability/InitiativeManager'
 import {
   CompletionScreen,
   FormField,
   FormNavigation,
+  type FormNavigationProps,
   type MultiStepFormProps,
   ProgressBar,
   StepIndicator,
@@ -55,6 +57,35 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
   // Watch reportBasis for conditional rendering
   const reportBasis = watch('reportBasis')
 
+  // Watch initiatives for sustainability initiatives step
+  const initiatives = watch('initiatives') || []
+
+  // Custom handler for the sustainability initiatives step
+  const handleSustainabilityNext = async () => {
+    // Get current form data
+    const formData = { initiatives }
+    // Call the main next step handler
+    await handleNextStep(formData)
+  }
+
+  // FormNavigation props for regular steps (0, 1, 3)
+  const regularFormNavProps: FormNavigationProps = {
+    isFirstStep,
+    isLastStep,
+    isSubmitting: submissionState.isSubmitting,
+    onPrevious: handlePrevStep,
+    onNext: handleSubmit(handleNextStep),
+  }
+
+  // Custom FormNavigation props for sustainability step (2)
+  const sustainabilityFormNavProps: FormNavigationProps = {
+    isFirstStep,
+    isLastStep,
+    isSubmitting: submissionState.isSubmitting,
+    onPrevious: handlePrevStep,
+    onNext: handleSustainabilityNext,
+  }
+
   return (
     <div className={cn('mx-auto w-full max-w-xl rounded-lg bg-card/40 p-6 shadow-lg', className)}>
       {submissionState.isComplete ? (
@@ -82,31 +113,40 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
                 <p className="text-muted-foreground text-sm">{currentStepConfig.description}</p>
               </div>
 
-              <form className="space-y-4" onSubmit={handleSubmit(handleNextStep)}>
-                {currentStepConfig.fields.map((field: any) => (
-                  <FormField
-                    control={control}
-                    errors={errors}
-                    field={field}
-                    key={field.name}
-                    register={register}
+              {/* Use different form handling for sustainability initiatives step */}
+              {step === 2 ? (
+                <form className="space-y-4">
+                  <InitiativeManager
+                    initiatives={initiatives}
+                    onChange={(newInitiatives) => {
+                      form.setValue('initiatives', newInitiatives)
+                    }}
                   />
-                ))}
+                  <FormNavigation {...sustainabilityFormNavProps} />
+                </form>
+              ) : (
+                <form className="space-y-4" onSubmit={handleSubmit(handleNextStep)}>
+                  {/* Render regular fields for other steps */}
+                  {currentStepConfig.fields.map((field: any) => (
+                    <FormField
+                      control={control}
+                      errors={errors}
+                      field={field}
+                      key={field.name}
+                      register={register}
+                    />
+                  ))}
 
-                {/* Conditionally render SubsidiaryManager for consolidated reports */}
-                {step === 1 && reportBasis === 'consolidated' && (
-                  <div className="space-y-2">
-                    <SubsidiaryManager control={control} errors={errors} trigger={trigger} />
-                  </div>
-                )}
+                  {/* Conditionally render SubsidiaryManager for consolidated reports */}
+                  {step === 1 && reportBasis === 'consolidated' && (
+                    <div className="space-y-2">
+                      <SubsidiaryManager control={control} errors={errors} trigger={trigger} />
+                    </div>
+                  )}
 
-                <FormNavigation
-                  isFirstStep={isFirstStep}
-                  isLastStep={isLastStep}
-                  isSubmitting={submissionState.isSubmitting}
-                  onPrevious={handlePrevStep}
-                />
-              </form>
+                  <FormNavigation {...regularFormNavProps} />
+                </form>
+              )}
             </motion.div>
           </AnimatePresence>
         </>

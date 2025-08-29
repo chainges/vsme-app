@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 // Types for API responses
 interface SubsidiaryData {
@@ -36,7 +36,9 @@ export const useFormData = () => {
 
   // Fetch company financial data
   const fetchCompanyData = async (orgNumber?: string) => {
-    if (!orgNumber) return null
+    if (!orgNumber) {
+      return null
+    }
 
     setLoading(true)
     try {
@@ -96,63 +98,83 @@ export const useFormData = () => {
     }
   }
 
+  // Helper function for company info step defaults
+  const getCompanyInfoDefaults = useCallback(
+    (formData: any) => ({
+      ...formData,
+      // Static defaults
+      country: formData.country || 'norway',
+      legalForm: formData.legalForm || 'as',
+
+      // API data (if available)
+      ...(companyData && {
+        balanceSheetSize: formData.balanceSheetSize || companyData.balanceSheetSize,
+        turnover: formData.turnover || companyData.turnover,
+        numberOfEmployees: formData.numberOfEmployees || companyData.numberOfEmployees,
+      }),
+    }),
+    [companyData]
+  )
+
+  // Helper function for business model step defaults
+  const getBusinessModelDefaults = useCallback(
+    (formData: any) => ({
+      ...formData,
+      // Static defaults
+      reportBasis: formData.reportBasis || 'individual',
+
+      // API data (if available)
+      ...(reportingData && {
+        reportBasis: formData.reportBasis || reportingData.previousReportBasis || 'individual',
+        subsidiaries: formData.subsidiaries || reportingData.previousSubsidiaries || [],
+      }),
+    }),
+    [reportingData]
+  )
+
+  // Helper function for sustainability step defaults
+  const getSustainabilityDefaults = useCallback(
+    (formData: any) => ({
+      ...formData,
+      // Static defaults
+      hasPracticesPolicies:
+        formData.hasPracticesPolicies !== undefined ? formData.hasPracticesPolicies : false,
+
+      // API data (if available)
+      ...(sustainabilityData && {
+        sustainabilityCertifications:
+          formData.sustainabilityCertifications || sustainabilityData.certifications,
+        practicesDescription: formData.practicesDescription || sustainabilityData.practicesTemplate,
+        hasPracticesPolicies:
+          formData.hasPracticesPolicies !== undefined
+            ? formData.hasPracticesPolicies
+            : sustainabilityData.hasPreviousPractices,
+      }),
+    }),
+    [sustainabilityData]
+  )
+
   // Get enriched defaults for a specific step
-  const getEnrichedDefaults = (step: number, formData: any = {}) => {
-    switch (step) {
-      case 0: // company-info step
-        return {
-          ...formData,
-          // Static defaults
-          country: formData.country || 'norway',
-          legalForm: formData.legalForm || 'as',
-
-          // API data (if available)
-          ...(companyData && {
-            balanceSheetSize: formData.balanceSheetSize || companyData.balanceSheetSize,
-            turnover: formData.turnover || companyData.turnover,
-            numberOfEmployees: formData.numberOfEmployees || companyData.numberOfEmployees,
-          }),
-        }
-
-      case 1: // reporting-setup step
-        return {
-          ...formData,
-          // Static defaults
-          reportBasis: formData.reportBasis || 'individual',
-          reportingOption: formData.reportingOption || 'basic',
-
-          // API data (if available)
-          ...(reportingData && {
-            reportingYear: formData.reportingYear || reportingData.lastReportingYear?.toString(),
-            reportBasis: formData.reportBasis || reportingData.previousReportBasis || 'individual',
-            subsidiaries: formData.subsidiaries || reportingData.previousSubsidiaries || [],
-          }),
-        }
-
-      case 2: // sustainability step
-        return {
-          ...formData,
-          // Static defaults
-          hasPracticesPolicies:
-            formData.hasPracticesPolicies !== undefined ? formData.hasPracticesPolicies : false,
-
-          // API data (if available)
-          ...(sustainabilityData && {
-            sustainabilityCertifications:
-              formData.sustainabilityCertifications || sustainabilityData.certifications,
-            practicesDescription:
-              formData.practicesDescription || sustainabilityData.practicesTemplate,
-            hasPracticesPolicies:
-              formData.hasPracticesPolicies !== undefined
-                ? formData.hasPracticesPolicies
-                : sustainabilityData.hasPreviousPractices,
-          }),
-        }
-
-      default:
-        return formData
-    }
-  }
+  const getEnrichedDefaults = useCallback(
+    (step: number, formData: any = {}) => {
+      switch (step) {
+        case 0: // company-info step
+          return getCompanyInfoDefaults(formData)
+        case 1: // business-model step
+          return getBusinessModelDefaults(formData)
+        case 2: // sustainability initiatives step
+          return {
+            ...formData,
+            initiatives: formData.initiatives || [],
+          }
+        case 3: // sustainability step
+          return getSustainabilityDefaults(formData)
+        default:
+          return formData
+      }
+    },
+    [getCompanyInfoDefaults, getBusinessModelDefaults, getSustainabilityDefaults]
+  )
 
   return {
     // Data

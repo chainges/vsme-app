@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import MultiStepForm from '../multi-step-form'
+import MultiStepForm from '../../multi-step-form'
 
 // Mock the use-form-data hook
 vi.mock('@/hooks/use-form-data', () => ({
@@ -19,7 +19,7 @@ vi.mock('framer-motion', () => ({
 }))
 
 // Mock the subsidiary manager component
-vi.mock('../subsidiary-manager', () => ({
+vi.mock('../components/subsidiary-manager', () => ({
   default: ({ control, errors, trigger }: any) => (
     <div data-testid="subsidiary-manager">Subsidiary Manager Component</div>
   ),
@@ -78,7 +78,7 @@ describe('MultiStepForm Integration', () => {
 
     // Should be on step 2
     await waitFor(() => {
-      expect(screen.getByText('Reporting Setup')).toBeInTheDocument()
+      expect(screen.getByText('Business Model')).toBeInTheDocument()
       expect(screen.getByText('Step 2 of 3')).toBeInTheDocument()
     })
   })
@@ -122,7 +122,7 @@ describe('MultiStepForm Integration', () => {
     await user.click(screen.getByRole('button', { name: /Next/i }))
 
     await waitFor(() => {
-      expect(screen.getByText('Reporting Setup')).toBeInTheDocument()
+      expect(screen.getByText('Business Model')).toBeInTheDocument()
     })
 
     // Select consolidated reporting
@@ -157,16 +157,15 @@ describe('MultiStepForm Integration', () => {
 
     await user.click(screen.getByRole('button', { name: /Next/i }))
 
-    // Step 2: Reporting Setup
+    // Step 2: Business Model
     await waitFor(() => {
-      expect(screen.getByText('Reporting Setup')).toBeInTheDocument()
+      expect(screen.getByText('Business Model')).toBeInTheDocument()
     })
 
-    await user.click(screen.getByRole('combobox', { name: /reporting year/i }))
-    await user.click(screen.getByRole('option', { name: '2024' }))
-
-    await user.click(screen.getByRole('combobox', { name: /reporting option/i }))
-    await user.click(screen.getByRole('option', { name: /Basic Module only/i }))
+    await user.type(
+      screen.getByLabelText('Business Model Description'),
+      'We provide comprehensive software solutions for sustainability reporting and compliance management.'
+    )
 
     await user.click(screen.getByRole('button', { name: /Next/i }))
 
@@ -228,7 +227,7 @@ describe('MultiStepForm Integration', () => {
     await user.click(screen.getByRole('button', { name: /Next/i }))
 
     await waitFor(() => {
-      expect(screen.getByText('Reporting Setup')).toBeInTheDocument()
+      expect(screen.getByText('Business Model')).toBeInTheDocument()
     })
 
     // Go back to step 1

@@ -1,20 +1,22 @@
 // Export individual schemas and configurations
-export * from './company-info'
-export * from './reporting-setup'
-export * from './sustainability'
 
 // Export combined types
 export * from '../types'
+export * from './company-info'
+export * from './business-model'
+export * from './sustainability'
 
 // Step configurations array
 import { companyInfoStepConfig } from './company-info'
-import { reportingSetupStepConfig } from './reporting-setup'
+import { businessModelStepConfig } from './business-model'
 import { sustainabilityStepConfig } from './sustainability'
+import { sustainabilityInitiativesStepConfig } from '@/lib/forms/configs/sustainability-initiatives-config'
 
 export const stepConfigurations = [
   companyInfoStepConfig,
-  reportingSetupStepConfig,
+  businessModelStepConfig,
+  sustainabilityInitiativesStepConfig,
   sustainabilityStepConfig,
 ] as const
 
-export type StepConfigurationType = typeof stepConfigurations[number]
+export type StepConfigurationType = (typeof stepConfigurations)[number]

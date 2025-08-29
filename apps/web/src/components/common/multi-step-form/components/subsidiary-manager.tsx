@@ -183,13 +183,13 @@ export default function SubsidiaryManager({ control, errors, trigger }: Subsidia
 
       {/* Add/Edit form */}
       {isAddingNew && (
-        <Card className="border-primary/20">
-          <CardHeader className="pb-3">
+        <Card className="border-primary/20 bg-muted">
+          <CardHeader className="pb-1">
             <CardTitle className="font-medium text-sm">
               {editingIndex !== null ? 'Edit Subsidiary' : 'Add New Subsidiary'}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="">
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">

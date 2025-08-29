@@ -34,11 +34,7 @@ export function FormField({ field, control, register, errors }: FormFieldProps) 
           control={control}
           name={field.name}
           render={({ field: controllerField }) => (
-            <Select
-              defaultValue={controllerField.value || ''}
-              onValueChange={controllerField.onChange}
-              value={controllerField.value || ''}
-            >
+            <Select onValueChange={controllerField.onChange} value={controllerField.value || ''}>
               <SelectTrigger className={cn('w-full', hasError && 'border-destructive')}>
                 <SelectValue placeholder={field.placeholder} />
               </SelectTrigger>

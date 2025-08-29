@@ -23,17 +23,17 @@ export default function DemoPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-1">
-            <label className="font-medium text-muted-foreground text-sm">Name</label>
+            <div className="font-medium text-muted-foreground text-sm">Name</div>
             <InlineEditableInput onChange={setName} placeholder="Enter your name" value={name} />
           </div>
 
           <div className="space-y-1">
-            <label className="font-medium text-muted-foreground text-sm">Title</label>
+            <div className="font-medium text-muted-foreground text-sm">Title</div>
             <InlineEditableInput onChange={setTitle} placeholder="Enter your title" value={title} />
           </div>
 
           <div className="space-y-1">
-            <label className="font-medium text-muted-foreground text-sm">Bio</label>
+            <div className="font-medium text-muted-foreground text-sm">Bio</div>
             <InlineEditableInput
               className="min-h-[60px]"
               onChange={setBio}
@@ -43,7 +43,7 @@ export default function DemoPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="font-medium text-muted-foreground text-sm">Bio2</label>
+            <div className="font-medium text-muted-foreground text-sm">Bio2</div>
             <InlineEditableTextarea
               className="min-h-[60px]"
               onChange={setBio2}
@@ -53,7 +53,7 @@ export default function DemoPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="font-medium text-muted-foreground text-sm">Email</label>
+            <div className="font-medium text-muted-foreground text-sm">Email</div>
             <InlineEditableInput onChange={setEmail} placeholder="Enter your email" value={email} />
           </div>
         </CardContent>
