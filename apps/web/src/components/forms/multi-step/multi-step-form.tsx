@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import { InitiativeManager } from '../forms/sustainability/InitiativeManager'
+import { InitiativeManager } from '../sustainability/InitiativeManager'
 import {
   CompletionScreen,
   FormField,
@@ -13,8 +13,8 @@ import {
   StepIndicator,
   stepConfigurations,
   useMultiStepForm,
-} from './multi-step-form/'
-import SubsidiaryManager from './multi-step-form/components/subsidiary-manager'
+} from './'
+import SubsidiaryManager from './components/subsidiary-manager'
 
 // Animation variants
 const variants = {

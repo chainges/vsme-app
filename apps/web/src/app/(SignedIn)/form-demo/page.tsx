@@ -1,6 +1,6 @@
 'use client'
 
-import MultiStepForm from '@/components/common/multi-step-form'
+import { MultiStepForm } from '@/components/forms'
 
 export default function FormDemoPage() {
   const handleFormSubmit = (data: any) => {
