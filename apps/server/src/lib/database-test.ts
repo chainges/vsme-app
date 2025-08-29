@@ -45,18 +45,11 @@ export async function testExternalDatabase() {
     // Test basic query operation using configured database name
     const { getExternalDbConfig } = await import('./external-db-config')
     const config = getExternalDbConfig()
-    const testQuery = await externalDb.find(
-      config.databaseName,
-      'resources',
-      {},
-      { limit: 1 }
-    )
+    const testQuery = await externalDb.find(config.databaseName, 'resources', {}, { limit: 1 })
 
     console.log('✅ External database connected successfully.')
     console.log(`   - Available databases: ${databases.length}`)
-    console.log(
-      `   - Test query successful: ${testQuery.length >= 0 ? 'Yes' : 'No'}`
-    )
+    console.log(`   - Test query successful: ${testQuery.length >= 0 ? 'Yes' : 'No'}`)
     console.log(
       `   - Databases: ${databases.slice(0, 5).join(', ')}${databases.length > 5 ? '...' : ''}`
     )

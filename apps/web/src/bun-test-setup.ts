@@ -10,7 +10,7 @@ import { JSDOM } from 'jsdom'
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
   url: 'http://localhost:3000',
   pretendToBeVisual: true,
-  resources: 'usable'
+  resources: 'usable',
 })
 
 // Assign DOM globals

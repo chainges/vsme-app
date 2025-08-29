@@ -1,9 +1,5 @@
 import type { PrismaClient } from '../../../prisma/generated/client'
-import type {
-  ESGReportData,
-  PartialReportData,
-  ReportData,
-} from '../../types/esg-models'
+import type { ESGReportData, PartialReportData, ReportData } from '../../types/esg-models'
 
 export class ReportService {
   private prisma: PrismaClient
@@ -112,11 +108,7 @@ export class ReportService {
   }
 
   // Update report
-  async updateReport(
-    id: string,
-    data: PartialReportData,
-    organizationId: string
-  ) {
+  async updateReport(id: string, data: PartialReportData, organizationId: string) {
     try {
       const report = await this.prisma.report.updateMany({
         where: {

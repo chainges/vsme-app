@@ -14,10 +14,7 @@ interface UseAsyncOptions {
   onError?: (error: string) => void
 }
 
-export function useAsync<T>(
-  asyncFunction: () => Promise<T>,
-  options: UseAsyncOptions = {}
-) {
+export function useAsync<T>(asyncFunction: () => Promise<T>, options: UseAsyncOptions = {}) {
   const { immediate = false, onSuccess, onError } = options
 
   const [state, setState] = useState<AsyncState<T>>({
@@ -49,8 +46,7 @@ export function useAsync<T>(
       onSuccess?.(data)
       return data
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'An unexpected error occurred'
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred'
       setState({
         data: null,
         error: errorMessage,
@@ -137,8 +133,7 @@ export function useAsyncSubmit<T>(
         options.onSuccess?.(data)
         return data
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : 'Submission failed'
+        const errorMessage = error instanceof Error ? error.message : 'Submission failed'
         setState({
           data: null,
           error: errorMessage,

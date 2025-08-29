@@ -26,9 +26,7 @@ async function main() {
       if (result.linesRemoved > 0) {
         totalFiles++
         totalLinesRemoved += result.linesRemoved
-        console.log(
-          `   ✅ ${file}: removed ${result.linesRemoved} eslint comments`
-        )
+        console.log(`   ✅ ${file}: removed ${result.linesRemoved} eslint comments`)
       }
     }
 
@@ -75,9 +73,7 @@ async function findTypeScriptFiles(dir: string): Promise<string[]> {
  * Used by: main() to process individual files
  * Purpose: Removes eslint-disable comments and returns count of changes
  */
-async function cleanupFile(
-  filePath: string
-): Promise<{ linesRemoved: number }> {
+async function cleanupFile(filePath: string): Promise<{ linesRemoved: number }> {
   const content = await readFile(filePath, 'utf-8')
   const lines = content.split('\n')
   const originalLineCount = lines.length

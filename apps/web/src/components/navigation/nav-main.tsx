@@ -3,11 +3,7 @@
 import { ChevronRight, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -102,11 +98,7 @@ export function NavMain({
                             isMobile && 'min-h-[40px] py-2'
                           )}
                         >
-                          <Link
-                            href={subItem.url}
-                            onClick={handleNavigation}
-                            role="menuitem"
-                          >
+                          <Link href={subItem.url} onClick={handleNavigation} role="menuitem">
                             <span>{subItem.title}</span>
                           </Link>
                         </SidebarMenuSubButton>

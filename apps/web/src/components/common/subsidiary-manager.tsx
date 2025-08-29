@@ -1,38 +1,38 @@
-"use client";
+'use client'
 
-import React from "react";
-import { Controller, useFieldArray, type Control } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trash2, Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React from 'react'
+import { Controller, useFieldArray, type Control } from 'react-hook-form'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Trash2, Plus } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface Subsidiary {
-  name: string;
-  organizationNumber: string;
-  address: string;
+  name: string
+  organizationNumber: string
+  address: string
 }
 
 interface SubsidiaryManagerProps {
-  control: Control<any>;
-  errors?: any;
+  control: Control<any>
+  errors?: any
 }
 
 export default function SubsidiaryManager({ control, errors }: SubsidiaryManagerProps) {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "subsidiaries",
-  });
+    name: 'subsidiaries',
+  })
 
   const addSubsidiary = () => {
     append({
-      name: "",
-      organizationNumber: "",
-      address: "",
-    });
-  };
+      name: '',
+      organizationNumber: '',
+      address: '',
+    })
+  }
 
   return (
     <div className="space-y-4">
@@ -61,9 +61,7 @@ export default function SubsidiaryManager({ control, errors }: SubsidiaryManager
           <Card key={field.id} className="relative">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium">
-                  Subsidiary {index + 1}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Subsidiary {index + 1}</CardTitle>
                 <Button
                   type="button"
                   variant="ghost"
@@ -88,9 +86,7 @@ export default function SubsidiaryManager({ control, errors }: SubsidiaryManager
                       {...controllerField}
                       id={`subsidiaries.${index}.name`}
                       placeholder="Enter subsidiary company name"
-                      className={cn(
-                        errors?.subsidiaries?.[index]?.name && "border-destructive"
-                      )}
+                      className={cn(errors?.subsidiaries?.[index]?.name && 'border-destructive')}
                     />
                   )}
                 />
@@ -114,7 +110,7 @@ export default function SubsidiaryManager({ control, errors }: SubsidiaryManager
                       id={`subsidiaries.${index}.organizationNumber`}
                       placeholder="123456789"
                       className={cn(
-                        errors?.subsidiaries?.[index]?.organizationNumber && "border-destructive"
+                        errors?.subsidiaries?.[index]?.organizationNumber && 'border-destructive'
                       )}
                     />
                   )}
@@ -138,9 +134,7 @@ export default function SubsidiaryManager({ control, errors }: SubsidiaryManager
                       {...controllerField}
                       id={`subsidiaries.${index}.address`}
                       placeholder="Street address, City, Country"
-                      className={cn(
-                        errors?.subsidiaries?.[index]?.address && "border-destructive"
-                      )}
+                      className={cn(errors?.subsidiaries?.[index]?.address && 'border-destructive')}
                     />
                   )}
                 />
@@ -155,11 +149,11 @@ export default function SubsidiaryManager({ control, errors }: SubsidiaryManager
         ))}
       </div>
 
-      {errors?.subsidiaries && typeof errors.subsidiaries === "object" && !Array.isArray(errors.subsidiaries) && (
-        <p className="text-sm text-destructive">
-          {errors.subsidiaries.message}
-        </p>
-      )}
+      {errors?.subsidiaries &&
+        typeof errors.subsidiaries === 'object' &&
+        !Array.isArray(errors.subsidiaries) && (
+          <p className="text-sm text-destructive">{errors.subsidiaries.message}</p>
+        )}
     </div>
-  );
+  )
 }

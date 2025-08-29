@@ -45,8 +45,7 @@ export async function runMigrations() {
 
     // Apply pending migrations
     const pendingMigrations = availableMigrations.filter(
-      (migration) =>
-        !appliedMigrations.some((applied) => applied.name === migration.name)
+      (migration) => !appliedMigrations.some((applied) => applied.name === migration.name)
     )
 
     if (pendingMigrations.length === 0) {

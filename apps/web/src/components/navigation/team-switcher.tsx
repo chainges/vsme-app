@@ -52,10 +52,7 @@ export function TeamSwitcher({
                   isMobile ? 'size-10' : 'size-8'
                 }`}
               >
-                <activeTeam.logo
-                  aria-hidden="true"
-                  className={isMobile ? 'size-5' : 'size-4'}
-                />
+                <activeTeam.logo aria-hidden="true" className={isMobile ? 'size-5' : 'size-4'} />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{activeTeam.name}</span>
@@ -87,24 +84,17 @@ export function TeamSwitcher({
                   <team.logo aria-hidden="true" className="size-3.5 shrink-0" />
                 </div>
                 {team.name}
-                <DropdownMenuShortcut
-                  aria-label={`Keyboard shortcut: Command ${index + 1}`}
-                >
+                <DropdownMenuShortcut aria-label={`Keyboard shortcut: Command ${index + 1}`}>
                   ⌘{index + 1}
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              aria-label="Add new organization"
-              className="gap-2 p-2"
-            >
+            <DropdownMenuItem aria-label="Add new organization" className="gap-2 p-2">
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <Plus aria-hidden="true" className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">
-                Add organization
-              </div>
+              <div className="font-medium text-muted-foreground">Add organization</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

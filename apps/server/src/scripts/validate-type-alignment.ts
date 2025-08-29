@@ -107,9 +107,7 @@ async function main() {
 
     // Final coverage warning if needed
     if (coverage.missingValidation.length > 0) {
-      console.log(
-        '\n⚠️  Consider adding validation for missing types to ensure complete coverage.'
-      )
+      console.log('\n⚠️  Consider adding validation for missing types to ensure complete coverage.')
     }
 
     process.exit(result.isValid ? 0 : 1)
@@ -204,32 +202,21 @@ function validateCompanyTypes() {
       passed++
       console.log('   ✅ CompanyData ↔ companySchema alignment valid')
     } else {
-      errors.push(
-        `CompanyData validation failed: ${validationResult.error.message}`
-      )
+      errors.push(`CompanyData validation failed: ${validationResult.error.message}`)
       console.log('   ❌ CompanyData ↔ companySchema alignment failed')
     }
 
     // Check for missing optional fields
     totalChecks++
-    const requiredFields = [
-      'year',
-      'name',
-      'organizationId',
-      'registrationNumber',
-    ]
+    const requiredFields = ['year', 'name', 'organizationId', 'registrationNumber']
     const schemaShape = companySchema.shape
-    const missingFields = requiredFields.filter(
-      (field) => !(field in schemaShape)
-    )
+    const missingFields = requiredFields.filter((field) => !(field in schemaShape))
 
     if (missingFields.length === 0) {
       passed++
       console.log('   ✅ All required Company fields present in schema')
     } else {
-      errors.push(
-        `Missing required fields in companySchema: ${missingFields.join(', ')}`
-      )
+      errors.push(`Missing required fields in companySchema: ${missingFields.join(', ')}`)
       console.log('   ❌ Missing required Company fields in schema')
     }
   } catch (error) {
@@ -271,9 +258,7 @@ function validateReportTypes() {
       passed++
       console.log('   ✅ ReportData ↔ reportSchema alignment valid')
     } else {
-      errors.push(
-        `ReportData validation failed: ${validationResult.error.message}`
-      )
+      errors.push(`ReportData validation failed: ${validationResult.error.message}`)
       console.log('   ❌ ReportData ↔ reportSchema alignment failed')
     }
   } catch (error) {
@@ -316,9 +301,7 @@ function validateESGTypes() {
       passed++
       console.log('   ✅ Environmental types alignment valid')
     } else {
-      errors.push(
-        `Environmental types validation failed: ${envResult.error.message}`
-      )
+      errors.push(`Environmental types validation failed: ${envResult.error.message}`)
       console.log('   ❌ Environmental types alignment failed')
     }
   } catch (error) {
@@ -342,9 +325,7 @@ function validateESGTypes() {
       passed++
       console.log('   ✅ Social types alignment valid')
     } else {
-      errors.push(
-        `Social types validation failed: ${socialResult.error.message}`
-      )
+      errors.push(`Social types validation failed: ${socialResult.error.message}`)
       console.log('   ❌ Social types alignment failed')
     }
   } catch (error) {
@@ -372,9 +353,7 @@ function validateESGTypes() {
       passed++
       console.log('   ✅ Governance types alignment valid')
     } else {
-      errors.push(
-        `Governance types validation failed: ${govResult.error.message}`
-      )
+      errors.push(`Governance types validation failed: ${govResult.error.message}`)
       console.log('   ❌ Governance types alignment failed')
     }
   } catch (error) {
@@ -461,11 +440,7 @@ async function analyzeCoverage(): Promise<CoverageAnalysis> {
   // Calculate coverage
   const allPrismaTypes = [...prismaModels, ...prismaTypes]
   const expectedValidationTypes = allPrismaTypes.map((type) =>
-    type === 'User'
-      ? 'UserData'
-      : type.endsWith('s')
-        ? type + 'Data'
-        : type + 'Data'
+    type === 'User' ? 'UserData' : type.endsWith('s') ? type + 'Data' : type + 'Data'
   )
 
   const missingValidation = expectedValidationTypes.filter(
@@ -473,9 +448,7 @@ async function analyzeCoverage(): Promise<CoverageAnalysis> {
   )
 
   const coveragePercentage =
-    ((validatedTypes.length - missingValidation.length) /
-      validatedTypes.length) *
-    100
+    ((validatedTypes.length - missingValidation.length) / validatedTypes.length) * 100
 
   return {
     prismaModels,

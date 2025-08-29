@@ -2,13 +2,7 @@
 
 import { ModeToggle } from '@/components/common/mode-toggle'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
@@ -29,9 +23,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Profile</CardTitle>
-            <CardDescription>
-              Manage your account profile and personal information
-            </CardDescription>
+            <CardDescription>Manage your account profile and personal information</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
@@ -55,11 +47,7 @@ export default function SettingsPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="company">Company</Label>
-              <Input
-                defaultValue="VSME Guru"
-                id="company"
-                placeholder="Enter your company name"
-              />
+              <Input defaultValue="VSME Guru" id="company" placeholder="Enter your company name" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="role">Role</Label>
@@ -77,9 +65,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Appearance</CardTitle>
-            <CardDescription>
-              Customize the appearance of the application
-            </CardDescription>
+            <CardDescription>Customize the appearance of the application</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
@@ -98,9 +84,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Notifications</CardTitle>
-            <CardDescription>
-              Configure how you receive notifications
-            </CardDescription>
+            <CardDescription>Configure how you receive notifications</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
@@ -139,17 +123,13 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Data & Privacy</CardTitle>
-            <CardDescription>
-              Manage your data and privacy preferences
-            </CardDescription>
+            <CardDescription>Manage your data and privacy preferences</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label>Data Export</Label>
-                <p className="text-muted-foreground text-sm">
-                  Download a copy of your data
-                </p>
+                <p className="text-muted-foreground text-sm">Download a copy of your data</p>
               </div>
               <Button variant="outline">Export Data</Button>
             </div>
@@ -169,12 +149,8 @@ export default function SettingsPage() {
         {/* Danger Zone */}
         <Card className="border-red-200 dark:border-red-800">
           <CardHeader>
-            <CardTitle className="text-red-600 dark:text-red-400">
-              Danger Zone
-            </CardTitle>
-            <CardDescription>
-              Irreversible and destructive actions
-            </CardDescription>
+            <CardTitle className="text-red-600 dark:text-red-400">Danger Zone</CardTitle>
+            <CardDescription>Irreversible and destructive actions</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">

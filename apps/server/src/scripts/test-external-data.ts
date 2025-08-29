@@ -43,12 +43,9 @@ async function main() {
     // Test 4: Test search functionality (if resources exist)
     if (resources.metadata.total > 0) {
       console.log('\n4. Testing search functionality...')
-      const searchResults = await externalDataService.searchSharedResources(
-        'test',
-        {
-          limit: 3,
-        }
-      )
+      const searchResults = await externalDataService.searchSharedResources('test', {
+        limit: 3,
+      })
       console.log(`   Search results: ${searchResults.data.length}`)
     }
 

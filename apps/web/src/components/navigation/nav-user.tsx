@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from 'lucide-react'
+import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -57,17 +50,9 @@ export function NavUser({
               }`}
               size="lg"
             >
-              <Avatar
-                className={`rounded-lg ${isMobile ? 'h-10 w-10' : 'h-8 w-8'}`}
-              >
-                <AvatarImage
-                  alt={`${user.name}'s profile picture`}
-                  src={user.avatar}
-                />
-                <AvatarFallback
-                  aria-label={`${user.name} initials`}
-                  className="rounded-lg"
-                >
+              <Avatar className={`rounded-lg ${isMobile ? 'h-10 w-10' : 'h-8 w-8'}`}>
+                <AvatarImage alt={`${user.name}'s profile picture`} src={user.avatar} />
+                <AvatarFallback aria-label={`${user.name} initials`} className="rounded-lg">
                   {user.name
                     .split(' ')
                     .map((n) => n[0])

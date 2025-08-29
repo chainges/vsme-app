@@ -12,10 +12,7 @@
  */
 
 import type { ExternalDbConfig } from '../types/external-data'
-import {
-  getCurrentEnvironment,
-  getExternalDatabaseName,
-} from './environment-config'
+import { getCurrentEnvironment, getExternalDatabaseName } from './environment-config'
 
 /**
  * Default connection options for external databases
@@ -80,8 +77,7 @@ const ENVIRONMENT_OPTIONS = {
  * Purpose: Provides environment-appropriate configuration with validation
  */
 export function getExternalDbConfig(): ExternalDbConfig {
-  const environment =
-    getCurrentEnvironment() as keyof typeof ENVIRONMENT_OPTIONS
+  const environment = getCurrentEnvironment() as keyof typeof ENVIRONMENT_OPTIONS
   const connectionUrl = process.env.SCOPE321_DATABASE_URL
 
   if (!connectionUrl) {
@@ -91,19 +87,13 @@ export function getExternalDbConfig(): ExternalDbConfig {
   }
 
   // Validate connection URL format
-  if (
-    !(
-      connectionUrl.startsWith('mongodb://') ||
-      connectionUrl.startsWith('mongodb+srv://')
-    )
-  ) {
+  if (!(connectionUrl.startsWith('mongodb://') || connectionUrl.startsWith('mongodb+srv://'))) {
     throw new Error(
       'Invalid external database URL format. Must start with mongodb:// or mongodb+srv://'
     )
   }
 
-  const options =
-    ENVIRONMENT_OPTIONS[environment] || ENVIRONMENT_OPTIONS.development
+  const options = ENVIRONMENT_OPTIONS[environment] || ENVIRONMENT_OPTIONS.development
 
   // Get database name using environment configuration
   const databaseName = getExternalDatabaseName()
@@ -123,8 +113,7 @@ export function getExternalDbConfig(): ExternalDbConfig {
 export function getConnectionOptionsForUseCase(
   useCase: 'analytics' | 'realtime' | 'bulk' | 'default'
 ) {
-  const baseOptions =
-    getExternalDbConfig().options || DEFAULT_CONNECTION_OPTIONS
+  const baseOptions = getExternalDbConfig().options || DEFAULT_CONNECTION_OPTIONS
 
   switch (useCase) {
     case 'analytics':
@@ -225,11 +214,7 @@ export function getRetryConfig() {
     initialDelayMs: 1000,
     maxDelayMs: 10_000,
     backoffMultiplier: 2,
-    retryableErrors: [
-      'MongoNetworkError',
-      'MongoTimeoutError',
-      'MongoServerSelectionError',
-    ],
+    retryableErrors: ['MongoNetworkError', 'MongoTimeoutError', 'MongoServerSelectionError'],
   }
 }
 

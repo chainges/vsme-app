@@ -185,10 +185,7 @@ export class ExternalDbClient {
     options: any = {}
   ): Promise<T[]> {
     try {
-      const collection = await this.getCollection<T>(
-        databaseName,
-        collectionName
-      )
+      const collection = await this.getCollection<T>(databaseName, collectionName)
       const cursor = collection.find(query, options)
       return await cursor.toArray()
     } catch (error) {
@@ -209,10 +206,7 @@ export class ExternalDbClient {
     options: any = {}
   ): Promise<T | null> {
     try {
-      const collection = await this.getCollection<T>(
-        databaseName,
-        collectionName
-      )
+      const collection = await this.getCollection<T>(databaseName, collectionName)
       return await collection.findOne(query, options)
     } catch (error) {
       console.error('External database findOne failed:', error)
@@ -225,11 +219,7 @@ export class ExternalDbClient {
    * Used by: External data statistics and pagination
    * Purpose: Document counting for analytics and pagination
    */
-  async count(
-    databaseName: string,
-    collectionName: string,
-    query: any = {}
-  ): Promise<number> {
+  async count(databaseName: string, collectionName: string, query: any = {}): Promise<number> {
     try {
       const collection = await this.getCollection(databaseName, collectionName)
       return await collection.countDocuments(query)

@@ -3,13 +3,7 @@
 import { Calendar, FileText, Users } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 const projects = [
   {
@@ -25,8 +19,7 @@ const projects = [
   {
     id: 2,
     name: 'Sustainability Metrics',
-    description:
-      'Comprehensive analysis of key sustainability indicators and benchmarks',
+    description: 'Comprehensive analysis of key sustainability indicators and benchmarks',
     status: 'in-progress',
     dueDate: '2024-05-30',
     progress: 65,
@@ -74,9 +67,7 @@ export default function ProjectsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-xl">{project.name}</CardTitle>
-                  <CardDescription className="mt-2">
-                    {project.description}
-                  </CardDescription>
+                  <CardDescription className="mt-2">{project.description}</CardDescription>
                 </div>
                 <Badge className={getStatusColor(project.status)}>
                   {project.status.replace('-', ' ')}

@@ -17,8 +17,7 @@ import { ModeToggle } from '../common/mode-toggle'
 // Helper function to generate breadcrumbs from pathname
 function generateBreadcrumbs(pathname: string) {
   const segments = pathname.split('/').filter(Boolean)
-  const breadcrumbs: Array<{ label: string; href: string; isLast: boolean }> =
-    []
+  const breadcrumbs: Array<{ label: string; href: string; isLast: boolean }> = []
 
   // Handle different top-level pages
   if (segments.length === 0 || pathname === '/') {

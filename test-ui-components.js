@@ -33,42 +33,24 @@ function checkFileExists(filePath, description) {
 
 function checkComponentStructure(filePath, requiredElements, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Component structure: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Component structure: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
   const content = fs.readFileSync(filePath, 'utf8')
-  const missingElements = requiredElements.filter(
-    (element) => !content.includes(element)
-  )
+  const missingElements = requiredElements.filter((element) => !content.includes(element))
 
   if (missingElements.length === 0) {
-    logTest(
-      `Component structure: ${description}`,
-      true,
-      'All required elements found'
-    )
+    logTest(`Component structure: ${description}`, true, 'All required elements found')
     return true
   }
-  logTest(
-    `Component structure: ${description}`,
-    false,
-    `Missing: ${missingElements.join(', ')}`
-  )
+  logTest(`Component structure: ${description}`, false, `Missing: ${missingElements.join(', ')}`)
   return false
 }
 
 function checkAccessibilityFeatures(filePath, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Accessibility: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Accessibility: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
@@ -81,9 +63,7 @@ function checkAccessibilityFeatures(filePath, description) {
     'aria-describedby',
   ]
 
-  const foundFeatures = accessibilityFeatures.filter((feature) =>
-    content.includes(feature)
-  )
+  const foundFeatures = accessibilityFeatures.filter((feature) => content.includes(feature))
   const hasAccessibility = foundFeatures.length >= 2 // At least 2 accessibility features
 
   logTest(
@@ -96,23 +76,12 @@ function checkAccessibilityFeatures(filePath, description) {
 
 function checkResponsiveDesign(filePath, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Responsive design: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Responsive design: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
   const content = fs.readFileSync(filePath, 'utf8')
-  const responsiveClasses = [
-    'sm:',
-    'md:',
-    'lg:',
-    'xl:',
-    'min-h-\\[44px\\]',
-    'isMobile',
-  ]
+  const responsiveClasses = ['sm:', 'md:', 'lg:', 'xl:', 'min-h-\\[44px\\]', 'isMobile']
 
   const foundClasses = responsiveClasses.filter((cls) => content.includes(cls))
   const hasResponsive = foundClasses.length >= 2
@@ -127,20 +96,14 @@ function checkResponsiveDesign(filePath, description) {
 
 function checkThemeSupport(filePath, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Theme support: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Theme support: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
   const content = fs.readFileSync(filePath, 'utf8')
   const themeFeatures = ['dark:', 'ModeToggle', 'useTheme', 'ThemeProvider']
 
-  const foundFeatures = themeFeatures.filter((feature) =>
-    content.includes(feature)
-  )
+  const foundFeatures = themeFeatures.filter((feature) => content.includes(feature))
   const hasTheme = foundFeatures.length >= 1
 
   logTest(
@@ -161,63 +124,29 @@ checkFileExists('apps/web/src/components/layout/header.tsx', 'Header component')
 
 // Test 2: Navigation Components
 console.log('\n🧭 Testing Navigation Components')
-checkFileExists(
-  'apps/web/src/components/navigation/app-sidebar.tsx',
-  'App sidebar'
-)
-checkFileExists(
-  'apps/web/src/components/navigation/nav-main.tsx',
-  'Main navigation'
-)
-checkFileExists(
-  'apps/web/src/components/navigation/nav-user.tsx',
-  'User navigation'
-)
-checkFileExists(
-  'apps/web/src/components/navigation/nav-projects.tsx',
-  'Projects navigation'
-)
-checkFileExists(
-  'apps/web/src/components/navigation/team-switcher.tsx',
-  'Team switcher'
-)
+checkFileExists('apps/web/src/components/navigation/app-sidebar.tsx', 'App sidebar')
+checkFileExists('apps/web/src/components/navigation/nav-main.tsx', 'Main navigation')
+checkFileExists('apps/web/src/components/navigation/nav-user.tsx', 'User navigation')
+checkFileExists('apps/web/src/components/navigation/nav-projects.tsx', 'Projects navigation')
+checkFileExists('apps/web/src/components/navigation/team-switcher.tsx', 'Team switcher')
 
 // Test 3: Page Components
 console.log('\n📄 Testing Page Components')
 checkFileExists('apps/web/src/app/(LandingPages)/page.tsx', 'Landing page')
-checkFileExists(
-  'apps/web/src/app/(SignedIn)/dashboard/page.tsx',
-  'Dashboard page'
-)
-checkFileExists(
-  'apps/web/src/app/(SignedIn)/projects/page.tsx',
-  'Projects page'
-)
-checkFileExists(
-  'apps/web/src/app/(SignedIn)/settings/page.tsx',
-  'Settings page'
-)
+checkFileExists('apps/web/src/app/(SignedIn)/dashboard/page.tsx', 'Dashboard page')
+checkFileExists('apps/web/src/app/(SignedIn)/projects/page.tsx', 'Projects page')
+checkFileExists('apps/web/src/app/(SignedIn)/settings/page.tsx', 'Settings page')
 
 // Test 4: Authentication Components
 console.log('\n🔐 Testing Authentication Components')
-checkFileExists(
-  'apps/web/src/contexts/mock-auth-context.tsx',
-  'Mock auth context'
-)
+checkFileExists('apps/web/src/contexts/mock-auth-context.tsx', 'Mock auth context')
 checkFileExists('apps/web/src/hooks/use-auth.ts', 'Auth hook')
 
 // Test 5: Component Structure Tests
 console.log('\n🏗️ Testing Component Structure')
 checkComponentStructure(
   'apps/web/src/components/navigation/app-sidebar.tsx',
-  [
-    'Sidebar',
-    'SidebarContent',
-    'SidebarHeader',
-    'SidebarFooter',
-    'NavMain',
-    'NavUser',
-  ],
+  ['Sidebar', 'SidebarContent', 'SidebarHeader', 'SidebarFooter', 'NavMain', 'NavUser'],
   'App sidebar structure'
 )
 
@@ -235,43 +164,22 @@ checkComponentStructure(
 
 // Test 6: Accessibility Features
 console.log('\n♿ Testing Accessibility Features')
-checkAccessibilityFeatures(
-  'apps/web/src/components/navigation/nav-main.tsx',
-  'Main navigation'
-)
-checkAccessibilityFeatures(
-  'apps/web/src/components/navigation/nav-user.tsx',
-  'User navigation'
-)
-checkAccessibilityFeatures(
-  'apps/web/src/app/(LandingPages)/page.tsx',
-  'Landing page'
-)
+checkAccessibilityFeatures('apps/web/src/components/navigation/nav-main.tsx', 'Main navigation')
+checkAccessibilityFeatures('apps/web/src/components/navigation/nav-user.tsx', 'User navigation')
+checkAccessibilityFeatures('apps/web/src/app/(LandingPages)/page.tsx', 'Landing page')
 
 // Test 7: Responsive Design
 console.log('\n📱 Testing Responsive Design')
-checkResponsiveDesign(
-  'apps/web/src/components/navigation/nav-main.tsx',
-  'Main navigation'
-)
-checkResponsiveDesign(
-  'apps/web/src/components/navigation/nav-user.tsx',
-  'User navigation'
-)
-checkResponsiveDesign(
-  'apps/web/src/app/(LandingPages)/page.tsx',
-  'Landing page'
-)
+checkResponsiveDesign('apps/web/src/components/navigation/nav-main.tsx', 'Main navigation')
+checkResponsiveDesign('apps/web/src/components/navigation/nav-user.tsx', 'User navigation')
+checkResponsiveDesign('apps/web/src/app/(LandingPages)/page.tsx', 'Landing page')
 checkResponsiveDesign('apps/web/src/components/layout/header.tsx', 'Header')
 
 // Test 8: Theme Support
 console.log('\n🎨 Testing Theme Support')
 checkThemeSupport('apps/web/src/components/layout/header.tsx', 'Header')
 checkThemeSupport('apps/web/src/components/layout/providers.tsx', 'Providers')
-checkThemeSupport(
-  'apps/web/src/app/(SignedIn)/settings/page.tsx',
-  'Settings page'
-)
+checkThemeSupport('apps/web/src/app/(SignedIn)/settings/page.tsx', 'Settings page')
 
 // Test 9: Error Handling
 console.log('\n🚨 Testing Error Handling')
@@ -281,10 +189,7 @@ checkComponentStructure(
   'Sidebar error boundaries'
 )
 
-checkFileExists(
-  'apps/web/src/components/common/error-boundary.tsx',
-  'Error boundary component'
-)
+checkFileExists('apps/web/src/components/common/error-boundary.tsx', 'Error boundary component')
 checkFileExists('apps/web/src/app/error.tsx', 'Global error page')
 checkFileExists('apps/web/src/app/not-found.tsx', 'Not found page')
 
@@ -301,10 +206,7 @@ const uiComponents = [
 ]
 
 uiComponents.forEach((component) => {
-  checkFileExists(
-    `apps/web/src/components/ui/${component}`,
-    `UI component: ${component}`
-  )
+  checkFileExists(`apps/web/src/components/ui/${component}`, `UI component: ${component}`)
 })
 
 // Test Results Summary
@@ -322,18 +224,14 @@ const detailedResults = {
   summary: {
     passed: testResults.passed,
     failed: testResults.failed,
-    successRate: (
-      (testResults.passed / (testResults.passed + testResults.failed)) *
-      100
-    ).toFixed(1),
+    successRate: ((testResults.passed / (testResults.passed + testResults.failed)) * 100).toFixed(
+      1
+    ),
   },
   tests: testResults.tests,
 }
 
-fs.writeFileSync(
-  'test-results-10.1.json',
-  JSON.stringify(detailedResults, null, 2)
-)
+fs.writeFileSync('test-results-10.1.json', JSON.stringify(detailedResults, null, 2))
 console.log('\n💾 Detailed results saved to test-results-10.1.json')
 
 // Exit with appropriate code

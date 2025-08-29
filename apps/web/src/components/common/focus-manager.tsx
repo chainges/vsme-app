@@ -1,9 +1,6 @@
 'use client'
 
-import {
-  useFocusManagement,
-  useKeyboardNavigation,
-} from '@/hooks/use-focus-management'
+import { useFocusManagement, useKeyboardNavigation } from '@/hooks/use-focus-management'
 
 /**
  * Component that manages focus and keyboard navigation for the entire app

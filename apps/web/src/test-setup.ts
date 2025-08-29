@@ -8,9 +8,9 @@ if (typeof globalThis.window === 'undefined') {
   const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
     url: 'http://localhost:3000',
     pretendToBeVisual: true,
-    resources: 'usable'
+    resources: 'usable',
   })
-  
+
   globalThis.window = dom.window as any
   globalThis.document = dom.window.document
   globalThis.navigator = dom.window.navigator
@@ -55,14 +55,14 @@ if (typeof globalThis.window !== 'undefined') {
     writable: true,
     configurable: true,
   })
-  
+
   // Ensure localStorage is also available globally
   Object.defineProperty(globalThis, 'localStorage', {
     value: localStorageMock,
     writable: true,
     configurable: true,
   })
-  
+
   // Add missing navigator properties
   if (!globalThis.window.navigator) {
     globalThis.window.navigator = {
@@ -76,49 +76,71 @@ vi.mock('@radix-ui/react-select', async () => {
   const actual = await vi.importActual('@radix-ui/react-select')
   return {
     ...actual,
-    Root: ({ children, onValueChange, value, disabled }: any) => 
-      React.createElement('div', { 'data-testid': 'select-root', role: 'combobox', 'aria-expanded': false }, children),
-    Trigger: ({ children, ...props }: any) => 
-      React.createElement('button', { 
-        ...props, 
-        'data-testid': 'select-trigger',
-        role: 'combobox',
-        'aria-expanded': false
-      }, children),
-    Content: ({ children, ...props }: any) => 
-      React.createElement('div', { 
-        ...props, 
-        'data-testid': 'select-content',
-        role: 'listbox'
-      }, children),
+    Root: ({ children, onValueChange, value, disabled }: any) =>
+      React.createElement(
+        'div',
+        {
+          'data-testid': 'select-root',
+          role: 'combobox',
+          'aria-expanded': false,
+        },
+        children
+      ),
+    Trigger: ({ children, ...props }: any) =>
+      React.createElement(
+        'button',
+        {
+          ...props,
+          'data-testid': 'select-trigger',
+          role: 'combobox',
+          'aria-expanded': false,
+        },
+        children
+      ),
+    Content: ({ children, ...props }: any) =>
+      React.createElement(
+        'div',
+        {
+          ...props,
+          'data-testid': 'select-content',
+          role: 'listbox',
+        },
+        children
+      ),
     Portal: ({ children }: any) => children,
-    Viewport: ({ children, ...props }: any) => 
+    Viewport: ({ children, ...props }: any) =>
       React.createElement('div', { ...props, 'data-testid': 'select-viewport' }, children),
-    Item: ({ children, value, ...props }: any) => 
-      React.createElement('div', { 
-        ...props, 
-        'data-testid': 'select-item',
-        'data-value': value,
-        role: 'option'
-      }, children),
-    ItemText: ({ children }: any) => 
-      React.createElement('span', null, children),
-    ItemIndicator: ({ children }: any) => 
+    Item: ({ children, value, ...props }: any) =>
+      React.createElement(
+        'div',
+        {
+          ...props,
+          'data-testid': 'select-item',
+          'data-value': value,
+          role: 'option',
+        },
+        children
+      ),
+    ItemText: ({ children }: any) => React.createElement('span', null, children),
+    ItemIndicator: ({ children }: any) =>
       React.createElement('span', { 'data-testid': 'select-indicator' }, children),
-    Value: ({ placeholder }: any) => 
+    Value: ({ placeholder }: any) =>
       React.createElement('span', { 'data-testid': 'select-value' }, placeholder),
-    Icon: ({ children }: any) => 
+    Icon: ({ children }: any) =>
       React.createElement('span', { 'data-testid': 'select-icon' }, children),
-    ScrollUpButton: ({ children, ...props }: any) => 
+    ScrollUpButton: ({ children, ...props }: any) =>
       React.createElement('div', { ...props, 'data-testid': 'select-scroll-up' }, children),
-    ScrollDownButton: ({ children, ...props }: any) => 
+    ScrollDownButton: ({ children, ...props }: any) =>
       React.createElement('div', { ...props, 'data-testid': 'select-scroll-down' }, children),
-    Group: ({ children, ...props }: any) => 
+    Group: ({ children, ...props }: any) =>
       React.createElement('div', { ...props, 'data-testid': 'select-group' }, children),
-    Label: ({ children, ...props }: any) => 
+    Label: ({ children, ...props }: any) =>
       React.createElement('div', { ...props, 'data-testid': 'select-label' }, children),
-    Separator: (props: any) => 
-      React.createElement('div', { ...props, 'data-testid': 'select-separator' })
+    Separator: (props: any) =>
+      React.createElement('div', {
+        ...props,
+        'data-testid': 'select-separator',
+      }),
   }
 })
 
@@ -170,7 +192,7 @@ if (typeof globalThis.window !== 'undefined') {
   if (!globalThis.window.setTimeout) {
     globalThis.window.setTimeout = vi.fn() as any
   }
-  
+
   // Add observer classes
   globalThis.window.ResizeObserver = MockResizeObserver as any
   globalThis.window.IntersectionObserver = MockIntersectionObserver as any

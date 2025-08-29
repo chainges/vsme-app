@@ -32,11 +32,7 @@ function testHttpEndpoint(url, expectedStatus = 200, description) {
     })
     const statusCode = Number.parseInt(result.trim())
     const passed = statusCode === expectedStatus
-    logTest(
-      `HTTP endpoint: ${description}`,
-      passed,
-      `${url} returned ${statusCode}`
-    )
+    logTest(`HTTP endpoint: ${description}`, passed, `${url} returned ${statusCode}`)
     return passed
   } catch (error) {
     logTest(`HTTP endpoint: ${description}`, false, `Error: ${error.message}`)
@@ -46,11 +42,7 @@ function testHttpEndpoint(url, expectedStatus = 200, description) {
 
 function testComponentIntegrity(filePath, requiredPatterns, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Component integrity: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Component integrity: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
@@ -61,11 +53,7 @@ function testComponentIntegrity(filePath, requiredPatterns, description) {
   })
 
   if (missingPatterns.length === 0) {
-    logTest(
-      `Component integrity: ${description}`,
-      true,
-      'All required patterns found'
-    )
+    logTest(`Component integrity: ${description}`, true, 'All required patterns found')
     return true
   }
   logTest(
@@ -78,11 +66,7 @@ function testComponentIntegrity(filePath, requiredPatterns, description) {
 
 function testResponsiveFeatures(filePath, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Responsive features: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Responsive features: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
@@ -116,11 +100,7 @@ function testResponsiveFeatures(filePath, description) {
 
 function testAccessibilityCompliance(filePath, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Accessibility compliance: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Accessibility compliance: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
@@ -152,22 +132,12 @@ function testAccessibilityCompliance(filePath, description) {
 
 function testThemeImplementation(filePath, description) {
   if (!fs.existsSync(filePath)) {
-    logTest(
-      `Theme implementation: ${description}`,
-      false,
-      `File not found: ${filePath}`
-    )
+    logTest(`Theme implementation: ${description}`, false, `File not found: ${filePath}`)
     return false
   }
 
   const content = fs.readFileSync(filePath, 'utf8')
-  const themePatterns = [
-    'dark:',
-    'ModeToggle',
-    'useTheme',
-    'ThemeProvider',
-    'next-themes',
-  ]
+  const themePatterns = ['dark:', 'ModeToggle', 'useTheme', 'ThemeProvider', 'next-themes']
 
   const foundPatterns = themePatterns.filter((pattern) => {
     const regex = new RegExp(pattern)
@@ -191,22 +161,13 @@ testHttpEndpoint('http://localhost:3001/', 200, 'Home page')
 testHttpEndpoint('http://localhost:3001/dashboard', 200, 'Dashboard page')
 testHttpEndpoint('http://localhost:3001/projects', 200, 'Projects page')
 testHttpEndpoint('http://localhost:3001/settings', 200, 'Settings page')
-testHttpEndpoint(
-  'http://localhost:3001/nonexistent',
-  404,
-  'Non-existent page (should 404)'
-)
+testHttpEndpoint('http://localhost:3001/nonexistent', 404, 'Non-existent page (should 404)')
 
 // Test 2: Navigation Component Functionality
 console.log('\n🧭 Testing Navigation Component Functionality')
 testComponentIntegrity(
   'apps/web/src/components/navigation/nav-main.tsx',
-  [
-    'handleNavigation',
-    'setOpenMobile',
-    'Link.*href',
-    'onClick.*handleNavigation',
-  ],
+  ['handleNavigation', 'setOpenMobile', 'Link.*href', 'onClick.*handleNavigation'],
   'Main navigation click handling'
 )
 
@@ -232,74 +193,35 @@ testComponentIntegrity(
 
 testComponentIntegrity(
   'apps/web/src/components/layout/app-layout.tsx',
-  [
-    'isAuthenticated',
-    'isLoading',
-    'useEffect.*window\\.location',
-    'Access Denied',
-  ],
+  ['isAuthenticated', 'isLoading', 'useEffect.*window\\.location', 'Access Denied'],
   'Authentication-based layout switching'
 )
 
 // Test 4: Responsive Design Implementation
 console.log('\n📱 Testing Responsive Design Implementation')
-testResponsiveFeatures(
-  'apps/web/src/components/navigation/nav-main.tsx',
-  'Main navigation'
-)
-testResponsiveFeatures(
-  'apps/web/src/components/navigation/nav-user.tsx',
-  'User navigation'
-)
-testResponsiveFeatures(
-  'apps/web/src/components/layout/header.tsx',
-  'Header component'
-)
-testResponsiveFeatures(
-  'apps/web/src/app/(LandingPages)/page.tsx',
-  'Landing page'
-)
+testResponsiveFeatures('apps/web/src/components/navigation/nav-main.tsx', 'Main navigation')
+testResponsiveFeatures('apps/web/src/components/navigation/nav-user.tsx', 'User navigation')
+testResponsiveFeatures('apps/web/src/components/layout/header.tsx', 'Header component')
+testResponsiveFeatures('apps/web/src/app/(LandingPages)/page.tsx', 'Landing page')
 
 // Test 5: Accessibility Implementation
 console.log('\n♿ Testing Accessibility Implementation')
-testAccessibilityCompliance(
-  'apps/web/src/components/navigation/nav-main.tsx',
-  'Main navigation'
-)
-testAccessibilityCompliance(
-  'apps/web/src/components/navigation/nav-user.tsx',
-  'User navigation'
-)
-testAccessibilityCompliance(
-  'apps/web/src/app/(LandingPages)/page.tsx',
-  'Landing page'
-)
+testAccessibilityCompliance('apps/web/src/components/navigation/nav-main.tsx', 'Main navigation')
+testAccessibilityCompliance('apps/web/src/components/navigation/nav-user.tsx', 'User navigation')
+testAccessibilityCompliance('apps/web/src/app/(LandingPages)/page.tsx', 'Landing page')
 testAccessibilityCompliance('apps/web/src/app/layout.tsx', 'Root layout')
 
 // Test 6: Theme System Implementation
 console.log('\n🎨 Testing Theme System Implementation')
-testThemeImplementation(
-  'apps/web/src/components/layout/providers.tsx',
-  'Theme providers'
-)
-testThemeImplementation(
-  'apps/web/src/components/common/mode-toggle.tsx',
-  'Theme toggle'
-)
-testThemeImplementation(
-  'apps/web/src/components/layout/header.tsx',
-  'Header theme integration'
-)
+testThemeImplementation('apps/web/src/components/layout/providers.tsx', 'Theme providers')
+testThemeImplementation('apps/web/src/components/common/mode-toggle.tsx', 'Theme toggle')
+testThemeImplementation('apps/web/src/components/layout/header.tsx', 'Header theme integration')
 
 // Test 7: Error Handling Implementation
 console.log('\n🚨 Testing Error Handling Implementation')
 testComponentIntegrity(
   'apps/web/src/components/common/error-boundary.tsx',
-  [
-    'class.*extends.*Component',
-    'componentDidCatch',
-    'getDerivedStateFromError',
-  ],
+  ['class.*extends.*Component', 'componentDidCatch', 'getDerivedStateFromError'],
   'Error boundary implementation'
 )
 
@@ -327,12 +249,7 @@ testComponentIntegrity(
 console.log('\n🎨 Testing Component Styling and CSS Classes')
 testComponentIntegrity(
   'apps/web/src/app/(LandingPages)/page.tsx',
-  [
-    'className.*bg-gradient',
-    'className.*text-',
-    'className.*flex',
-    'className.*grid',
-  ],
+  ['className.*bg-gradient', 'className.*text-', 'className.*flex', 'className.*grid'],
   'Landing page styling classes'
 )
 
@@ -371,18 +288,14 @@ const detailedResults = {
   summary: {
     passed: testResults.passed,
     failed: testResults.failed,
-    successRate: (
-      (testResults.passed / (testResults.passed + testResults.failed)) *
-      100
-    ).toFixed(1),
+    successRate: ((testResults.passed / (testResults.passed + testResults.failed)) * 100).toFixed(
+      1
+    ),
   },
   tests: testResults.tests,
 }
 
-fs.writeFileSync(
-  'test-results-functionality.json',
-  JSON.stringify(detailedResults, null, 2)
-)
+fs.writeFileSync('test-results-functionality.json', JSON.stringify(detailedResults, null, 2))
 console.log('\n💾 Detailed results saved to test-results-functionality.json')
 
 // Exit with appropriate code

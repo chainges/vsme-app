@@ -75,9 +75,7 @@ export async function seedExampleData() {
 
     console.log('✅ Seed data created successfully:')
     console.log(`   - User: ${testUser.name} (${testUser.email})`)
-    console.log(
-      `   - Company: ${testCompany.name} (${testCompany.registrationNumber})`
-    )
+    console.log(`   - Company: ${testCompany.name} (${testCompany.registrationNumber})`)
     console.log(`   - Report: ${testReport.year} ESG Report`)
 
     return { testUser, testCompany, testReport }

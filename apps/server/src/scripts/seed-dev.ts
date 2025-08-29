@@ -8,10 +8,7 @@
  * Purpose: Forces development seeding for local development and testing
  */
 
-import {
-  cleanupDevelopmentData,
-  seedDevelopmentData,
-} from '../lib/seeds/development-seed'
+import { cleanupDevelopmentData, seedDevelopmentData } from '../lib/seeds/development-seed'
 
 async function main() {
   try {

@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useMockAuth } from '@/contexts/mock-auth-context'
 
 export default function DashboardPage() {
@@ -31,37 +25,27 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium text-sm">
-              Compliance Score
-            </CardTitle>
+            <CardTitle className="font-medium text-sm">Compliance Score</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="font-bold text-2xl">87%</div>
-            <p className="text-muted-foreground text-xs">
-              +5% from last quarter
-            </p>
+            <p className="text-muted-foreground text-xs">+5% from last quarter</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium text-sm">
-              Environmental Score
-            </CardTitle>
+            <CardTitle className="font-medium text-sm">Environmental Score</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="font-bold text-2xl">92%</div>
-            <p className="text-muted-foreground text-xs">
-              +3% from last quarter
-            </p>
+            <p className="text-muted-foreground text-xs">+3% from last quarter</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium text-sm">
-              Active Projects
-            </CardTitle>
+            <CardTitle className="font-medium text-sm">Active Projects</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="font-bold text-2xl">3</div>
@@ -74,17 +58,13 @@ export default function DashboardPage() {
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>
-              Your latest sustainability reporting activities
-            </CardDescription>
+            <CardDescription>Your latest sustainability reporting activities</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-4">
               <div className="h-2 w-2 rounded-full bg-blue-500" />
               <div className="flex-1">
-                <p className="font-medium text-sm">
-                  Q1 2024 Environmental Report submitted
-                </p>
+                <p className="font-medium text-sm">Q1 2024 Environmental Report submitted</p>
                 <p className="text-muted-foreground text-xs">2 hours ago</p>
               </div>
             </div>
@@ -98,9 +78,7 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-4">
               <div className="h-2 w-2 rounded-full bg-yellow-500" />
               <div className="flex-1">
-                <p className="font-medium text-sm">
-                  Compliance review scheduled
-                </p>
+                <p className="font-medium text-sm">Compliance review scheduled</p>
                 <p className="text-muted-foreground text-xs">3 days ago</p>
               </div>
             </div>
@@ -117,9 +95,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
-                <h4 className="font-medium text-blue-900 dark:text-blue-100">
-                  Next Deadline
-                </h4>
+                <h4 className="font-medium text-blue-900 dark:text-blue-100">Next Deadline</h4>
                 <p className="text-blue-700 text-sm dark:text-blue-300">
                   Q2 2024 Report due in 15 days
                 </p>

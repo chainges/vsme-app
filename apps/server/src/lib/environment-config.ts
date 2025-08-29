@@ -35,10 +35,7 @@ interface EnvironmentDatabaseConfig {
  * Used by: getEnvironmentDatabaseConfig() to determine database names
  * Purpose: Centralizes database naming conventions per environment
  */
-const ENVIRONMENT_DATABASE_CONFIG: Record<
-  Environment,
-  EnvironmentDatabaseConfig
-> = {
+const ENVIRONMENT_DATABASE_CONFIG: Record<Environment, EnvironmentDatabaseConfig> = {
   development: {
     external: {
       defaultDatabase: 'co2-intensities-dev',
@@ -150,20 +147,12 @@ export function validateEnvironmentConfig(): {
   }
 
   // Validate database URLs format
-  if (
-    process.env.PRIMARY_DATABASE_URL &&
-    !isValidMongoUrl(process.env.PRIMARY_DATABASE_URL)
-  ) {
+  if (process.env.PRIMARY_DATABASE_URL && !isValidMongoUrl(process.env.PRIMARY_DATABASE_URL)) {
     errors.push('PRIMARY_DATABASE_URL is not a valid MongoDB connection string')
   }
 
-  if (
-    process.env.SCOPE321_DATABASE_URL &&
-    !isValidMongoUrl(process.env.SCOPE321_DATABASE_URL)
-  ) {
-    errors.push(
-      'SCOPE321_DATABASE_URL is not a valid MongoDB connection string'
-    )
+  if (process.env.SCOPE321_DATABASE_URL && !isValidMongoUrl(process.env.SCOPE321_DATABASE_URL)) {
+    errors.push('SCOPE321_DATABASE_URL is not a valid MongoDB connection string')
   }
 
   return {
@@ -211,12 +200,8 @@ export function getEnvironmentSummary() {
     environmentVariables: {
       NODE_ENV: process.env.NODE_ENV,
       EXTERNAL_DATABASE_NAME: process.env.EXTERNAL_DATABASE_NAME,
-      PRIMARY_DATABASE_URL: process.env.PRIMARY_DATABASE_URL
-        ? 'Set'
-        : 'Not set',
-      SCOPE321_DATABASE_URL: process.env.SCOPE321_DATABASE_URL
-        ? 'Set'
-        : 'Not set',
+      PRIMARY_DATABASE_URL: process.env.PRIMARY_DATABASE_URL ? 'Set' : 'Not set',
+      SCOPE321_DATABASE_URL: process.env.SCOPE321_DATABASE_URL ? 'Set' : 'Not set',
       CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ? 'Set' : 'Not set',
     },
   }
@@ -235,9 +220,7 @@ export function getEnvironmentFeatures() {
     enableQueryLogging: environment === 'development' || environment === 'test',
     enableDevTools: environment === 'development',
     enableDetailedErrors: environment !== 'production',
-    enablePerformanceMonitoring:
-      environment === 'production' || environment === 'staging',
-    enableExternalDataCaching:
-      environment === 'production' || environment === 'staging',
+    enablePerformanceMonitoring: environment === 'production' || environment === 'staging',
+    enableExternalDataCaching: environment === 'production' || environment === 'staging',
   }
 }

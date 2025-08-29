@@ -16,23 +16,14 @@ import {
 } from '../lib/environment-config'
 
 function main() {
-  const targetEnv = process.argv[2] as
-    | 'development'
-    | 'test'
-    | 'staging'
-    | 'production'
+  const targetEnv = process.argv[2] as 'development' | 'test' | 'staging' | 'production'
 
   try {
     console.log('🔧 Environment Setup and Validation')
     console.log('===================================')
 
-    if (
-      targetEnv &&
-      !['development', 'test', 'staging', 'production'].includes(targetEnv)
-    ) {
-      console.error(
-        '❌ Invalid environment. Use: development, test, staging, or production'
-      )
+    if (targetEnv && !['development', 'test', 'staging', 'production'].includes(targetEnv)) {
+      console.error('❌ Invalid environment. Use: development, test, staging, or production')
       process.exit(1)
     }
 
@@ -49,12 +40,8 @@ function main() {
 
     // Show database configuration
     console.log('\n🗄️  Database Configuration:')
-    console.log(
-      `   External Database: ${envSummary.databaseConfig.external.configured}`
-    )
-    console.log(
-      `   Default for ${currentEnv}: ${envSummary.databaseConfig.external.default}`
-    )
+    console.log(`   External Database: ${envSummary.databaseConfig.external.configured}`)
+    console.log(`   Default for ${currentEnv}: ${envSummary.databaseConfig.external.default}`)
     console.log(`   Fallback: ${envSummary.databaseConfig.external.fallback}`)
 
     // Validate configuration
@@ -80,9 +67,7 @@ function main() {
 
     // Show environment variables status
     console.log('\n🔐 Environment Variables:')
-    for (const [key, value] of Object.entries(
-      envSummary.environmentVariables
-    )) {
+    for (const [key, value] of Object.entries(envSummary.environmentVariables)) {
       console.log(`   ${key}: ${value}`)
     }
 
@@ -110,34 +95,26 @@ function showEnvironmentTemplate(environment: string) {
     development: {
       NODE_ENV: 'development',
       EXTERNAL_DATABASE_NAME: 'co2-intensities-dev',
-      PRIMARY_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/app_dev',
-      SCOPE321_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities-dev',
+      PRIMARY_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/app_dev',
+      SCOPE321_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities-dev',
     },
     test: {
       NODE_ENV: 'test',
       EXTERNAL_DATABASE_NAME: 'co2-intensities-test',
-      PRIMARY_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/app_test',
-      SCOPE321_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities-test',
+      PRIMARY_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/app_test',
+      SCOPE321_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities-test',
     },
     staging: {
       NODE_ENV: 'staging',
       EXTERNAL_DATABASE_NAME: 'co2-intensities-staging',
-      PRIMARY_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/app_staging',
-      SCOPE321_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities-staging',
+      PRIMARY_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/app_staging',
+      SCOPE321_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities-staging',
     },
     production: {
       NODE_ENV: 'production',
       EXTERNAL_DATABASE_NAME: 'co2-intensities',
-      PRIMARY_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/app_production',
-      SCOPE321_DATABASE_URL:
-        'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities',
+      PRIMARY_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/app_production',
+      SCOPE321_DATABASE_URL: 'mongodb+srv://user:pass@cluster.mongodb.net/co2-intensities',
     },
   }
 

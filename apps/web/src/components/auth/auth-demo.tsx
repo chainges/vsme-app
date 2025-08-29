@@ -7,13 +7,7 @@ import { ErrorBoundary } from '@/components/common/error-boundary'
 import { ErrorDisplay } from '@/components/common/error-display'
 import { InlineLoader } from '@/components/common/loading'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuth } from '@/hooks/use-auth'
 
 export function AuthDemo() {
@@ -32,8 +26,7 @@ export function AuthDemo() {
       toast.success('Successfully signed in!')
       // The redirect will be handled by the home page useEffect
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to sign in'
+      const errorMessage = err instanceof Error ? err.message : 'Failed to sign in'
       setError(errorMessage)
       toast.error(errorMessage)
     } finally {
@@ -51,8 +44,7 @@ export function AuthDemo() {
       toast.success('Successfully signed out!')
       // Stay on home page after sign out
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to sign out'
+      const errorMessage = err instanceof Error ? err.message : 'Failed to sign out'
       setError(errorMessage)
       toast.error(errorMessage)
     } finally {
@@ -75,9 +67,7 @@ export function AuthDemo() {
         <CardContent className="flex items-center justify-center p-6">
           <div className="flex items-center gap-2">
             <InlineLoader />
-            <span className="text-muted-foreground text-sm">
-              Loading authentication...
-            </span>
+            <span className="text-muted-foreground text-sm">Loading authentication...</span>
           </div>
         </CardContent>
       </Card>
@@ -90,8 +80,7 @@ export function AuthDemo() {
         <CardHeader>
           <CardTitle>Mock Authentication Demo</CardTitle>
           <CardDescription>
-            This demonstrates the authentication system with loading states and
-            error handling.
+            This demonstrates the authentication system with loading states and error handling.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -151,11 +140,7 @@ export function AuthDemo() {
                 )}
               </Button>
             ) : (
-              <Button
-                className="min-w-[120px]"
-                disabled={actionLoading}
-                onClick={handleSignIn}
-              >
+              <Button className="min-w-[120px]" disabled={actionLoading} onClick={handleSignIn}>
                 {actionLoading ? (
                   <>
                     <InlineLoader className="mr-2" />
@@ -169,10 +154,9 @@ export function AuthDemo() {
           </div>
 
           <p className="text-muted-foreground text-sm">
-            This is a mock authentication system for UI development.
-            Authentication state persists across page refreshes.
-            {!isAuthenticated &&
-              " Click 'Sign In' to be redirected to the dashboard."}
+            This is a mock authentication system for UI development. Authentication state persists
+            across page refreshes.
+            {!isAuthenticated && " Click 'Sign In' to be redirected to the dashboard."}
           </p>
         </CardContent>
       </Card>
