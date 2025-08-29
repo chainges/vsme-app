@@ -1,7 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { InitiativeType, SustainabilityInitiative } from '@/lib/forms/types/sustainability-types'
+import type {
+  InitiativeType,
+  SustainabilityInitiative,
+} from '@/lib/forms/types/sustainability-types'
 import { InitiativeForm } from './InitiativeForm'
 import { InitiativesTable } from './InitiativesTable'
 
@@ -36,7 +39,7 @@ export function InitiativeManager({ initiatives, onChange }: InitiativeManagerPr
 
   const handleFormSubmit = (data: Omit<SustainabilityInitiative, 'isSelected' | 'type'>) => {
     let newInitiatives: SustainabilityInitiative[]
-    
+
     if (editingIndex !== null) {
       // Update existing initiative
       newInitiatives = [...initiatives]
@@ -84,18 +87,18 @@ export function InitiativeManager({ initiatives, onChange }: InitiativeManagerPr
   }
 
   // Determine which initiative we're editing or adding
-  const currentInitiative =
-    editingIndex !== null
-      ? initiatives[editingIndex]
-      : addingType
-        ? ({
-            type: addingType,
-            responsiblePerson: '',
-            goal: '',
-            description: '',
-            isSelected: true,
-          } as SustainabilityInitiative)
-        : null
+  let currentInitiative: SustainabilityInitiative | null = null
+  if (editingIndex !== null) {
+    currentInitiative = initiatives[editingIndex]
+  } else if (addingType) {
+    currentInitiative = {
+      type: addingType,
+      responsiblePerson: '',
+      goal: '',
+      description: '',
+      isSelected: true,
+    } as SustainabilityInitiative
+  }
 
   // Focus form when it appears
   useEffect(() => {

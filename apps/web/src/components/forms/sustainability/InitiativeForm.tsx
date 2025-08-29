@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import type { SustainabilityInitiative } from '@/lib/forms/types/sustainability-types'
 
 interface InitiativeFormProps {
@@ -19,14 +19,14 @@ export function InitiativeForm({ initiative, onSubmit, onCancel }: InitiativeFor
     goal: initiative?.goal || '',
     description: initiative?.description || '',
   })
-  
+
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    setFormData((prev) => ({ ...prev, [field]: value }))
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => {
+      setErrors((prev) => {
         const newErrors = { ...prev }
         delete newErrors[field]
         return newErrors
@@ -36,19 +36,19 @@ export function InitiativeForm({ initiative, onSubmit, onCancel }: InitiativeFor
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
-    
+
     if (formData.responsiblePerson.length < 2) {
       newErrors.responsiblePerson = 'Responsible person name must be at least 2 characters'
     }
-    
+
     if (formData.goal.length < 10) {
       newErrors.goal = 'Goal must be at least 10 characters'
     }
-    
+
     if (formData.description.length < 20) {
       newErrors.description = 'Description must be at least 20 characters'
     }
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -64,16 +64,11 @@ export function InitiativeForm({ initiative, onSubmit, onCancel }: InitiativeFor
       <h3 className="font-medium text-lg" id="initiative-form-title">
         {initiative ? `Edit ${initiative.type}` : 'Add New Initiative'}
       </h3>
-      
-      <div
-        aria-describedby="initiative-form-title"
-        className="space-y-4 pt-4"
-      >
+
+      <div aria-describedby="initiative-form-title" className="space-y-4 pt-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="responsiblePerson">
-              Responsible Person *
-            </Label>
+            <Label htmlFor="responsiblePerson">Responsible Person *</Label>
             <Input
               id="responsiblePerson"
               onChange={(e) => handleChange('responsiblePerson', e.target.value)}
@@ -84,23 +79,15 @@ export function InitiativeForm({ initiative, onSubmit, onCancel }: InitiativeFor
               <p className="text-destructive text-sm">{errors.responsiblePerson}</p>
             )}
           </div>
-          
+
           <div className="space-y-2">
-            <Label htmlFor="type">
-              Initiative Type
-            </Label>
-            <Input
-              disabled
-              id="type"
-              value={initiative?.type || ''}
-            />
+            <Label htmlFor="type">Initiative Type</Label>
+            <Input disabled id="type" value={initiative?.type || ''} />
           </div>
         </div>
-        
+
         <div className="space-y-2">
-          <Label htmlFor="goal">
-            Goal *
-          </Label>
+          <Label htmlFor="goal">Goal *</Label>
           <Textarea
             className="min-h-20"
             id="goal"
@@ -108,15 +95,11 @@ export function InitiativeForm({ initiative, onSubmit, onCancel }: InitiativeFor
             placeholder="Enter the goal for this initiative"
             value={formData.goal}
           />
-          {errors.goal && (
-            <p className="text-destructive text-sm">{errors.goal}</p>
-          )}
+          {errors.goal && <p className="text-destructive text-sm">{errors.goal}</p>}
         </div>
-        
+
         <div className="space-y-2">
-          <Label htmlFor="description">
-            Description *
-          </Label>
+          <Label htmlFor="description">Description *</Label>
           <Textarea
             className="min-h-32"
             id="description"
@@ -124,16 +107,16 @@ export function InitiativeForm({ initiative, onSubmit, onCancel }: InitiativeFor
             placeholder="Enter a detailed description of this initiative"
             value={formData.description}
           />
-          {errors.description && (
-            <p className="text-destructive text-sm">{errors.description}</p>
-          )}
+          {errors.description && <p className="text-destructive text-sm">{errors.description}</p>}
         </div>
-        
+
         <div className="flex justify-end gap-2">
           <Button onClick={onCancel} type="button" variant="outline">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} type="button">{initiative ? 'Update' : 'Add'} Initiative</Button>
+          <Button onClick={handleSubmit} type="button">
+            {initiative ? 'Update' : 'Add'} Initiative
+          </Button>
         </div>
       </div>
     </div>

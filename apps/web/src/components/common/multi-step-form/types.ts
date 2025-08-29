@@ -1,5 +1,8 @@
 import { z } from 'zod'
-import { sustainabilityInitiativesSchema } from '@/lib/forms/validation/sustainability-schemas'
+import {
+  type SustainabilityInitiative,
+  sustainabilityInitiativesSchema,
+} from '@/lib/forms/validation/sustainability-schemas'
 import { businessModelSchema } from './schemas/business-model'
 import { companyInfoSchema } from './schemas/company-info'
 import { sustainabilitySchema } from './schemas/sustainability'
@@ -16,13 +19,7 @@ export type FormData = z.infer<typeof formSchema>
 
 // Extend FormData to include initiatives
 export interface ExtendedFormData extends FormData {
-  initiatives: Array<{
-    type: string
-    responsiblePerson: string
-    goal: string
-    description: string
-    isSelected: boolean
-  }>
+  initiatives: SustainabilityInitiative[]
 }
 
 // Field type definitions

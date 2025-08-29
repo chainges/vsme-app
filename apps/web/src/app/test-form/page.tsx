@@ -12,7 +12,7 @@ export default function TestFormPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="font-bold text-2xl mb-6">Sustainability Initiatives Form Test</h1>
+      <h1 className="mb-6 font-bold text-2xl">Sustainability Initiatives Form Test</h1>
       <MultiStepForm onSubmit={handleFormSubmit} />
     </div>
   )

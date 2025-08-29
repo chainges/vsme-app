@@ -108,7 +108,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
       // For the sustainability initiatives step, we need to validate the initiatives array
       // Get the current initiatives from the form
       const initiatives = form.getValues('initiatives') || []
-      
+
       // Validate each initiative using the schema
       try {
         const validationSchema = currentStepConfig.schema
@@ -121,7 +121,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
         console.log('Validation errors:', error)
         form.setError('initiatives', {
           type: 'manual',
-          message: 'Please fix the validation errors in the initiatives'
+          message: 'Please fix the validation errors in the initiatives',
         })
         return
       }
@@ -145,7 +145,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
       // Save to localStorage when moving to next step
       localStorage.setItem('sustainabilityForm', JSON.stringify(updatedData))
       console.log('Form data saved to localStorage:', updatedData)
-      
+
       setStep(step + 1)
     }
   }

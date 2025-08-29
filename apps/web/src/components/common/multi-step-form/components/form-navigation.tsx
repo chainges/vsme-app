@@ -3,7 +3,7 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { FormNavigationProps } from '../../types'
+import type { FormNavigationProps } from '../types'
 
 export function FormNavigation({
   isFirstStep,
