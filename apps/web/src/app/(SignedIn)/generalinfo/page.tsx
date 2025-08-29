@@ -5,7 +5,7 @@ import MultiStepForm from '@/components/common/multi-step-form'
 export default function GeneralInfoPage() {
   return (
     <div className="container mx-auto max-w-4xl space-y-6 p-6">
-      <h1 className="text-3xl font-bold">General Information</h1>
+      <h1 className="font-bold text-2xl">General Information</h1>
 
       <section>
         <MultiStepForm

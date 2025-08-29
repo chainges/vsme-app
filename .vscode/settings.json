@@ -34,7 +34,7 @@
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "emmet.showExpandedAbbreviation": "never",
-  "biome.lspBin": "bunx biome",
+  "biome.lsp.bin": "bunx biome",
   "biome.enabled": true,
   "files.associations": {
     "*.mjs": "javascript",
