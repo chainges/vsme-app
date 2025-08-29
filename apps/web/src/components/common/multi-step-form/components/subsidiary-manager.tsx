@@ -241,9 +241,11 @@ export default function SubsidiaryManager({ control, errors, trigger }: Subsidia
               </div>
 
               <div className="flex items-center gap-2 pt-2">
-                <Button 
-                  onClick={handleSubmit(editingIndex !== null ? handleSaveEdit : handleAddSubsidiary)}
-                  size="sm" 
+                <Button
+                  onClick={handleSubmit(
+                    editingIndex !== null ? handleSaveEdit : handleAddSubsidiary
+                  )}
+                  size="sm"
                   type="button"
                 >
                   {editingIndex !== null ? 'Update' : 'Add'} Subsidiary

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useForm } from 'react-hook-form'
 import { describe, expect, it } from 'vitest'
-import SubsidiaryManager from '@/components/common/subsidiary-manager'
+import SubsidiaryManager from '@/components/common/multi-step-form/components/subsidiary-manager'
 
 // Test wrapper component
 function TestWrapper({ withTrigger = false }: { withTrigger?: boolean } = {}) {
