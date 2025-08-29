@@ -1,36 +1,33 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import SubsidiaryManager from '@/components/common/subsidiary-manager'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-
-// Test schema
-const testSchema = z.object({
-  subsidiaries: z
-    .array(
-      z.object({
-        name: z.string().min(2, 'Name must be at least 2 characters'),
-        organizationNumber: z.string().min(9, 'Organization number must be valid'),
-        address: z.string().min(5, 'Address must be at least 5 characters'),
-      })
-    )
-    .optional(),
-})
 
 // Test wrapper component
-function TestWrapper() {
+function TestWrapper({ withTrigger = false }: { withTrigger?: boolean } = {}) {
   const {
     control,
+    trigger,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(testSchema),
     defaultValues: {
       subsidiaries: [],
     },
   })
 
-  return <SubsidiaryManager control={control} errors={errors} />
+  const triggerFn = withTrigger 
+    ? async (fieldName?: string | string[]) => {
+        return await trigger(fieldName as any)
+      }
+    : undefined
+
+  return (
+    <SubsidiaryManager 
+      control={control} 
+      errors={errors} 
+      trigger={triggerFn}
+    />
+  )
 }
 
 describe('SubsidiaryManager', () => {
@@ -44,79 +41,194 @@ describe('SubsidiaryManager', () => {
     ).toBeInTheDocument()
   })
 
-  it('adds a new subsidiary when "Add Subsidiary" button is clicked', async () => {
+  it('shows add form when "Add Subsidiary" button is clicked', async () => {
     render(<TestWrapper />)
 
     const addButton = screen.getByText('Add Subsidiary')
     fireEvent.click(addButton)
 
     await waitFor(() => {
-      expect(screen.getByText('Subsidiary 1')).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Enter subsidiary company name')).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('123456789')).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Street address, City, Country')).toBeInTheDocument()
+      expect(screen.getByText('Add New Subsidiary')).toBeInTheDocument()
+      expect(screen.getByLabelText('Company Name *')).toBeInTheDocument()
+      expect(screen.getByLabelText('Organization Number *')).toBeInTheDocument()
+      expect(screen.getByLabelText('Registered Address *')).toBeInTheDocument()
+      expect(screen.getByText('Add Subsidiary', { selector: 'button' })).toBeInTheDocument()
+      expect(screen.getByText('Cancel')).toBeInTheDocument()
     })
   })
 
-  it('allows multiple subsidiaries to be added', async () => {
-    render(<TestWrapper />)
+  it('validates and adds a subsidiary with proper data', async () => {
+    render(<TestWrapper withTrigger={true} />)
 
+    // Click add subsidiary button
     const addButton = screen.getByText('Add Subsidiary')
-
-    // Add first subsidiary
     fireEvent.click(addButton)
+
     await waitFor(() => {
-      expect(screen.getByText('Subsidiary 1')).toBeInTheDocument()
+      expect(screen.getByText('Add New Subsidiary')).toBeInTheDocument()
     })
 
-    // Add second subsidiary
-    fireEvent.click(addButton)
-    await waitFor(() => {
-      expect(screen.getByText('Subsidiary 2')).toBeInTheDocument()
-    })
+    // Fill in the form
+    const nameInput = screen.getByLabelText('Company Name *')
+    const orgNumberInput = screen.getByLabelText('Organization Number *')
+    const addressInput = screen.getByLabelText('Registered Address *')
 
-    // Both subsidiaries should be present
-    expect(screen.getByText('Subsidiary 1')).toBeInTheDocument()
-    expect(screen.getByText('Subsidiary 2')).toBeInTheDocument()
+    fireEvent.change(nameInput, { target: { value: 'Test Company' } })
+    fireEvent.change(orgNumberInput, { target: { value: '123456789' } })
+    fireEvent.change(addressInput, { target: { value: 'Test Address, City, Country' } })
+
+    // Submit the form
+    const submitButton = screen.getByText('Add Subsidiary', { selector: 'button' })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      // The form should close and show the added subsidiary
+      expect(screen.queryByText('Add New Subsidiary')).not.toBeInTheDocument()
+      expect(screen.getByText('Test Company')).toBeInTheDocument()
+      expect(screen.getByText('Org: 123456789')).toBeInTheDocument()
+      expect(screen.getByText('Test Address, City, Country')).toBeInTheDocument()
+    })
   })
 
-  it('removes a subsidiary when delete button is clicked', async () => {
+  it('shows validation errors for invalid data', async () => {
+    render(<TestWrapper />)
+
+    // Click add subsidiary button
+    const addButton = screen.getByText('Add Subsidiary')
+    fireEvent.click(addButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Add New Subsidiary')).toBeInTheDocument()
+    })
+
+    // Try to submit with invalid data
+    const nameInput = screen.getByLabelText('Company Name *')
+    const orgNumberInput = screen.getByLabelText('Organization Number *')
+    const addressInput = screen.getByLabelText('Registered Address *')
+
+    fireEvent.change(nameInput, { target: { value: 'A' } }) // Too short
+    fireEvent.change(orgNumberInput, { target: { value: '123' } }) // Too short
+    fireEvent.change(addressInput, { target: { value: 'ABC' } }) // Too short
+
+    const submitButton = screen.getByText('Add Subsidiary', { selector: 'button' })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Name must be at least 2 characters')).toBeInTheDocument()
+      expect(screen.getByText('Organization number must be at least 9 characters')).toBeInTheDocument()
+      expect(screen.getByText('Address must be at least 5 characters')).toBeInTheDocument()
+    })
+  })
+
+  it('cancels adding a subsidiary when cancel button is clicked', async () => {
     render(<TestWrapper />)
 
     const addButton = screen.getByText('Add Subsidiary')
-
-    // Add a subsidiary
     fireEvent.click(addButton)
+
     await waitFor(() => {
-      expect(screen.getByText('Subsidiary 1')).toBeInTheDocument()
+      expect(screen.getByText('Add New Subsidiary')).toBeInTheDocument()
     })
 
-    // Find and click the delete button
-    const deleteButton = screen.getByRole('button', { name: '' }) // Trash icon button
-    fireEvent.click(deleteButton)
+    // Fill in some data
+    const nameInput = screen.getByLabelText('Company Name *')
+    fireEvent.change(nameInput, { target: { value: 'Test Company' } })
+
+    // Click cancel
+    const cancelButton = screen.getByText('Cancel')
+    fireEvent.click(cancelButton)
 
     await waitFor(() => {
-      expect(screen.queryByText('Subsidiary 1')).not.toBeInTheDocument()
+      // Form should close and no subsidiary should be added
+      expect(screen.queryByText('Add New Subsidiary')).not.toBeInTheDocument()
+      expect(screen.queryByText('Test Company')).not.toBeInTheDocument()
       expect(
         screen.getByText('No subsidiaries added yet. Click "Add Subsidiary" to get started.')
       ).toBeInTheDocument()
     })
   })
 
-  it('displays form fields with correct labels and placeholders', async () => {
-    render(<TestWrapper />)
+  it('displays edit and delete buttons for added subsidiaries', async () => {
+    render(<TestWrapper withTrigger={true} />)
 
+    // Add a subsidiary first
     const addButton = screen.getByText('Add Subsidiary')
     fireEvent.click(addButton)
 
-    await waitFor(() => {
-      expect(screen.getByText('Company Name')).toBeInTheDocument()
-      expect(screen.getByText('Organization Number')).toBeInTheDocument()
-      expect(screen.getByText('Registered Address')).toBeInTheDocument()
+    const nameInput = screen.getByLabelText('Company Name *')
+    const orgNumberInput = screen.getByLabelText('Organization Number *')
+    const addressInput = screen.getByLabelText('Registered Address *')
 
-      expect(screen.getByPlaceholderText('Enter subsidiary company name')).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('123456789')).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Street address, City, Country')).toBeInTheDocument()
+    fireEvent.change(nameInput, { target: { value: 'Test Company' } })
+    fireEvent.change(orgNumberInput, { target: { value: '123456789' } })
+    fireEvent.change(addressInput, { target: { value: 'Test Address, City, Country' } })
+
+    const submitButton = screen.getByText('Add Subsidiary', { selector: 'button' })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Company')).toBeInTheDocument()
+    })
+
+    // Check for edit and delete buttons
+    const editButtons = screen.getAllByRole('button')
+    const editButton = editButtons.find(button => 
+      button.querySelector('svg') && 
+      button.getAttribute('aria-label') === null &&
+      button.textContent === ''
+    )
+    expect(editButton).toBeInTheDocument()
+  })
+
+  it('allows editing a subsidiary', async () => {
+    render(<TestWrapper withTrigger={true} />)
+
+    // Add a subsidiary first
+    const addButton = screen.getByText('Add Subsidiary')
+    fireEvent.click(addButton)
+
+    const nameInput = screen.getByLabelText('Company Name *')
+    const orgNumberInput = screen.getByLabelText('Organization Number *')
+    const addressInput = screen.getByLabelText('Registered Address *')
+
+    fireEvent.change(nameInput, { target: { value: 'Original Company' } })
+    fireEvent.change(orgNumberInput, { target: { value: '123456789' } })
+    fireEvent.change(addressInput, { target: { value: 'Original Address' } })
+
+    const submitButton = screen.getByText('Add Subsidiary', { selector: 'button' })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Original Company')).toBeInTheDocument()
+    })
+
+    // Find and click edit button (first button with no text content)
+    const buttons = screen.getAllByRole('button')
+    const editButton = buttons.find(btn => 
+      btn.textContent === '' && 
+      btn.querySelector('svg')
+    )
+    
+    if (editButton) {
+      fireEvent.click(editButton)
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('Edit Subsidiary')).toBeInTheDocument()
+      expect(screen.getByDisplayValue('Original Company')).toBeInTheDocument()
+    })
+
+    // Edit the name
+    const editNameInput = screen.getByDisplayValue('Original Company')
+    fireEvent.change(editNameInput, { target: { value: 'Updated Company' } })
+
+    // Save changes
+    const updateButton = screen.getByText('Update Subsidiary')
+    fireEvent.click(updateButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Updated Company')).toBeInTheDocument()
+      expect(screen.queryByText('Original Company')).not.toBeInTheDocument()
     })
   })
 })

@@ -503,7 +503,7 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
                 {/* Conditionally render SubsidiaryManager for consolidated reports */}
                 {step === 1 && reportBasis === 'consolidated' && (
                   <div className="space-y-2">
-                    <SubsidiaryManager control={control} errors={errors} />
+                    <SubsidiaryManager control={control} errors={errors} trigger={trigger} />
                   </div>
                 )}
 

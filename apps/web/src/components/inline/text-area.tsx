@@ -1,11 +1,10 @@
 'use client'
 
+import { Check, Pencil, X } from 'lucide-react'
 import type React from 'react'
-
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import { Check, Pencil, X } from 'lucide-react'
 
 interface InlineEditableTextareaProps {
   value: string
@@ -60,30 +59,38 @@ export function InlineEditableTextarea({
     }
   }
 
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleEdit()
+    }
+  }
+
   if (isEditing) {
     return (
-      <div className={cn('flex items-center gap-2 group', className)}>
+      <div className={cn('group flex items-center gap-2', className)}>
         <Textarea
-          ref={inputRef}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          className={cn('transition-all', inputClassName)}
           onBlur={handleSave}
+          onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className={cn('transition-all', inputClassName)}
+          ref={inputRef}
+          value={inputValue}
         />
         <div className="flex items-center gap-1">
           <button
-            onClick={handleSave}
-            className="p-1 text-green-600 hover:bg-green-100 rounded-md transition-colors"
             aria-label="Save"
+            className="rounded-md p-1 text-green-600 transition-colors hover:bg-green-100"
+            onClick={handleSave}
+            type="button"
           >
             <Check className="h-4 w-4" />
           </button>
           <button
-            onClick={handleCancel}
-            className="p-1 text-red-600 hover:bg-red-100 rounded-md transition-colors"
             aria-label="Cancel"
+            className="rounded-md p-1 text-red-600 transition-colors hover:bg-red-100"
+            onClick={handleCancel}
+            type="button"
           >
             <X className="h-4 w-4" />
           </button>
@@ -93,18 +100,20 @@ export function InlineEditableTextarea({
   }
 
   return (
-    <div
-      onClick={handleEdit}
+    <button
       className={cn(
-        'group flex items-center gap-2 px-3 py-2 rounded-md border border-transparent cursor-pointer transition-all',
-        'hover:bg-muted/50 hover:border-muted-foreground/20',
+        'group flex w-full cursor-pointer items-center gap-2 rounded-md border border-transparent px-3 py-2 text-left transition-all',
+        'hover:border-muted-foreground/20 hover:bg-muted/50',
         className
       )}
+      onClick={handleEdit}
+      onKeyUp={handleKeyUp}
+      type="button"
     >
       <span className={cn('flex-1', !value && 'text-muted-foreground text-sm')}>
         {value || placeholder}
       </span>
-      <Pencil className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-    </div>
+      <Pencil className="h-3.5 w-3.5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+    </button>
   )
 }
