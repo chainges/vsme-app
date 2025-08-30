@@ -4,7 +4,7 @@ import {
   sustainabilityInitiativeSchema,
   sustainabilityInitiativesSchema,
   sustainabilityInitiativesStepSchema,
-} from '../sustainability-schemas'
+} from '../schema'
 
 describe('Sustainability Schemas', () => {
   describe('initiativeTypeSchema', () => {

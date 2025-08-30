@@ -5,12 +5,12 @@ export type {
   InitiativeType,
   SustainabilityInitiative,
   SustainabilityInitiatives,
-} from '../types/sustainability-types'
+} from './sustainability-types'
 export {
   initiativeTypeSchema,
   sustainabilityInitiativeSchema,
   sustainabilityInitiativesSchema,
-} from '../types/sustainability-types'
+} from './sustainability-types'
 
 // Schema for the sustainability initiatives step
 export const sustainabilityInitiativesStepSchema = z.object({
@@ -33,6 +33,15 @@ export const sustainabilityInitiativesStepSchema = z.object({
     })
   ),
 })
+
+export const sustainabilityInitiativesStepConfig = {
+  id: 'sustainability-initiatives',
+  title: 'Sustainability Initiatives',
+  description: 'Report on the sustainability initiatives your organization is involved in',
+  schema: sustainabilityInitiativesStepSchema,
+  // This step will be handled as a custom component rather than field-based rendering
+  fields: [],
+} as const
 
 // Type for the sustainability initiatives step data
 export type SustainabilityInitiativesStepData = z.infer<typeof sustainabilityInitiativesStepSchema>

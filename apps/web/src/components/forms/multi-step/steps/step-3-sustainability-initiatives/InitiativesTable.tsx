@@ -1,6 +1,7 @@
 'use client'
 
 import { Pencil, Plus, Trash2 } from 'lucide-react'
+import type { SustainabilityInitiative } from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/sustainability-types'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -11,7 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { SustainabilityInitiative } from '@/lib/forms/types/sustainability-types'
 
 interface InitiativesTableProps {
   initiatives: SustainabilityInitiative[]

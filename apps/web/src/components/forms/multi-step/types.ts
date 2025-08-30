@@ -1,12 +1,12 @@
 import { z } from 'zod'
-// Import sustainability schema from new location
-import { sustainabilitySchema } from './steps/step-4-sustainability-practices/schema'
+// Import SustainabilityInitiative type
+import type { SustainabilityInitiative } from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/sustainability-types'
 // Import company info schema from new location
 import { companyInfoSchema } from './steps/step-1-company-info/schema'
 // Import business model schema from new location
 import { businessModelSchema } from './steps/step-2-business-model/schema'
-// Import SustainabilityInitiative type
-import type { SustainabilityInitiative } from '@/lib/forms/types/sustainability-types'
+// Import sustainability schema from new location
+import { sustainabilitySchema } from './steps/step-4-sustainability-practices/schema'
 
 // Combined form data type
 export const formSchema = z.object({
@@ -25,12 +25,12 @@ export const formSchema = z.object({
 
 export type FormData = z.infer<typeof formSchema>
 
-// Re-export individual types
-export type { SustainabilityData } from './steps/step-4-sustainability-practices/schema'
 // Re-export company info types from new location
 export type { CompanyInfoData } from './steps/step-1-company-info/schema'
 // Re-export business model types from new location
 export type { BusinessModelData, SubsidiaryData } from './steps/step-2-business-model/schema'
+// Re-export individual types
+export type { SustainabilityData } from './steps/step-4-sustainability-practices/schema'
 
 // Extend FormData to include initiatives
 export interface ExtendedFormData extends FormData {

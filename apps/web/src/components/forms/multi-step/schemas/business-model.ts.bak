@@ -13,7 +13,7 @@ export type SubsidiaryData = z.infer<typeof subsidiarySchema>
 const businessModelBaseSchema = z.object({
   businessModelDescription: z
     .string()
-    .min(10, 'Please provide a business model description of at least 10 characters'),
+    .min(10, 'Please provide a business model description of at least 10 characters.'),
   reportBasis: z
     .enum(['individual', 'consolidated'], {
       message: 'Please specify if the report is individual or consolidated',
@@ -64,7 +64,7 @@ export const businessModelFields = [
 export const businessModelStepConfig = {
   id: 'business-model',
   title: 'Business Model',
-  description: 'Describe your business model and reporting structure',
+  description: 'Describe your business model and reporting structure...',
   schema: businessModelSchema,
   fields: businessModelFields,
 } as const

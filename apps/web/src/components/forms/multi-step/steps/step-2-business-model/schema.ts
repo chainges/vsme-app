@@ -64,7 +64,7 @@ export const businessModelFields = [
 export const businessModelStepConfig = {
   id: 'business-model',
   title: 'Business Model',
-  description: 'Describe your business model and reporting structure',
+  description: 'Describe your business model and reporting structure.',
   schema: businessModelSchema,
   fields: businessModelFields,
 } as const

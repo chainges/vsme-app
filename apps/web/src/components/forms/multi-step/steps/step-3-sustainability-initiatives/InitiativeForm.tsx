@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import type { SustainabilityInitiative } from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/sustainability-types'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import type { SustainabilityInitiative } from '@/lib/forms/types/sustainability-types'
 
 interface InitiativeFormProps {
   initiative?: SustainabilityInitiative
