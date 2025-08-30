@@ -1,5 +1,44 @@
 import '@testing-library/jest-dom'
+// Mock DOM APIs for testing
 import { JSDOM } from 'jsdom'
+
+// Set up a basic DOM environment
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>')
+
+// Set up global objects
+global.document = dom.window.document
+global.window = dom.window as any
+global.navigator = dom.window.navigator
+
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+
+  return {
+    getItem(key: string) {
+      return store[key] || null
+    },
+
+    setItem(key: string, value: string) {
+      store[key] = value.toString()
+    },
+
+    removeItem(key: string) {
+      delete store[key]
+    },
+
+    clear() {
+      store = {}
+    },
+  }
+})()
+
+// Mock the global localStorage object
+Object.defineProperty(global, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+})
+
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 

@@ -12,10 +12,10 @@ export function FormNavigation({
   onPrevious,
   onNext,
   className,
-  previousLabel = "Back",
-  nextLabel = "Next",
-  submitLabel = "Submit",
-  submittingLabel = "Submitting...",
+  previousLabel = 'Back',
+  nextLabel = 'Next',
+  submitLabel = 'Submit',
+  submittingLabel = 'Submitting...',
 }: FormNavigationProps) {
   return (
     <div className={cn('flex justify-between pt-4', className)}>
@@ -28,12 +28,8 @@ export function FormNavigation({
       >
         <ArrowLeft className="mr-2 h-4 w-4" /> {previousLabel}
       </Button>
-      
-      <Button 
-        disabled={isSubmitting} 
-        onClick={onNext}
-        type="button"
-      >
+
+      <Button disabled={isSubmitting} onClick={onNext} type="button">
         {isLastStep ? (
           isSubmitting ? (
             submittingLabel

@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useFormData } from '@/hooks/use-form-data'
+import { useFormData } from '../../../../hooks/use-form-data'
+import { useFormDataPersistence } from '../../../../hooks/use-form-data-persistence'
 import { stepConfigurations } from '../schemas'
 import type { FormData, FormSubmissionState } from '../types'
 
@@ -51,8 +52,19 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
   // Use the form data hook for enriched defaults
   const { getEnrichedDefaults } = useFormData()
 
+  // Use the form data persistence hook
+  const { saveStepData, loadFormData } = useFormDataPersistence()
+
   // Get current step configuration
   const currentStepConfig = stepConfigurations[step]
+
+  // Load initial form data on mount
+  useEffect(() => {
+    const initialData = loadFormData()
+    if (initialData) {
+      setFormData(initialData)
+    }
+  }, [loadFormData])
 
   // Memoize helper function to extract default values
   const getSchemaDefaults = useCallback(
@@ -127,25 +139,27 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
       }
     }
 
-    if (isLastStep) {
-      // Final step submission
-      setSubmissionState({ isSubmitting: true, isComplete: false })
+    // Save step data to the single localStorage object
+    const stepIds = [
+      'company-info',
+      'business-model',
+      'sustainability-initiatives',
+      'sustainability',
+    ]
+    saveStepData(stepIds[step], data)
 
-      // Save to localStorage before submitting
-      localStorage.setItem('sustainabilityForm', JSON.stringify(updatedData))
-      console.log('Form data saved to localStorage:', updatedData)
+    if (isLastStep) {
+      // Final step submission - data should persist for future returns
+      setSubmissionState({ isSubmitting: true, isComplete: false })
 
       setTimeout(() => {
         if (onSubmit) {
           onSubmit(updatedData as FormData)
         }
         setSubmissionState({ isSubmitting: false, isComplete: true })
+        // Note: We don't clear form data here to maintain persistence as required
       }, 1500)
     } else {
-      // Save to localStorage when moving to next step
-      localStorage.setItem('sustainabilityForm', JSON.stringify(updatedData))
-      console.log('Form data saved to localStorage:', updatedData)
-
       setStep(step + 1)
     }
   }
@@ -157,12 +171,14 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
     }
   }
 
-  // Handle restart
+  // Handle restart - keep data persistent as required by acceptance criteria
   const handleRestart = () => {
     setStep(0)
-    setFormData({})
+    // Note: We don't clear formData to maintain persistence as required
     setSubmissionState({ isSubmitting: false, isComplete: false })
-    form.reset({})
+    // Reset form to initial values but keep existing data
+    const newDefaults = getSchemaDefaults(formData)
+    form.reset(newDefaults)
   }
 
   return {
