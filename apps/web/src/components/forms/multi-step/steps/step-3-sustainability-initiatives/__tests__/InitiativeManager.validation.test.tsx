@@ -92,9 +92,9 @@ describe('InitiativeManager Validation', () => {
 
     render(<InitiativeManager {...defaultProps} initiatives={initialInitiatives} />)
 
-    // Click edit button
-    const editButton = screen.getByRole('button', { name: /Edit Climate Change/i })
-    await user.click(editButton)
+    // Click edit button (get the first one if there are multiple)
+    const editButtons = screen.getAllByRole('button', { name: /Edit Climate Change/i })
+    await user.click(editButtons[0])
 
     // Update the responsible person
     const responsibleInput = screen.getByLabelText(/Responsible Person/i)

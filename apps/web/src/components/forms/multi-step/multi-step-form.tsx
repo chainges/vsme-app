@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import { InitiativeManager } from '../sustainability/InitiativeManager'
+import { InitiativeManager } from './steps/step-3-sustainability-initiatives'
 import {
   CompletionScreen,
   FormField,

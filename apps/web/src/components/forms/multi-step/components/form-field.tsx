@@ -35,7 +35,10 @@ export function FormField({ field, control, register, errors }: FormFieldProps) 
           name={field.name}
           render={({ field: controllerField }) => (
             <Select onValueChange={controllerField.onChange} value={controllerField.value || ''}>
-              <SelectTrigger className={cn('w-full', hasError && 'border-destructive')}>
+              <SelectTrigger
+                className={cn('w-full', hasError && 'border-destructive')}
+                id={field.name}
+              >
                 <SelectValue placeholder={field.placeholder} />
               </SelectTrigger>
               <SelectContent>

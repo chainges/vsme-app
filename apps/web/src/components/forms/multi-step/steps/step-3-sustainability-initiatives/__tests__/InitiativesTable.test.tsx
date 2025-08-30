@@ -110,8 +110,10 @@ describe('InitiativesTable', () => {
     )
 
     // Should have 1 edit button and 1 delete button
-    expect(screen.getByRole('button', { name: /Edit Workforce Development/ })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Delete Workforce Development/ })).toBeInTheDocument()
+    const editButtons = screen.getAllByRole('button', { name: /Edit Workforce Development/ })
+    const deleteButtons = screen.getAllByRole('button', { name: /Delete Workforce Development/ })
+    expect(editButtons.length).toBe(1)
+    expect(deleteButtons.length).toBe(1)
   })
 
   it('calls onAddInitiative when add button is clicked', () => {
@@ -140,7 +142,7 @@ describe('InitiativesTable', () => {
       />
     )
 
-    const editButton = screen.getByRole('button', { name: /Edit Workforce Development/ })
+    const editButton = screen.getAllByRole('button', { name: /Edit Workforce Development/ })[0]
     fireEvent.click(editButton)
 
     expect(mockOnEditInitiative).toHaveBeenCalledWith(0)
@@ -156,7 +158,7 @@ describe('InitiativesTable', () => {
       />
     )
 
-    const deleteButton = screen.getByRole('button', { name: /Delete Workforce Development/ })
+    const deleteButton = screen.getAllByRole('button', { name: /Delete Workforce Development/ })[0]
     fireEvent.click(deleteButton)
 
     expect(mockOnDeleteInitiative).toHaveBeenCalledWith(0)

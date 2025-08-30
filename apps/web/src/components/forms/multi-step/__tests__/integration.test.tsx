@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import MultiStepForm from '../../multi-step-form'
+import MultiStepForm from '../multi-step-form'
 
 // Mock the use-form-data hook
 vi.mock('@/hooks/use-form-data', () => ({
@@ -67,10 +67,10 @@ describe('MultiStepForm Integration', () => {
     await user.type(screen.getByLabelText('Number of Employees'), '50')
 
     // Select from dropdowns
-    await user.click(screen.getByRole('combobox', { name: /legal form/i }))
-    await user.click(screen.getByRole('option', { name: /Aksjeselskap/i }))
+    await user.click(screen.getByLabelText('Legal Form'))
+    await user.click(screen.getByRole('option', { name: /Aksjeselskap \(AS\)/i }))
 
-    await user.click(screen.getByRole('combobox', { name: /country/i }))
+    await user.click(screen.getByLabelText('Country'))
     await user.click(screen.getByRole('option', { name: /Norway/i }))
 
     // Click next
@@ -79,7 +79,7 @@ describe('MultiStepForm Integration', () => {
     // Should be on step 2
     await waitFor(() => {
       expect(screen.getByText('Business Model')).toBeInTheDocument()
-      expect(screen.getByText('Step 2 of 3')).toBeInTheDocument()
+      expect(screen.getByText('Step 2 of 4')).toBeInTheDocument()
     })
   })
 
@@ -113,10 +113,10 @@ describe('MultiStepForm Integration', () => {
     await user.type(screen.getByLabelText('Annual Turnover (€)'), '5000000')
     await user.type(screen.getByLabelText('Number of Employees'), '50')
 
-    await user.click(screen.getByRole('combobox', { name: /legal form/i }))
-    await user.click(screen.getByRole('option', { name: /Aksjeselskap/i }))
+    await user.click(screen.getByLabelText('Legal Form'))
+    await user.click(screen.getByRole('option', { name: /Aksjeselskap \(AS\)/i }))
 
-    await user.click(screen.getByRole('combobox', { name: /country/i }))
+    await user.click(screen.getByLabelText('Country'))
     await user.click(screen.getByRole('option', { name: /Norway/i }))
 
     await user.click(screen.getByRole('button', { name: /Next/i }))
@@ -126,7 +126,7 @@ describe('MultiStepForm Integration', () => {
     })
 
     // Select consolidated reporting
-    await user.click(screen.getByRole('combobox', { name: /report basis/i }))
+    await user.click(screen.getByLabelText('Report Basis'))
     await user.click(screen.getByRole('option', { name: /Consolidated basis/i }))
 
     await waitFor(() => {
@@ -149,10 +149,10 @@ describe('MultiStepForm Integration', () => {
     await user.type(screen.getByLabelText('Annual Turnover (€)'), '5000000')
     await user.type(screen.getByLabelText('Number of Employees'), '50')
 
-    await user.click(screen.getByRole('combobox', { name: /legal form/i }))
-    await user.click(screen.getByRole('option', { name: /Aksjeselskap/i }))
+    await user.click(screen.getByLabelText('Legal Form'))
+    await user.click(screen.getByRole('option', { name: /Aksjeselskap \(AS\)/i }))
 
-    await user.click(screen.getByRole('combobox', { name: /country/i }))
+    await user.click(screen.getByLabelText('Country'))
     await user.click(screen.getByRole('option', { name: /Norway/i }))
 
     await user.click(screen.getByRole('button', { name: /Next/i }))
@@ -169,7 +169,14 @@ describe('MultiStepForm Integration', () => {
 
     await user.click(screen.getByRole('button', { name: /Next/i }))
 
-    // Step 3: Sustainability
+    // Step 3: Sustainability Initiatives
+    await waitFor(() => {
+      expect(screen.getByText('Sustainability Initiatives')).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /Next/i }))
+
+    // Step 4: Sustainability Practices
     await waitFor(() => {
       expect(screen.getByText('Sustainability Practices')).toBeInTheDocument()
     })
@@ -218,10 +225,10 @@ describe('MultiStepForm Integration', () => {
     await user.type(screen.getByLabelText('Annual Turnover (€)'), '5000000')
     await user.type(screen.getByLabelText('Number of Employees'), '50')
 
-    await user.click(screen.getByRole('combobox', { name: /legal form/i }))
-    await user.click(screen.getByRole('option', { name: /Aksjeselskap/i }))
+    await user.click(screen.getByLabelText('Legal Form'))
+    await user.click(screen.getByRole('option', { name: /Aksjeselskap \(AS\)/i }))
 
-    await user.click(screen.getByRole('combobox', { name: /country/i }))
+    await user.click(screen.getByLabelText('Country'))
     await user.click(screen.getByRole('option', { name: /Norway/i }))
 
     await user.click(screen.getByRole('button', { name: /Next/i }))
@@ -233,18 +240,21 @@ describe('MultiStepForm Integration', () => {
     // Go back to step 1
     await user.click(screen.getByRole('button', { name: /Back/i }))
 
-    await waitFor(() => {
-      expect(screen.getByText('Company Information')).toBeInTheDocument()
-      expect(screen.getByText('Step 1 of 3')).toBeInTheDocument()
-    })
+    await waitFor(
+      () => {
+        expect(screen.getByText('Company Information')).toBeInTheDocument()
+        expect(screen.getByText('Step 1 of 4')).toBeInTheDocument()
+      },
+      { timeout: 5000 }
+    )
   })
 
   it('should show progress correctly throughout the form', () => {
     render(<MultiStepForm {...defaultProps} />)
 
-    // Step 1 should show 33% progress
-    expect(screen.getByText('33%')).toBeInTheDocument()
-    expect(screen.getByText('Step 1 of 3')).toBeInTheDocument()
+    // Step 1 should show 25% progress
+    expect(screen.getByText('25%')).toBeInTheDocument()
+    expect(screen.getByText('Step 1 of 4')).toBeInTheDocument()
   })
 
   it('should apply custom className', () => {

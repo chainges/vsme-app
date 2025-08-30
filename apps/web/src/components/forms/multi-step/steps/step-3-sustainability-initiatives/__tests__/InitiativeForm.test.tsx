@@ -61,12 +61,15 @@ describe('InitiativeForm', () => {
 
     // Wait for validation errors
     await waitFor(() => {
-      expect(screen.getByText('Required')).toBeInTheDocument()
+      expect(
+        screen.getByText('Responsible person name must be at least 2 characters')
+      ).toBeInTheDocument()
     })
 
     // Check that all required fields show validation errors
-    const errorMessages = screen.getAllByText('Required')
-    expect(errorMessages.length).toBe(3) // responsiblePerson, goal, description
+    expect(screen.getByText('Responsible person name must be at least 2 characters')).toBeInTheDocument()
+    expect(screen.getByText('Goal must be at least 10 characters')).toBeInTheDocument()
+    expect(screen.getByText('Description must be at least 20 characters')).toBeInTheDocument()
   })
 
   it('validates field length requirements', async () => {
@@ -103,10 +106,6 @@ describe('InitiativeForm', () => {
     const responsibleInput = screen.getByLabelText('Responsible Person *')
     fireEvent.change(responsibleInput, { target: { value: 'John Doe' } })
 
-    // Set type (normally this would be set by the parent component)
-    const typeInput = screen.getByLabelText('Initiative Type')
-    fireEvent.change(typeInput, { target: { value: 'Climate Change' } })
-
     const goalInput = screen.getByLabelText('Goal *')
     fireEvent.change(goalInput, { target: { value: 'Reduce carbon emissions by 2030' } })
 
@@ -123,7 +122,6 @@ describe('InitiativeForm', () => {
     // Wait for submission
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalledWith({
-        type: 'Climate Change',
         responsiblePerson: 'John Doe',
         goal: 'Reduce carbon emissions by 2030',
         description: 'Implement comprehensive carbon reduction strategies across all operations',
