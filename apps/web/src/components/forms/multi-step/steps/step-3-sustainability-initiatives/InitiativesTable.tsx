@@ -1,7 +1,7 @@
 'use client'
 
 import { Pencil, Plus, Trash2 } from 'lucide-react'
-import type { SustainabilityInitiative } from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/sustainability-types'
+import type { SustainabilityInitiative } from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/schema'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {

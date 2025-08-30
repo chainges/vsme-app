@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { InitiativeManager } from '../InitiativeManager'
 
-// 定义正则表达式在顶层作用域以避免性能问题
+//
 const ADD_WORKFORCE_DEV_REGEX = /add Workforce Development/i
 const RESPONSIBLE_PERSON_ERROR_REGEX = /Responsible person name must be at least 2 characters/i
 const GOAL_ERROR_REGEX = /Goal must be at least 10 characters/i

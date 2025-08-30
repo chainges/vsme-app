@@ -1,10 +1,12 @@
 import { z } from 'zod'
-// Import SustainabilityInitiative type
-import type { SustainabilityInitiative } from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/sustainability-types'
 // Import company info schema from new location
 import { companyInfoSchema } from './steps/step-1-company-info/schema'
 // Import business model schema from new location
 import { businessModelSchema } from './steps/step-2-business-model/schema'
+// Import SustainabilityInitiative type
+import type { SustainabilityInitiative } from './steps/step-3-sustainability-initiatives/schema'
+// Import initiatives schema from new location
+import { sustainabilityInitiativesSchema } from './steps/step-3-sustainability-initiatives/schema'
 // Import sustainability schema from new location
 import { sustainabilitySchema } from './steps/step-4-sustainability-practices/schema'
 
@@ -17,7 +19,7 @@ export const formSchema = z.object({
   ...businessModelSchema.shape,
 
   // Sustainability initiatives step
-  initiatives: z.array(z.any()).default([]),
+  initiatives: sustainabilityInitiativesSchema.default([]),
 
   // Sustainability practices step
   ...sustainabilitySchema.shape,
@@ -29,6 +31,12 @@ export type FormData = z.infer<typeof formSchema>
 export type { CompanyInfoData } from './steps/step-1-company-info/schema'
 // Re-export business model types from new location
 export type { BusinessModelData, SubsidiaryData } from './steps/step-2-business-model/schema'
+export type {
+  InitiativeType,
+  SustainabilityInitiative,
+  SustainabilityInitiatives,
+  SustainabilityInitiativesStepData,
+} from './steps/step-3-sustainability-initiatives/schema'
 // Re-export individual types
 export type { SustainabilityData } from './steps/step-4-sustainability-practices/schema'
 

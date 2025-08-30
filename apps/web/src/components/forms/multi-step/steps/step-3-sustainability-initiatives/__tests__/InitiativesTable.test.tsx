@@ -1,9 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { InitiativesTable } from '../InitiativesTable'
+import type { SustainabilityInitiative } from '../schema'
 
 // Mock data
-const mockInitiatives = [
+const mockInitiatives: SustainabilityInitiative[] = [
   {
     type: 'Workforce Development',
     responsiblePerson: 'John Doe',
@@ -50,9 +51,9 @@ describe('InitiativesTable', () => {
       'Stakeholder Engagement',
     ]
 
-    initiativeTypes.forEach((type) => {
+    for (const type of initiativeTypes) {
       expect(screen.getByText(type)).toBeInTheDocument()
-    })
+    }
   })
 
   it('shows "-" for unselected initiatives', () => {

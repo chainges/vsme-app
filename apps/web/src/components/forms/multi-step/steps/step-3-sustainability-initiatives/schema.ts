@@ -1,37 +1,32 @@
 import { z } from 'zod'
 
-// Re-export types and schemas from sustainability-types.ts
-export type {
-  InitiativeType,
-  SustainabilityInitiative,
-  SustainabilityInitiatives,
-} from './sustainability-types'
-export {
-  initiativeTypeSchema,
-  sustainabilityInitiativeSchema,
-  sustainabilityInitiativesSchema,
-} from './sustainability-types'
+// Define the initiative types as a literal union
+export const initiativeTypeSchema = z.enum([
+  'Workforce Development',
+  'Biodiversity',
+  'Climate Change',
+  'Business Ethics',
+  'Circular Economy',
+  'Community Impact',
+  'Marine Resources',
+  'Stakeholder Engagement',
+])
+
+// Schema for individual sustainability initiative
+export const sustainabilityInitiativeSchema = z.object({
+  type: initiativeTypeSchema,
+  responsiblePerson: z.string().min(2, 'Responsible person name must be at least 2 characters'),
+  goal: z.string().min(10, 'Goal must be at least 10 characters'),
+  description: z.string().min(20, 'Description must be at least 20 characters'),
+  isSelected: z.boolean(),
+})
+
+// Schema for array of sustainability initiatives
+export const sustainabilityInitiativesSchema = z.array(sustainabilityInitiativeSchema)
 
 // Schema for the sustainability initiatives step
 export const sustainabilityInitiativesStepSchema = z.object({
-  initiatives: z.array(
-    z.object({
-      type: z.enum([
-        'Workforce Development',
-        'Biodiversity',
-        'Climate Change',
-        'Business Ethics',
-        'Circular Economy',
-        'Community Impact',
-        'Marine Resources',
-        'Stakeholder Engagement',
-      ]),
-      responsiblePerson: z.string().min(2, 'Responsible person name must be at least 2 characters'),
-      goal: z.string().min(10, 'Goal must be at least 10 characters'),
-      description: z.string().min(20, 'Description must be at least 20 characters'),
-      isSelected: z.boolean(),
-    })
-  ),
+  initiatives: sustainabilityInitiativesSchema,
 })
 
 export const sustainabilityInitiativesStepConfig = {
@@ -43,5 +38,8 @@ export const sustainabilityInitiativesStepConfig = {
   fields: [],
 } as const
 
-// Type for the sustainability initiatives step data
+// Types for the schemas
+export type InitiativeType = z.infer<typeof initiativeTypeSchema>
+export type SustainabilityInitiative = z.infer<typeof sustainabilityInitiativeSchema>
+export type SustainabilityInitiatives = z.infer<typeof sustainabilityInitiativesSchema>
 export type SustainabilityInitiativesStepData = z.infer<typeof sustainabilityInitiativesStepSchema>

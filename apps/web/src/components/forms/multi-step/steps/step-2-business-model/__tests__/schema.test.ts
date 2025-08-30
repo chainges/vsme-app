@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { 
-  type BusinessModelData, 
-  businessModelSchema, 
-  type SubsidiaryData, 
-  subsidiarySchema 
+import {
+  type BusinessModelData,
+  businessModelSchema,
+  type SubsidiaryData,
+  subsidiarySchema,
 } from '../schema'
 
 describe('Subsidiary Schema', () => {

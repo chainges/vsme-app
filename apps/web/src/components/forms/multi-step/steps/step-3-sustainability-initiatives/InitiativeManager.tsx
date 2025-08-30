@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import type {
   InitiativeType,
   SustainabilityInitiative,
-} from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/sustainability-types'
+} from '@/components/forms/multi-step/steps/step-3-sustainability-initiatives/schema'
 import { InitiativeForm } from './InitiativeForm'
 import { InitiativesTable } from './InitiativesTable'
 

@@ -67,7 +67,9 @@ describe('InitiativeForm', () => {
     })
 
     // Check that all required fields show validation errors
-    expect(screen.getByText('Responsible person name must be at least 2 characters')).toBeInTheDocument()
+    expect(
+      screen.getByText('Responsible person name must be at least 2 characters')
+    ).toBeInTheDocument()
     expect(screen.getByText('Goal must be at least 10 characters')).toBeInTheDocument()
     expect(screen.getByText('Description must be at least 20 characters')).toBeInTheDocument()
   })
