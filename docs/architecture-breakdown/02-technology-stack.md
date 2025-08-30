@@ -55,7 +55,7 @@ The following technologies are the **definitive choices** for this project. All 
 | Technology | Version/Spec | Rationale |
 | :--- | :--- | :--- |
 | **TanStack Query** | v5 | Industry standard for server state management in React |
-| **TanStack Form** | Latest | Headless, performant form library for complex forms |
+| **React Hook Form** | Latest |  |
 
 ### Validation & Type Safety
 | Technology | Version/Spec | Rationale |
@@ -79,7 +79,7 @@ The following technologies are the **definitive choices** for this project. All 
 ### UI Component Stack
 - **Component Library:** shadcn/ui
 - **Styling Framework:** Tailwind CSS
-- **Form Management:** TanStack Form
+- **Form Management:** React Hook Form
 - **State Management:** TanStack Query v5
 
 ### Data Layer Stack

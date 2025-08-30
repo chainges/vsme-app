@@ -25,8 +25,8 @@ This directory contains all user stories for the VSME Guru project, organized by
 - **Type:** Brownfield Addition
 - **Actual Effort:** 4-6 hours
 - **QA Gate:** PASS WITH RECOMMENDATIONS (Quality Score: 88/100)
-- **Results:** Full TanStack Forms integration with storage persistence
-- **Dependencies:** TanStack Forms, existing form field components, storage providers
+- **Results:** Full React Hook Forms integration with storage persistence
+- **Dependencies:** React Hook Forms, existing form field components, storage providers
 
 #### Story 9: Step Renderer and Configuration System ✅
 - **Status:** ✅ COMPLETED
@@ -36,15 +36,16 @@ This directory contains all user stories for the VSME Guru project, organized by
 - **Actual Effort:** 4 hours
 - **QA Gate:** PASS (Quality Score: 95/100)
 - **Results:** Dynamic field rendering with configuration validation and error boundaries
-- **Dependencies:** Story 8 (MultiStepForm Controller), field registry system, TanStack Forms
+- **Dependencies:** Story 8 (MultiStepForm Controller), field registry system, React Hook Forms
 
-### Planned Stories
 
 #### Story 10: GeneralInfo Page Integration
 - **Status:** Planned
 - **Focus:** Complete form integration into existing page
 - **Type:** Brownfield Addition
 - **Dependencies:** Stories 8-9 (Core form system)
+
+### Planned Stories
 
 #### Story 11: Validation and Error Handling
 - **Status:** Planned

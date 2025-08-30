@@ -66,7 +66,7 @@ This document provides an index to the broken-down sections of the VSME Guru Ful
 - **UI:** shadcn/ui + Tailwind CSS
 - **ORM:** Prisma with MongoDB
 - **State Management:** TanStack Query v5
-- **Forms:** TanStack Form
+- **Forms:** React Hook Form
 - **Validation:** Zod
 
 ### Development Approach

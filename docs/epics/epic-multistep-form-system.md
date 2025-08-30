@@ -2,7 +2,7 @@
 
 ## Epic Goal
 
-Implement a comprehensive, reusable multi-step form system using TanStack Forms and Zod validation to replace the existing React Hook Form implementation and provide a flexible, type-safe solution for sustainability reporting forms.
+Implement a comprehensive, reusable multi-step form system using React Hook Forms and Zod validation to replace the existing React Hook Form implementation and provide a flexible, type-safe solution for sustainability reporting forms.
 
 ## Epic Description
 

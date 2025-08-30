@@ -71,7 +71,7 @@ The following technologies are the definitive choices for this project. All deve
 | **Database** | MongoDB Atlas | Latest | Leverages existing team expertise; flexible schema for evolving needs. |
 | **ORM** | Prisma | Latest | Provides end-to-end type safety from database to frontend. |
 | **Data Fetching** | TanStack Query | v5 | Industry standard for server state management in React. |
-| **Forms** | TanStack Form | Latest | Headless, performant form library for complex forms. |
+| **Forms** | React Hook Form | Latest | Headless, performant form library for complex forms. |
 | **Validation** | Zod | Latest | TypeScript-first schema validation for frontend and backend. |
 | **Linting** | ESLint | Latest | Industry standard for code quality with a rich plugin ecosystem. |
 | **Formatting** | Prettier | Latest | Opinionated code formatter for consistent style. |

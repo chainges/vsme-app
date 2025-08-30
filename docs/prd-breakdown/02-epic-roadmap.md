@@ -36,7 +36,7 @@ This project will be developed and delivered in the following sequence of Epics.
 
 ### Epic 4.1: Multistep Form System
 - **Focus:** Reusable multi-step form architecture for sustainability reporting
-- **Scope:** TanStack Forms integration, Zod validation, accessibility compliance
+- **Scope:** React Hook Forms integration, Zod validation, accessibility compliance
 - **Dependencies:** Epic 3 (Core UI), existing UI components
 - **Value:** Enhanced user experience and form infrastructure foundation
 
