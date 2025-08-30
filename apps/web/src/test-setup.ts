@@ -1,72 +1,75 @@
 import '@testing-library/jest-dom'
-// Mock DOM APIs for testing
-import { JSDOM } from 'jsdom'
+import React from 'react'
+import { beforeEach, vi } from 'vitest'
 
-// Set up a basic DOM environment
-const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>')
+// Set up JSDOM environment
+const { JSDOM } = require('jsdom')
 
-// Set up global objects
-global.document = dom.window.document
-global.window = dom.window as any
-global.navigator = dom.window.navigator
-
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {}
-
-  return {
-    getItem(key: string) {
-      return store[key] || null
-    },
-
-    setItem(key: string, value: string) {
-      store[key] = value.toString()
-    },
-
-    removeItem(key: string) {
-      delete store[key]
-    },
-
-    clear() {
-      store = {}
-    },
-  }
-})()
-
-// Mock the global localStorage object
-Object.defineProperty(global, 'localStorage', {
-  value: localStorageMock,
-  writable: true,
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
+  url: 'http://localhost:3000',
+  pretendToBeVisual: true,
+  resources: 'usable',
 })
 
-import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-// Set up JSDOM environment if not already present
-if (typeof globalThis.window === 'undefined') {
-  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
-    url: 'http://localhost:3000',
-    pretendToBeVisual: true,
-    resources: 'usable',
-  })
-
-  globalThis.window = dom.window as any
-  globalThis.document = dom.window.document
-  globalThis.navigator = dom.window.navigator
-  globalThis.HTMLElement = dom.window.HTMLElement
-  globalThis.Element = dom.window.Element
-  globalThis.Node = dom.window.Node
-  globalThis.history = dom.window.history
-  globalThis.location = dom.window.location
-}
+// Set up global objects - single consistent setup
+globalThis.window = dom.window as any
+globalThis.document = dom.window.document
+globalThis.navigator = dom.window.navigator
+globalThis.HTMLElement = dom.window.HTMLElement
+globalThis.Element = dom.window.Element
+globalThis.Node = dom.window.Node
+globalThis.history = dom.window.history
+globalThis.location = dom.window.location
 
 // Make React available globally for JSX
 globalThis.React = React
 
+// Mock localStorage - single implementation
+const localStorageMock = {
+  store: {} as Record<string, string>,
+
+  getItem(key: string) {
+    return this.store[key] || null
+  },
+
+  setItem(key: string, value: string) {
+    this.store[key] = value.toString()
+  },
+
+  removeItem(key: string) {
+    delete this.store[key]
+  },
+
+  clear() {
+    this.store = {}
+  },
+
+  key(index: number) {
+    const keys = Object.keys(this.store)
+    return keys[index] || null
+  },
+
+  get length() {
+    return Object.keys(this.store).length
+  },
+}
+
+// Set up global localStorage mock
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+  configurable: true,
+})
+
+Object.defineProperty(globalThis.window, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+  configurable: true,
+})
+
 // Mock framer-motion globally for all tests
 vi.mock('framer-motion', async () => {
   const actual = await vi.importActual('framer-motion')
-  const React = await import('react')
   return {
     ...actual,
     motion: {
@@ -75,40 +78,6 @@ vi.mock('framer-motion', async () => {
     AnimatePresence: ({ children }: any) => children,
   }
 })
-
-// Mock localStorage for testing
-const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(),
-}
-
-// Set up global mocks and DOM properties
-if (typeof globalThis.window !== 'undefined') {
-  // Enhance existing window with mocks
-  Object.defineProperty(globalThis.window, 'localStorage', {
-    value: localStorageMock,
-    writable: true,
-    configurable: true,
-  })
-
-  // Ensure localStorage is also available globally
-  Object.defineProperty(globalThis, 'localStorage', {
-    value: localStorageMock,
-    writable: true,
-    configurable: true,
-  })
-
-  // Add missing navigator properties
-  if (!globalThis.window.navigator) {
-    globalThis.window.navigator = {
-      userAgent: 'test-user-agent',
-    } as any
-  }
-}
 
 // Mock @radix-ui/react-select
 vi.mock('@radix-ui/react-select', async () => {
@@ -200,12 +169,8 @@ class MockIntersectionObserver {
 globalThis.IntersectionObserver = MockIntersectionObserver as any
 
 // Mock clearTimeout and setTimeout with proper types
-if (!globalThis.clearTimeout) {
-  globalThis.clearTimeout = vi.fn() as any
-}
-if (!globalThis.setTimeout) {
-  globalThis.setTimeout = vi.fn() as any
-}
+globalThis.clearTimeout = vi.fn() as any
+globalThis.setTimeout = vi.fn() as any
 
 // Mock DOMRect for getBoundingClientRect
 class MockDOMRect {
@@ -222,20 +187,9 @@ class MockDOMRect {
   }
 }
 
-// Add additional methods to the window object
-if (typeof globalThis.window !== 'undefined') {
-  // Add timer functions
-  if (!globalThis.window.clearTimeout) {
-    globalThis.window.clearTimeout = vi.fn() as any
-  }
-  if (!globalThis.window.setTimeout) {
-    globalThis.window.setTimeout = vi.fn() as any
-  }
-
-  // Add observer classes
-  globalThis.window.ResizeObserver = MockResizeObserver as any
-  globalThis.window.IntersectionObserver = MockIntersectionObserver as any
-}
+// Add observer classes to window
+globalThis.window.ResizeObserver = MockResizeObserver as any
+globalThis.window.IntersectionObserver = MockIntersectionObserver as any
 
 // Mock element methods for DOM interactions
 if (typeof Element !== 'undefined') {
@@ -248,9 +202,5 @@ if (typeof Element !== 'undefined') {
 
 // Reset localStorage mock before each test
 beforeEach(() => {
-  localStorageMock.getItem.mockClear()
-  localStorageMock.setItem.mockClear()
-  localStorageMock.removeItem.mockClear()
-  localStorageMock.clear.mockClear()
-  localStorageMock.key.mockClear()
+  localStorageMock.clear()
 })

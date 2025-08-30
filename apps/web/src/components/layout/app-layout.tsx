@@ -53,7 +53,7 @@ export function AppLayout({ children }: DashboardLayoutProps) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <Header isDashboard={true} />
+        <Header className="sticky top-0 z-10 bg-background" isDashboard={true} />
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
     </SidebarProvider>
