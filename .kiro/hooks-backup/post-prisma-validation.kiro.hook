@@ -1,0 +1,26 @@
+{
+  "name": "Post-Prisma Type Validation",
+  "description": "Validates type alignment after Prisma operations like db:generate, db:push, or schema changes",
+  "trigger": {
+    "type": "manual",
+    "buttonText": "Post-Prisma Validation",
+    "category": "Database & Types"
+  },
+  "actions": [
+    {
+      "type": "agent_execution", 
+      "prompt": "A Prisma operation has completed. Please validate that all type definitions remain properly aligned:\n\n1. Run the type alignment validation: `bun run validate:types` in apps/server\n2. Check if the Prisma client generation was successful\n3. Verify that business logic types still match the updated database schema\n4. Confirm that Zod validation schemas are still compatible\n5. Report any misalignments and suggest fixes\n\nThis post-operation validation ensures that:\n- Database schema changes don't break type safety\n- Generated Prisma types are accessible\n- Business logic types remain consistent with database models\n- API validation continues to work correctly\n\nIf validation fails, provide specific guidance on which files need updates.",
+      "context": [
+        "apps/server/src/scripts/validate-type-alignment.ts",
+        "apps/server/prisma/schema/schema.prisma",
+        "apps/server/src/types/esg-models.ts",
+        "apps/server/src/lib/validation/esg-schemas.ts"
+      ]
+    }
+  ],
+  "settings": {
+    "autoApprove": true,
+    "runInBackground": true,
+    "showNotification": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Test Hook",
+  "description": "Simple test hook to verify hook functionality",
+  "trigger": {
+    "type": "manual",
+    "buttonText": "Test Hook"
+  },
+  "actions": [
+    {
+      "type": "agent_execution",
+      "prompt": "This is a test hook. Please respond with 'Test hook is working!' to confirm the hook system is functioning."
+    }
+  ],
+  "settings": {
+    "autoApprove": false,
+    "runInBackground": false,
+    "showNotification": true
+  }
+}

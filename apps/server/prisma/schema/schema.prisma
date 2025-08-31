@@ -6,17 +6,116 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = env("PRIMARY_DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  password  String
-  name      String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId        String   @unique // Clerk user ID for authentication
+  email          String   @unique
+  name           String
+  organizationId String?  // For multi-tenant data isolation
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  companies Company[]
+  reports   Report[]
 
   @@map("users")
+}
+
+model Company {
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  year                 Int
+  name                 String
+  organizationId       String  // Links to Clerk organization
+  registrationNumber   String
+  revenue              Float?
+  naceCode             String?
+  industry             String?
+  industryCo2Intensity Float?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  // Relations
+  createdBy String @db.ObjectId
+  creator   User   @relation(fields: [createdBy], references: [id])
+  reports   Report[]
+
+  // Indexes for performance
+  @@index([organizationId, year])
+  @@index([registrationNumber])
+  @@index([organizationId, name])
+  @@map("companies")
+}
+
+// Nested types for Report model
+type EnergyAndEmissions {
+  scope1                      Float?
+  scope2                      Float?
+  scope3Market                Float?
+  scope3Location              Float?
+  renewableEnergy             Float?
+  nonRenewableEnergy          Float?
+  climateDataCollectionMethod String?
+  climateDataUncertainty      String?
+  reported                    Boolean @default(false)
+}
+
+type Environmental {
+  energyAndEmissions EnergyAndEmissions?
+}
+
+type Employees {
+  fullTimeEmployees  Int?
+  partTimeEmployees  Int?
+  tempEmployees      Int?
+  reported           Boolean @default(false)
+}
+
+type Social {
+  employees Employees?
+}
+
+type Ethics {
+  corruptionCases       Int?
+  whistleBlowerReports  Int?
+  reported              Boolean @default(false)
+}
+
+type FinesAndPenalties {
+  fnp         Boolean @default(false)
+  description String?
+  reported    Boolean @default(false)
+}
+
+type Governance {
+  ethics           Ethics?
+  finesAndPenalties FinesAndPenalties?
+}
+
+model Report {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String   // Links to Company via organizationId
+  year           Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // ESG Data
+  environmental Environmental?
+  social        Social?
+  governance    Governance?
+
+  // Relations
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+  createdBy String  @db.ObjectId
+  creator   User    @relation(fields: [createdBy], references: [id])
+
+  // Indexes for performance
+  @@index([organizationId, year])
+  @@index([companyId])
+  @@index([companyId, year])
+  @@map("reports")
 }

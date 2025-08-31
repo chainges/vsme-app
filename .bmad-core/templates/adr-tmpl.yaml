@@ -1,0 +1,208 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: adr-template-v1
+  name: Architecture Decision Record
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/adr/{{adr_number}}.{{decision_title_slug}}.md
+    title: "ADR {{adr_number}}: {{decision_title}}"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+agent_config:
+  editable_sections:
+    - Status
+    - Context
+    - Decision
+    - Consequences
+    - Alternatives Considered
+    - Implementation Details
+    - Validation
+    - References
+    - Review Schedule
+
+sections:
+  - id: adr-number
+    title: ADR Number
+    type: auto-increment
+    instruction: Auto-generate sequential ADR number based on existing ADRs in docs/adr/ directory
+    template: "{{adr_number}}"
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: decision-title
+    title: Decision Title
+    type: text
+    instruction: Provide a clear, concise title that summarizes the architectural decision
+    template: "{{decision_title}}"
+    elicit: true
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: status
+    title: Status
+    type: choice
+    choices: [Proposed, Accepted, Deprecated, Superseded]
+    instruction: Select the current status of this architectural decision
+    default: Proposed
+    owner: doc-agent
+    editors: [doc-agent, architect]
+
+  - id: context
+    title: Context
+    type: long-text
+    instruction: |
+      Describe the issue or opportunity that motivated this decision based on actual code analysis.
+      Include relevant background information, constraints, and forces at play.
+      Focus on WHAT you observed in the implementation, not hypothetical scenarios.
+    template: |
+      ## Context
+      
+      {{context_description}}
+      
+      ### Problem Statement
+      {{problem_being_solved}}
+      
+      ### Constraints and Forces
+      {{constraints_and_forces}}
+    elicit: true
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: decision
+    title: Decision
+    type: structured-text
+    instruction: |
+      Clearly state the architectural decision and approach taken based on actual implementation.
+      Be specific about what was implemented, referencing actual code, libraries, and configurations.
+    template: |
+      ## Decision
+      
+      {{decision_statement}}
+      
+      ### Technical Approach
+      {{technical_implementation_details}}
+      
+      ### Key Components
+      {{key_components_and_files}}
+    elicit: true
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: consequences
+    title: Consequences
+    type: structured-list
+    instruction: |
+      Document the positive and negative outcomes of this decision based on implementation analysis.
+      Include risks identified from the actual code and architecture.
+    template: |
+      ## Consequences
+      
+      ### Positive
+      {{positive_outcomes}}
+      
+      ### Negative  
+      {{negative_outcomes}}
+      
+      ### Risks
+      {{identified_risks}}
+    elicit: true
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: alternatives-considered
+    title: Alternatives Considered
+    type: alternative-list
+    instruction: |
+      Document alternatives that were considered (if evident from code comments, commit history, or implementation patterns).
+      Only include alternatives you can infer from actual evidence, not hypothetical options.
+    template: |
+      ## Alternatives Considered
+      
+      ### Alternative 1: {{alternative_name_1}}
+      **Description**: {{alternative_description_1}}
+      **Pros**: {{alternative_pros_1}}
+      **Cons**: {{alternative_cons_1}}
+      
+      ### Alternative 2: {{alternative_name_2}}
+      **Description**: {{alternative_description_2}}
+      **Pros**: {{alternative_pros_2}}
+      **Cons**: {{alternative_cons_2}}
+    elicit: false
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: implementation-details
+    title: Implementation Details
+    type: structured-text
+    instruction: |
+      Document specific technical implementation details found in the actual code.
+      Include dependencies, configuration values, and performance characteristics observed.
+    template: |
+      ## Implementation Details
+      
+      ### Dependencies
+      {{technical_dependencies}}
+      
+      ### Configuration
+      {{key_configuration_parameters}}
+      
+      ### Performance Considerations
+      {{performance_characteristics}}
+      
+      ### Key Files and Locations
+      {{implementation_files}}
+    elicit: true
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: validation
+    title: Validation
+    type: text
+    instruction: |
+      Define how this decision's success will be measured.
+      Include specific metrics, tests, or monitoring that should be implemented.
+    template: |
+      ## Validation
+      
+      {{validation_criteria_and_metrics}}
+    elicit: true
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: references
+    title: References
+    type: link-list
+    instruction: |
+      Include links to relevant documentation, related ADRs, external resources, and key code files.
+      Reference actual files and resources that exist in the codebase.
+    template: |
+      ## References
+      
+      - {{reference_links}}
+    elicit: false
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: review-schedule
+    title: Review Schedule
+    type: text
+    instruction: Define when this decision should be reviewed and what would trigger re-evaluation
+    template: |
+      ## Review Schedule
+      
+      {{review_timing_and_triggers}}
+    elicit: false
+    owner: doc-agent
+    editors: [doc-agent]
+
+  - id: change-log
+    title: Change Log
+    type: table
+    columns: [Date, Version, Description, Author]
+    instruction: Track changes made to this ADR document
+    owner: doc-agent
+    editors: [doc-agent]

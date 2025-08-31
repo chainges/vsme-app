@@ -1,0 +1,27 @@
+{
+  "name": "Manual Type Validation",
+  "description": "Manually validate type alignment across TypeScript types, Zod schemas, and Prisma models",
+  "trigger": {
+    "type": "manual",
+    "buttonText": "Validate Type Alignment",
+    "category": "Database & Types"
+  },
+  "actions": [
+    {
+      "type": "agent_execution",
+      "prompt": "Please run a comprehensive type alignment validation to ensure all type definitions are properly synchronized:\n\n1. Run the type alignment validation script: `bun run validate:types` in the apps/server directory\n2. Analyze the results and report on:\n   - Total checks performed\n   - Any validation errors or warnings\n   - Specific misalignments between types and schemas\n   - Recommendations for fixes if needed\n3. If validation passes, provide a summary of what was validated\n4. Check if Prisma client needs regeneration (`bun db:generate`)\n\nThis validation ensures:\n- Business logic types match API validation schemas\n- Zod schemas can properly validate TypeScript interfaces\n- Prisma client is properly generated and accessible\n- All ESG data structures are consistently typed across layers",
+      "context": [
+        "apps/server/src/scripts/validate-type-alignment.ts",
+        "apps/server/src/types/esg-models.ts",
+        "apps/server/src/lib/validation/esg-schemas.ts",
+        "apps/server/prisma/schema/schema.prisma",
+        "apps/server/package.json"
+      ]
+    }
+  ],
+  "settings": {
+    "autoApprove": false,
+    "runInBackground": false,
+    "showNotification": true
+  }
+}

@@ -11,7 +11,17 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "bun run src/scripts/seed.ts",
+    "db:seed:dev": "bun run src/scripts/seed-dev.ts",
+    "db:seed:prod": "bun run src/scripts/seed-prod.ts",
+    "db:reset": "bun run src/scripts/reset-db.ts",
+    "db:status": "bun run src/scripts/db-status.ts",
+    "db:test-external": "bun run src/scripts/test-external-data.ts",
+    "env:setup": "bun run src/scripts/setup-environment.ts",
+    "env:validate": "bun run src/scripts/setup-environment.ts",
+    "cleanup:eslint": "bun run src/scripts/cleanup-eslint-comments.ts",
+    "validate:types": "bun run src/scripts/validate-type-alignment.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
@@ -19,6 +29,7 @@
     "dotenv": "^17.2.1",
     "hono": "^4.8.10",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.18.0",
     "zod": "^4.0.14"
   },
   "devDependencies": {

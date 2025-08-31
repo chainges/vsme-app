@@ -1,0 +1,30 @@
+{
+  "name": "Type Alignment Validator",
+  "description": "Automatically validates that TypeScript types, Zod schemas, and Prisma models are properly aligned when schema files are modified",
+  "trigger": {
+    "type": "file_change",
+    "patterns": [
+      "apps/server/prisma/schema/schema.prisma",
+      "apps/server/src/types/esg-models.ts",
+      "apps/server/src/lib/validation/esg-schemas.ts",
+      "apps/server/src/types/external-data.ts"
+    ]
+  },
+  "actions": [
+    {
+      "type": "agent_execution",
+      "prompt": "I need you to validate that the TypeScript types, Zod validation schemas, and Prisma models are properly aligned after schema changes. Please:\n\n1. **Run the validation script**: Execute `bun run validate:types` in the apps/server directory\n2. **Check validation coverage**: Compare the validation script against the Prisma schema to ensure all models and types are covered:\n   - Review `apps/server/prisma/schema/schema.prisma` to identify all models and types\n   - Check `apps/server/src/scripts/validate-type-alignment.ts` to see what's being validated\n   - Identify any missing coverage (new models/types not being validated)\n3. **Analyze results**: If there are validation errors, analyze them and suggest fixes\n4. **Update validation script**: If new models or types are found in Prisma schema that aren't covered by validation, update the validation script to include them\n5. **Confirm alignment**: If validation passes and coverage is complete, confirm that all type layers are properly synchronized\n6. **Update documentation**: Update any relevant documentation if needed\n\n**Current Expected Coverage**:\n- User, Company, Report models from Prisma schema\n- CompanyData ↔ companySchema alignment\n- ReportData ↔ reportSchema alignment  \n- ESG nested types ↔ their Zod schemas (Environmental, Social, Governance, etc.)\n- All Prisma composite types (EnergyAndEmissions, Environmental, Social, etc.)\n- Prisma client generation and accessibility\n\n**Coverage Validation**: Ensure the validation script tests all business-critical types and models defined in the Prisma schema. If new models or types are added to Prisma but not covered in validation, flag this as a gap that needs to be addressed.\n\nThis ensures comprehensive type safety across the database, business logic, and API validation layers with accurate, meaningful validation results.",
+      "context": [
+        "apps/server/src/scripts/validate-type-alignment.ts",
+        "apps/server/src/types/esg-models.ts",
+        "apps/server/src/lib/validation/esg-schemas.ts",
+        "apps/server/prisma/schema/schema.prisma"
+      ]
+    }
+  ],
+  "settings": {
+    "autoApprove": false,
+    "runInBackground": false,
+    "showNotification": true
+  }
+}

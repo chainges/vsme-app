@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
  */
 export function useFocusManagement() {
   const pathname = usePathname()
-  const previousPathnameRef = useRef<string>()
+  const previousPathnameRef = useRef<string | undefined>(undefined)
 
   useEffect(() => {
     // Skip focus management on initial load

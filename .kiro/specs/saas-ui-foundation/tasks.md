@@ -2,7 +2,7 @@
 
 ## Authentication Note
 
-**Authentication is now handled by Clerk integration. See [Clerk Integration Spec](../clerk-integration/tasks.md) for authentication-related tasks.**
+**Authentication will be handled by a Clerk integration. See [Clerk Integration Spec](../clerk-integration/tasks.md) for authentication-related tasks.**
 
 **For UI development**: We'll use a simple mock auth state to enable UI development without being blocked by authentication implementation.
 

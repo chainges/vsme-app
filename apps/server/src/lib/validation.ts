@@ -1,23 +1,16 @@
-import { z } from 'zod'
+/**
+ * Legacy Validation Schemas
+ *
+ * This file previously contained authentication validation schemas.
+ * Since migrating to Clerk authentication, these schemas are no longer needed.
+ *
+ * For current validation schemas, see:
+ * - ESG data validation: src/lib/validation/esg-schemas.ts
+ * - Type definitions: src/types/esg-models.ts
+ *
+ * This file is kept for backward compatibility and will be removed
+ * once all references are updated to use the new validation system.
+ */
 
-// User validation schemas
-export const registerSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  name: z.string().min(1, 'Name is required'),
-})
-
-export const loginSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(1, 'Password is required'),
-})
-
-export const userUpdateSchema = z.object({
-  name: z.string().min(1, 'Name is required').optional(),
-  email: z.string().email('Invalid email format').optional(),
-})
-
-// Type exports for use in other files
-export type RegisterInput = z.infer<typeof registerSchema>
-export type LoginInput = z.infer<typeof loginSchema>
-export type UserUpdateInput = z.infer<typeof userUpdateSchema>
+// Re-export the new validation schemas for backward compatibility
+export * from './validation/esg-schemas'

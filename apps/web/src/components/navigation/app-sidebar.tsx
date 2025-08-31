@@ -7,6 +7,7 @@ import {
   FolderOpen,
   Frame,
   GalleryVerticalEnd,
+  Info,
   Settings2,
   SquareTerminal,
 } from 'lucide-react'
@@ -57,6 +58,17 @@ const data = {
         {
           title: 'Overview',
           url: '/dashboard',
+        },
+      ],
+    },
+    {
+      title: 'General Info',
+      url: '/generalinfo',
+      icon: Info,
+      items: [
+        {
+          title: 'General Information',
+          url: '/generalinfo',
         },
       ],
     },

@@ -1,95 +1,138 @@
-# Steering Documentation
+# Project Documentation & BMad Integration
 
-_Last Updated: August 4, 2025_
+_Last Updated: January 8, 2025_
 
-This directory contains the project's steering documentation, organized into two clear categories to serve both human developers and AI agents effectively.
+This directory contains the project's documentation organized for **BMad method compliance** and **lean information architecture**. The documentation is structured to serve both human developers and AI agents effectively with a single entry point and contextual loading.
 
-## 📋 Quick Navigation
+## 🎯 **BMad Method Integration**
 
-### Current State Documentation (✅ What Exists Now)
+**CRITICAL: This project now uses BMad method for knowledge management, task tracking, and project organization.**
 
-These documents accurately reflect what is currently implemented in the codebase:
+### **BMad Project Configuration**
+- **`.kiro/bmad-project-config.yaml`** - Complete BMad method configuration
+- **Compliance Status**: Full BMad method compliance enabled
+- **Documentation Strategy**: Lean-consolidated approach
 
-- **[current-state.md](./current-state.md)** - Comprehensive audit of what actually exists vs what doesn't
-- **[tech.md](./tech.md)** - Technology stack, versions, and command reference
-- **[structure.md](./structure.md)** - Project file organization and naming conventions
-- **[MAIN.md](./MAIN.md)** - Coding standards and rules (applicable to current code)
+## 📋 **Documentation Architecture**
 
-### Development Guidelines (🔄 Future Implementation Guides)
+### **Single Entry Point**
+- **`README.md`** (root) - **ONLY entry point** for project information
+- **Current Status**: Accurately reflects basic scaffolding implementation
+- **Purpose**: Immediate context for developers and AI agents
 
-These documents provide patterns and standards for future development:
+### **Reference Documents** (`.kiro/reference/`)
+**Consolidated, lean reference materials:**
 
-- **[development.md](./development.md)** - Development workflow and project standards
-- **[api-best-practices.md](./api-best-practices.md)** - Patterns for implementing API features
-- **[ui-best-practices.md](./ui-best-practices.md)** - Patterns for implementing UI components
-- **[database-best-practices.md](./database-best-practices.md)** - Patterns for database design
-- **[testing-best-practices.md](./testing-best-practices.md)** - Testing strategy and patterns
+1. **`coding-standards.md`** - All coding standards and best practices
+2. **`development-workflow.md`** - Development workflow and project standards  
+3. **`architecture.md`** - Project architecture and technical decisions
+4. **`tech-stack.md`** - Technology stack and command reference
 
-### Specialized Documentation
+### **Current State Documentation** (`.kiro/steering/`)
+**What actually exists right now:**
 
-- **[decision-log.md](./decision-log.md)** - Record of architectural decisions
-- **[learning-journal.md](./learning-journal.md)** - Development insights and lessons learned
-- **[documentation-evolution.md](./documentation-evolution.md)** - How documentation should evolve
-- **[product.md](./product.md)** - Product vision and requirements
+1. **`current-state.md`** - Comprehensive audit of actual implementation
+2. **`tech.md`** - Technology stack details and commands
+3. **`structure.md`** - Project file organization and naming conventions
 
-## 🎯 How to Use This Documentation
+### **Specifications** (`.kiro/specs/`)
+**Feature requirements and implementation plans:**
 
-### For Human Developers
+1. **`saas-ui-foundation/`** - UI foundation requirements
+2. **`clerk-integration/`** - Authentication integration plan
+3. **`testing-strategy/`** - Testing implementation plan
+4. **`data-fetching-strategy/`** - Data fetching patterns
+5. **`multistep-form-system/`** - Form system design
 
-1. **Start with [current-state.md](./current-state.md)** to understand what exists
-2. **Check [tech.md](./tech.md)** for commands and technology details
-3. **Reference appropriate best-practices files** when implementing new features
-4. **Follow [MAIN.md](./MAIN.md)** coding standards
+### **Archive** (`.kiro/archive/`)
+**Historical documents preserved for reference:**
 
-### For AI Agents
+- Consolidated best practices documents
+- Previous development guidelines
+- Historical architectural decisions
 
-1. **Always read [current-state.md](./current-state.md) first** to understand actual implementation status
-2. **Use future implementation guides** only when implementing new features
-3. **Never assume patterns exist** unless confirmed in current-state.md
-4. **Reference [tech.md](./tech.md)** for accurate command usage
+## 🚀 **How to Use This Documentation**
 
-## 🔍 Key Principles
+### **For Human Developers**
 
-### Clear Separation
+1. **Start with `README.md`** - Understand current project status
+2. **Check `current-state.md`** - See what actually exists vs. what doesn't
+3. **Reference `.kiro/reference/`** - Use consolidated reference materials
+4. **Follow `tech.md`** - Use accurate commands and technology details
 
+### **For AI Agents**
+
+1. **Always read `README.md` first** - Get immediate project context
+2. **Use `current-state.md`** - Understand actual implementation status
+3. **Pull reference documents** - Load specific information as needed
+4. **Never assume patterns exist** - Check current-state.md for confirmation
+
+## 🔄 **BMad Workflow Integration**
+
+### **Development Cycle**
+1. **Check Current Task** → Review task details and requirements
+2. **Research for Task** → Search relevant documentation and examples
+3. **Implement the Task** → Write code based on research
+4. **Update Task Status** → Move task from "todo" → "doing" → "review"
+5. **Get Next Task** → Check for next priority task
+6. **Repeat Cycle**
+
+### **Documentation Standards**
+- **Single Source of Truth**: No duplication between documents
+- **Current State Accuracy**: All documents reflect actual implementation
+- **Future Guidance Clear**: Implementation guides clearly marked
+- **BMad Compliance**: Full integration with BMad method workflows
+
+## 📊 **Documentation Health Status**
+
+### **Current Score: 9/10** ✅
+- **Single Entry Point**: ✅ README.md provides immediate context
+- **No Discrepancies**: ✅ All documents reflect actual state
+- **Lean Structure**: ✅ Consolidated reference materials
+- **BMad Compliance**: ✅ Full method integration enabled
+
+### **Improvement Areas**
+- **Maintain Accuracy**: Keep current-state.md updated as features are built
+- **Reference Updates**: Update reference documents when patterns emerge
+- **Specification Evolution**: Keep specs aligned with implementation progress
+
+## 🎯 **Key Principles**
+
+### **Clear Separation**
 - **Current State** documents reflect reality
-- **Future Guidelines** provide implementation patterns
-- Each document clearly indicates its category
+- **Reference Documents** provide consolidated guidance
+- **Specifications** outline future implementation plans
+- **Archive** preserves historical information
 
-### Accuracy First
+### **Contextual Loading**
+- **Single entry point** for immediate context
+- **Reference documents** pulled in as needed
+- **No overwhelming information** dumped at once
+- **AI-friendly structure** for efficient context injection
 
-- Current state documentation is regularly updated
-- Future guidelines are marked as implementation guides
-- No theoretical patterns presented as existing
+### **BMad Method Compliance**
+- **Task-driven development** with Archon integration
+- **Multi-agent coordination** through BMad orchestrator
+- **Quality gates** for documentation accuracy
+- **Workflow management** for development processes
 
-### Single Source of Truth
+## 📝 **Maintenance Guidelines**
 
-- Avoid duplication between documents
-- Cross-reference related information
-- Maintain consistency across all files
-
-## 📝 Maintenance Guidelines
-
-### When to Update Current State Documentation
-
+### **When to Update Current State Documentation**
 - ✅ New features implemented → Update current-state.md
 - ✅ Technology versions changed → Update tech.md
 - ✅ File structure changed → Update structure.md
-- ✅ New coding patterns established → Update MAIN.md
 
-### When to Update Future Guidelines
+### **When to Update Reference Documents**
+- 🔄 New best practices identified → Update relevant reference documents
+- 🔄 Development workflow changes → Update development-workflow.md
+- 🔄 Architecture decisions made → Update architecture.md
 
-- 🔄 New best practices identified → Update relevant best-practices files
-- 🔄 Development workflow changes → Update development.md
-- 🔄 Architecture decisions made → Update decision-log.md
-
-### Documentation Health Indicators
-
-- Current state docs accurately reflect codebase
-- Future guides clearly marked as implementation patterns
-- No contradictions between documents
-- Commands and examples work as documented
+### **When to Update Specifications**
+- 📋 Requirements change → Update relevant spec documents
+- 📋 Implementation progress → Update spec status and priorities
+- 📋 New features planned → Add new specification documents
 
 ---
 
-_This documentation structure ensures that developers and AI agents can quickly understand what exists versus what are patterns to follow for future development._
+**This documentation structure ensures that developers and AI agents can quickly understand what exists versus what are patterns to follow, while maintaining full BMad method compliance.**

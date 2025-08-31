@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "node_modules/.bin/mcp-server-playwright",
+      "args": [],
+      "url": "http://127.0.0.1:3002/mcp"
+    },
+    "archon": {
+      "command": "npx",
+      "args": ["mcp-remote", "http://localhost:8051/mcp"]
+    }
+  }
+}
