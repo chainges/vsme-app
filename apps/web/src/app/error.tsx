@@ -3,13 +3,7 @@
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react'
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface ErrorProps {
   error: Error & { digest?: string }
@@ -31,12 +25,10 @@ export default function Error({ error, reset }: ErrorProps) {
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20">
             <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
           </div>
-          <CardTitle className="text-red-900 dark:text-red-100">
-            Something went wrong
-          </CardTitle>
+          <CardTitle className="text-red-900 dark:text-red-100">Something went wrong</CardTitle>
           <CardDescription>
-            An unexpected error occurred. Please try refreshing the page or go
-            back to the home page.
+            An unexpected error occurred. Please try refreshing the page or go back to the home
+            page.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

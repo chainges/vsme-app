@@ -105,7 +105,8 @@ my-better-t-app/
 - **VSME-Specific Components** for sustainability reporting
 - **Clerk Authentication** integration
 - **TanStack Query** for server state management
-- **TanStack Form** for complex form handling
+- **React Hook Form** for complex form handling
+- **Zod** for form validation
 - **VSME Module System** (B1, B2, C1, etc.)
 
 ### **VSME Module Structure**

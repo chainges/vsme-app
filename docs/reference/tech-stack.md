@@ -60,7 +60,8 @@ bun check-types
 
 ### **State Management**
 - **TanStack Query**: Server state management (installed, not implemented)
-- **TanStack Form**: Form state management (installed, not implemented)
+- **React Hook Form**: Form state management (implemented for multistep forms)
+- **Zod**: Schema validation for forms (implemented for multistep forms)
 - **React Context**: Theme and authentication state
 
 ### **Frontend Commands**

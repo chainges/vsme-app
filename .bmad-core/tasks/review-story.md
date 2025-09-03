@@ -314,3 +314,4 @@ After review:
 3. Recommend status: "Ready for Done" or "Changes Required" (owner decides)
 4. If files were modified, list them in QA Results and ask Dev to update File List
 5. Always provide constructive feedback and actionable recommendations
+6. IF story implementation changes something that might be **Architecturally Significant** THEN recommend that Doc Brown should document this to the user.

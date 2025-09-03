@@ -71,16 +71,9 @@ export class ExternalDataService {
    * Used by: External data API endpoints and reference lookups
    * Purpose: Retrieves shared resources with validation and error handling
    */
-  async getSharedResources(
-    options: ExternalQueryOptions = {}
-  ): Promise<ExternalApiResponse<any>> {
+  async getSharedResources(options: ExternalQueryOptions = {}): Promise<ExternalApiResponse<any>> {
     try {
-      const {
-        limit = 20,
-        offset = 0,
-        sort = { createdAt: -1 },
-        filters = {},
-      } = options
+      const { limit = 20, offset = 0, sort = { createdAt: -1 }, filters = {} } = options
 
       // Build query with filters
       const query = this.buildQuery(filters)
@@ -139,11 +132,7 @@ export class ExternalDataService {
         $or: [{ _id: id }, { id }],
       }
 
-      const resource = await externalDb.findOne(
-        this.defaultDatabase,
-        'resources',
-        query
-      )
+      const resource = await externalDb.findOne(this.defaultDatabase, 'resources', query)
 
       if (!resource) {
         return null
@@ -187,9 +176,7 @@ export class ExternalDataService {
         externalDb.count(this.defaultDatabase, 'resources', query),
       ])
 
-      const validatedResources = resources.map((resource) =>
-        externalResourceSchema.parse(resource)
-      )
+      const validatedResources = resources.map((resource) => externalResourceSchema.parse(resource))
 
       return {
         data: validatedResources,
@@ -249,11 +236,7 @@ export class ExternalDataService {
    */
   async getAggregatedData(pipeline: any[]): Promise<any[]> {
     try {
-      return await externalDb.aggregate(
-        this.defaultDatabase,
-        'resources',
-        pipeline
-      )
+      return await externalDb.aggregate(this.defaultDatabase, 'resources', pipeline)
     } catch (error) {
       console.error('Failed to get aggregated external data:', error)
       throw new Error(`External aggregation failed: ${error}`)

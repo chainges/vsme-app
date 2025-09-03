@@ -219,10 +219,7 @@ export interface ExternalDataError {
 export type PartialExternalResource = Partial<ExternalResource>
 
 // External resource without system fields
-export type ExternalResourceInput = Omit<
-  ExternalResource,
-  'id' | 'createdAt' | 'updatedAt'
->
+export type ExternalResourceInput = Omit<ExternalResource, 'id' | 'createdAt' | 'updatedAt'>
 
 // External query result with pagination
 export type PaginatedExternalResult<T> = ExternalApiResponse<T>
@@ -251,9 +248,7 @@ export function isExternalResource(obj: any): obj is ExternalResource {
   )
 }
 
-export function isExternalApiResponse<T>(
-  obj: any
-): obj is ExternalApiResponse<T> {
+export function isExternalApiResponse<T>(obj: any): obj is ExternalApiResponse<T> {
   return (
     typeof obj === 'object' &&
     obj !== null &&

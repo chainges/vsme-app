@@ -8,10 +8,7 @@
  * Purpose: Provides a clean slate for development and testing
  */
 
-import {
-  cleanupDevelopmentData,
-  seedDevelopmentData,
-} from '../lib/seeds/development-seed'
+import { cleanupDevelopmentData, seedDevelopmentData } from '../lib/seeds/development-seed'
 
 async function main() {
   try {
@@ -56,19 +53,13 @@ async function cleanupAllTestData() {
     // Clean up any test data with specific patterns
     await prisma.report.deleteMany({
       where: {
-        OR: [
-          { organizationId: { contains: 'test' } },
-          { organizationId: { contains: 'demo' } },
-        ],
+        OR: [{ organizationId: { contains: 'test' } }, { organizationId: { contains: 'demo' } }],
       },
     })
 
     await prisma.company.deleteMany({
       where: {
-        OR: [
-          { organizationId: { contains: 'test' } },
-          { organizationId: { contains: 'demo' } },
-        ],
+        OR: [{ organizationId: { contains: 'test' } }, { organizationId: { contains: 'demo' } }],
       },
     })
 

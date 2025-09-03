@@ -1,28 +1,78 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
   "files": {
-    "ignoreUnknown": false,
+    "ignoreUnknown": true,
     "includes": [
-      "**",
-      "!**/.next",
-      "!**/dist",
-      "!**/.turbo",
-      "!**/dev-dist",
-      "!**/.zed",
-      "!**/.vscode",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.json",
+      "**/*.jsonc",
+      "**/*.cjs",
+      "**/*.mjs",
+      "**/*.cts",
+      "**/*.mts",
+      "!**/.next/**",
+      "!**/dist/**",
+      "!**/.turbo/**",
+      "!**/dev-dist/**",
+      "!**/.zed/**",
+      "!**/.vscode/**",
       "!**/routeTree.gen.ts",
-      "!**/src-tauri",
-      "!**/.nuxt",
+      "!**/src-tauri/**",
+      "!**/.nuxt/**",
       "!bts.jsonc",
-      "!**/.expo",
-      "!**/.wrangler",
-      "!**/.source"
+      "!**/.expo/**",
+      "!**/.wrangler/**",
+      "!**/.source/**",
+      "!**/node_modules/**",
+      "!**/.git/**",
+      "!**/build/**",
+      "!**/coverage/**",
+      "!**/.augment-guidelines",
+      "!**/.claude/**",
+      "!**/.cursor/**",
+      "!**/playwright-report/**",
+      "!**/test-results/**",
+      "!**/*.md",
+      "!**/*.mdc",
+      "!**/*.html",
+      "!**/*.css",
+      "!**/*.scss",
+      "!**/*.sass",
+      "!**/*.less",
+      "!**/prisma/generated/**"
     ]
   },
   "extends": ["ultracite"],
   "javascript": {
     "formatter": {
-      "semicolons": "asNeeded"
+      "semicolons": "asNeeded",
+      "quoteStyle": "single",
+      "trailingCommas": "es5",
+      "lineWidth": 100
+    }
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none",
+      "lineWidth": 100
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": "off"
     }
   }
 }

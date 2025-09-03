@@ -8,12 +8,7 @@ import { ThemeProvider } from './theme-provider'
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        disableTransitionOnChange
-        enableSystem
-      >
+      <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
         <ErrorBoundary>
           <AuthProvider>
             {children}

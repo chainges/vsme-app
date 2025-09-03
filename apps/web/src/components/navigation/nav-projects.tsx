@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Folder,
-  Forward,
-  type LucideIcon,
-  MoreHorizontal,
-  Trash2,
-} from 'lucide-react'
+import { Folder, Forward, type LucideIcon, MoreHorizontal, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 
 import {

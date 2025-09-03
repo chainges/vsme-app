@@ -8,14 +8,8 @@
  * Purpose: Safely seeds production environment with minimal required data
  */
 
-import {
-  checkMigrationStatus,
-  runMigrations,
-} from '../lib/migrations/migration-runner'
-import {
-  seedProductionData,
-  validateProductionDatabase,
-} from '../lib/seeds/production-seed'
+import { checkMigrationStatus, runMigrations } from '../lib/migrations/migration-runner'
+import { seedProductionData, validateProductionDatabase } from '../lib/seeds/production-seed'
 
 async function main() {
   try {
@@ -23,16 +17,12 @@ async function main() {
 
     // Safety check - ensure we're in production mode
     if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        '⚠️  Warning: Running production seed in non-production environment'
-      )
+      console.warn('⚠️  Warning: Running production seed in non-production environment')
 
       // Require explicit confirmation for non-production
       const shouldContinue = process.argv.includes('--force')
       if (!shouldContinue) {
-        console.log(
-          'Use --force flag to run production seed in non-production environment'
-        )
+        console.log('Use --force flag to run production seed in non-production environment')
         process.exit(1)
       }
     }

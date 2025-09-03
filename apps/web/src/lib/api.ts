@@ -32,8 +32,7 @@ export async function handleApiResponse<T>(
 
       try {
         const errorData = await response.json()
-        errorMessage =
-          errorData.error || errorData.message || `HTTP ${response.status}`
+        errorMessage = errorData.error || errorData.message || `HTTP ${response.status}`
       } catch {
         // If response is not JSON, use status text
         errorMessage = response.statusText || `HTTP ${response.status}`
@@ -103,9 +102,7 @@ export async function withRetry<T>(
       }
 
       // Exponential backoff
-      await new Promise((resolve) =>
-        setTimeout(resolve, delay * 2 ** (attempt - 1))
-      )
+      await new Promise((resolve) => setTimeout(resolve, delay * 2 ** (attempt - 1)))
     }
   }
 

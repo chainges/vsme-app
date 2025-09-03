@@ -1,4 +1,2 @@
-// Form system exports
-
-export * from './fields'
+// Export all form components
 export * from './multi-step'

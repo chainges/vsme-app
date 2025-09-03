@@ -14,8 +14,7 @@ const auth = new Hono()
 auth.post('/register', async (c) => {
   return c.json(
     {
-      message:
-        'Authentication is handled by Clerk. Please use the frontend authentication flow.',
+      message: 'Authentication is handled by Clerk. Please use the frontend authentication flow.',
       status: 'placeholder',
     },
     501
@@ -26,8 +25,7 @@ auth.post('/register', async (c) => {
 auth.post('/login', async (c) => {
   return c.json(
     {
-      message:
-        'Authentication is handled by Clerk. Please use the frontend authentication flow.',
+      message: 'Authentication is handled by Clerk. Please use the frontend authentication flow.',
       status: 'placeholder',
     },
     501
@@ -37,8 +35,7 @@ auth.post('/login', async (c) => {
 // Placeholder logout endpoint
 auth.post('/logout', async (c) => {
   return c.json({
-    message:
-      'Authentication is handled by Clerk. Please use the frontend authentication flow.',
+    message: 'Authentication is handled by Clerk. Please use the frontend authentication flow.',
     status: 'placeholder',
   })
 })

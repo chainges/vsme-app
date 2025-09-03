@@ -19,9 +19,7 @@ interface MockAuthContextType {
   signOut: () => void
 }
 
-const MockAuthContext = createContext<MockAuthContextType | undefined>(
-  undefined
-)
+const MockAuthContext = createContext<MockAuthContextType | undefined>(undefined)
 
 const MOCK_USER: MockUser = {
   id: 'mock-user-1',
@@ -74,11 +72,7 @@ export function MockAuthProvider({ children }: { children: React.ReactNode }) {
     signOut,
   }
 
-  return (
-    <MockAuthContext.Provider value={value}>
-      {children}
-    </MockAuthContext.Provider>
-  )
+  return <MockAuthContext.Provider value={value}>{children}</MockAuthContext.Provider>
 }
 
 export function useMockAuth() {
@@ -94,8 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Use mock auth when explicitly enabled or in development mode
   const shouldUseMockAuth =
     process.env.NEXT_PUBLIC_USE_MOCK_AUTH === 'true' ||
-    (process.env.NODE_ENV === 'development' &&
-      process.env.NEXT_PUBLIC_USE_MOCK_AUTH !== 'false')
+    (process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_USE_MOCK_AUTH !== 'false')
 
   if (shouldUseMockAuth) {
     return <MockAuthProvider>{children}</MockAuthProvider>

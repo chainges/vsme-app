@@ -87,7 +87,7 @@ The VSME Guru Full-Stack Architecture Document has been broken down into managea
 - **UI:** shadcn/ui + Tailwind CSS
 - **ORM:** Prisma with MongoDB
 - **State Management:** TanStack Query v5
-- **Forms:** TanStack Form
+- **Forms:** React Hook Form
 - **Validation:** Zod
 
 ### Development Approach

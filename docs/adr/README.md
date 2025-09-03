@@ -7,6 +7,7 @@ This directory contains Architecture Decision Records that document significant 
 | ADR | Title | Status | Date | Epic |
 |-----|-------|--------|------|------|
 | [001](./001.tdd-first-testing-strategy.md) | TDD-First Testing Strategy Implementation | Accepted | 2025-08-26 | Epic 10 |
+| [002](./002.multistep-form-implementation-with-react-hook-form.md) | Multistep Form Implementation with React Hook Form and Zod | Accepted | 2025-08-30 | - |
 
 ## About ADRs
 

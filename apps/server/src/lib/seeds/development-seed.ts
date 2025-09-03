@@ -177,21 +177,11 @@ async function createDevelopmentReports(companies: any[], users: any[]) {
     const user = users[i % users.length]
 
     // Create 2023 report (previous year)
-    const report2023 = await createESGReport(
-      company,
-      user,
-      2023,
-      getESGData2023(i)
-    )
+    const report2023 = await createESGReport(company, user, 2023, getESGData2023(i))
     reports.push(report2023)
 
     // Create 2024 report (current year) - some incomplete for testing
-    const report2024 = await createESGReport(
-      company,
-      user,
-      2024,
-      getESGData2024(i)
-    )
+    const report2024 = await createESGReport(company, user, 2024, getESGData2024(i))
     reports.push(report2024)
   }
 
@@ -203,12 +193,7 @@ async function createDevelopmentReports(companies: any[], users: any[]) {
  * Used by: createDevelopmentReports() to create each report record
  * Purpose: Centralizes report creation logic with proper validation
  */
-async function createESGReport(
-  company: any,
-  user: any,
-  year: number,
-  esgData: any
-) {
+async function createESGReport(company: any, user: any, year: number, esgData: any) {
   const reportData: ReportData & { createdBy: string } = {
     organizationId: company.organizationId,
     year,
@@ -240,8 +225,7 @@ function getESGData2023(companyIndex: number) {
         scope3Location: baseEmissions * 1.9,
         renewableEnergy: baseEmissions * 0.3,
         nonRenewableEnergy: baseEmissions * 1.7,
-        climateDataCollectionMethod:
-          'Direct measurement with third-party verification',
+        climateDataCollectionMethod: 'Direct measurement with third-party verification',
         climateDataUncertainty: 'Low - verified data',
         reported: true,
       },
@@ -325,8 +309,7 @@ function getESGData2024(companyIndex: number) {
             scope2: baseEmissions * 0.7,
             // Missing scope 3 data for testing
             renewableEnergy: baseEmissions * 0.45,
-            climateDataCollectionMethod:
-              'Estimation based on industry averages',
+            climateDataCollectionMethod: 'Estimation based on industry averages',
             climateDataUncertainty: 'Medium - estimated values',
             reported: false, // Not fully reported
           },
@@ -406,11 +389,7 @@ export async function cleanupDevelopmentData() {
     await prisma.report.deleteMany({
       where: {
         organizationId: {
-          in: [
-            'org-greentech-123',
-            'org-sustaincorp-456',
-            'org-ecoventures-789',
-          ],
+          in: ['org-greentech-123', 'org-sustaincorp-456', 'org-ecoventures-789'],
         },
       },
     })
@@ -418,11 +397,7 @@ export async function cleanupDevelopmentData() {
     await prisma.company.deleteMany({
       where: {
         organizationId: {
-          in: [
-            'org-greentech-123',
-            'org-sustaincorp-456',
-            'org-ecoventures-789',
-          ],
+          in: ['org-greentech-123', 'org-sustaincorp-456', 'org-ecoventures-789'],
         },
       },
     })

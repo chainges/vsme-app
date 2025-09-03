@@ -5,13 +5,7 @@ import type React from 'react'
 import type { ErrorInfo, ReactNode } from 'react'
 import { Component } from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface Props {
   children: ReactNode
@@ -67,12 +61,10 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20">
               <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
             </div>
-            <CardTitle className="text-red-900 dark:text-red-100">
-              Something went wrong
-            </CardTitle>
+            <CardTitle className="text-red-900 dark:text-red-100">Something went wrong</CardTitle>
             <CardDescription>
-              An unexpected error occurred. Please try refreshing the page or
-              contact support if the problem persists.
+              An unexpected error occurred. Please try refreshing the page or contact support if the
+              problem persists.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -92,11 +84,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 <RefreshCw className="mr-2 h-4 w-4" />
                 Try Again
               </Button>
-              <Button
-                className="flex-1"
-                onClick={() => window.location.reload()}
-                variant="outline"
-              >
+              <Button className="flex-1" onClick={() => window.location.reload()} variant="outline">
                 Reload Page
               </Button>
             </div>

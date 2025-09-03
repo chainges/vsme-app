@@ -86,11 +86,7 @@ export class CompanyService {
   }
 
   // Update company
-  async updateCompany(
-    id: string,
-    data: PartialCompanyData,
-    organizationId: string
-  ) {
+  async updateCompany(id: string, data: PartialCompanyData, organizationId: string) {
     try {
       const company = await this.prisma.company.updateMany({
         where: {

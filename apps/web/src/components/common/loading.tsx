@@ -15,9 +15,7 @@ export default function Loader({ className, size = 'md', text }: LoaderProps) {
   }
 
   return (
-    <div
-      className={cn('flex h-full items-center justify-center pt-8', className)}
-    >
+    <div className={cn('flex h-full items-center justify-center pt-8', className)}>
       <div className="flex flex-col items-center gap-2">
         <Loader2 className={cn('animate-spin', sizeClasses[size])} />
         {text && <p className="text-muted-foreground text-sm">{text}</p>}
@@ -27,19 +25,14 @@ export default function Loader({ className, size = 'md', text }: LoaderProps) {
 }
 
 // Inline loader for smaller spaces
-export function InlineLoader({
-  className,
-  size = 'sm',
-}: Omit<LoaderProps, 'text'>) {
+export function InlineLoader({ className, size = 'sm' }: Omit<LoaderProps, 'text'>) {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-6 w-6',
     lg: 'h-8 w-8',
   }
 
-  return (
-    <Loader2 className={cn('animate-spin', sizeClasses[size], className)} />
-  )
+  return <Loader2 className={cn('animate-spin', sizeClasses[size], className)} />
 }
 
 // Page-level loader

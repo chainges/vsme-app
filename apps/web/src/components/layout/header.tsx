@@ -17,8 +17,7 @@ import { ModeToggle } from '../common/mode-toggle'
 // Helper function to generate breadcrumbs from pathname
 function generateBreadcrumbs(pathname: string) {
   const segments = pathname.split('/').filter(Boolean)
-  const breadcrumbs: Array<{ label: string; href: string; isLast: boolean }> =
-    []
+  const breadcrumbs: Array<{ label: string; href: string; isLast: boolean }> = []
 
   // Handle different top-level pages
   if (segments.length === 0 || pathname === '/') {
@@ -49,9 +48,10 @@ function generateBreadcrumbs(pathname: string) {
 
 interface HeaderProps {
   isDashboard?: boolean
+  className?: string
 }
 
-export default function Header({ isDashboard = false }: HeaderProps) {
+export default function Header({ isDashboard = false, className = '' }: HeaderProps) {
   const pathname = usePathname()
   const links = [{ to: '/', label: 'Home' }]
 
@@ -60,7 +60,9 @@ export default function Header({ isDashboard = false }: HeaderProps) {
     const breadcrumbs = generateBreadcrumbs(pathname)
 
     return (
-      <header className="mb-4 flex h-12 shrink-0 items-center gap-2 shadow transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sm:h-14">
+      <header
+        className={`mb-4 flex h-12 shrink-0 items-center gap-2 shadow transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sm:h-14 ${className}`}
+      >
         <div className="flex items-center gap-2 px-3 sm:px-4">
           <SidebarTrigger className="-ml-1 min-h-[44px] min-w-[44px] sm:min-h-[32px] sm:min-w-[32px]" />
           <Separator className="mr-2 h-4" orientation="vertical" />

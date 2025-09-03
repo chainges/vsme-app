@@ -2,13 +2,7 @@
 
 import { AlertTriangle, RefreshCw, Wifi, WifiOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
 interface ErrorDisplayProps {
@@ -41,20 +35,12 @@ export function ErrorDisplay({
   if (variant === 'inline') {
     return (
       <div
-        className={cn(
-          'flex items-center gap-2 text-red-600 text-sm dark:text-red-400',
-          className
-        )}
+        className={cn('flex items-center gap-2 text-red-600 text-sm dark:text-red-400', className)}
       >
         {showIcon && <AlertTriangle className="h-4 w-4" />}
         <span>{errorMessage}</span>
         {onRetry && (
-          <Button
-            className="h-auto p-1"
-            onClick={onRetry}
-            size="sm"
-            variant="ghost"
-          >
+          <Button className="h-auto p-1" onClick={onRetry} size="sm" variant="ghost">
             <RefreshCw className="h-3 w-3" />
           </Button>
         )}
@@ -71,16 +57,10 @@ export function ErrorDisplay({
         )}
       >
         <div className="flex items-start gap-3">
-          {showIcon && (
-            <AlertTriangle className="mt-0.5 h-5 w-5 text-red-600 dark:text-red-400" />
-          )}
+          {showIcon && <AlertTriangle className="mt-0.5 h-5 w-5 text-red-600 dark:text-red-400" />}
           <div className="flex-1">
-            <p className="font-medium text-red-800 text-sm dark:text-red-200">
-              {title || 'Error'}
-            </p>
-            <p className="mt-1 text-red-700 text-sm dark:text-red-300">
-              {errorMessage}
-            </p>
+            <p className="font-medium text-red-800 text-sm dark:text-red-200">{title || 'Error'}</p>
+            <p className="mt-1 text-red-700 text-sm dark:text-red-300">{errorMessage}</p>
             {onRetry && (
               <Button
                 className="mt-3 border-red-300 text-red-700 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/20"

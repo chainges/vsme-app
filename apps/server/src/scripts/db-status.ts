@@ -57,15 +57,9 @@ async function main() {
     const envSummary = getEnvironmentSummary()
 
     console.log(`   Environment: ${envSummary.environment}`)
-    console.log(
-      `   External Database: ${envSummary.databaseConfig.external.configured}`
-    )
-    console.log(
-      `   Primary DB: ${envSummary.environmentVariables.PRIMARY_DATABASE_URL}`
-    )
-    console.log(
-      `   External DB: ${envSummary.environmentVariables.SCOPE321_DATABASE_URL}`
-    )
+    console.log(`   External Database: ${envSummary.databaseConfig.external.configured}`)
+    console.log(`   Primary DB: ${envSummary.environmentVariables.PRIMARY_DATABASE_URL}`)
+    console.log(`   External DB: ${envSummary.environmentVariables.SCOPE321_DATABASE_URL}`)
 
     if (envSummary.validation.warnings.length > 0) {
       console.log('\n⚠️  Configuration Warnings:')

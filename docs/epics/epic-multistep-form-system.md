@@ -2,7 +2,7 @@
 
 ## Epic Goal
 
-Implement a comprehensive, reusable multi-step form system using TanStack Forms and Zod validation to replace the existing React Hook Form implementation and provide a flexible, type-safe solution for sustainability reporting forms.
+Implement a comprehensive, reusable multi-step form system using React Hook Forms and Zod validation to replace the existing React Hook Form implementation and provide a flexible, type-safe solution for sustainability reporting forms.
 
 ## Epic Description
 
@@ -58,14 +58,14 @@ Based on the implementation plan analysis, this epic requires 8 focused stories 
 ## Technical Architecture
 
 **Core Components:**
-- MultiStepForm: Main form controller with TanStack Forms integration
+- MultiStepForm: Main form controller with React Hook Form integration
 - StepRenderer: Dynamic step rendering based on configuration
 - Field Components: Reusable form fields with validation
 - Storage Layer: Local storage provider with future MongoDB migration path
 
 **Data Flow:**
 1. Form configuration defines steps, fields, and validation
-2. TanStack Forms manages state and validation
+2. React Hook Form manages state and validation
 3. Local storage provides persistence and recovery
 4. UI components render form with accessibility features
 
@@ -87,7 +87,8 @@ Based on the implementation plan analysis, this epic requires 8 focused stories 
 ## Dependencies
 
 **External Dependencies:**
-- @tanstack/react-form: Form state management
+- react-hook-form: Form state management
+- @hookform/resolvers: Zod resolver for form validation
 - framer-motion: Smooth animations and transitions
 - zod: Schema validation and type safety
 

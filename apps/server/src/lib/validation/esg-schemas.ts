@@ -84,9 +84,7 @@ export const createCompanySchema = companySchema
 export const createReportSchema = reportSchema
 
 // Schema for updating a company
-export const updateCompanySchema = companySchema
-  .partial()
-  .omit({ organizationId: true })
+export const updateCompanySchema = companySchema.partial().omit({ organizationId: true })
 
 // Schema for updating a report
 export const updateReportSchema = reportSchema.partial().omit({

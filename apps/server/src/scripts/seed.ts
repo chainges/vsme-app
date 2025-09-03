@@ -15,9 +15,7 @@ async function main() {
   const environment = process.env.NODE_ENV || 'development'
 
   try {
-    console.log(
-      `🌱 Starting database seeding for ${environment} environment...`
-    )
+    console.log(`🌱 Starting database seeding for ${environment} environment...`)
 
     if (environment === 'production') {
       await seedProductionData()

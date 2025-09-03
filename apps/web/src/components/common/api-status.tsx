@@ -43,12 +43,7 @@ export function ApiStatus() {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="font-medium">API Status</h3>
-        <Button
-          disabled={isLoading}
-          onClick={checkApiStatus}
-          size="sm"
-          variant="outline"
-        >
+        <Button disabled={isLoading} onClick={checkApiStatus} size="sm" variant="outline">
           {isLoading ? <InlineLoader className="mr-2" /> : null}
           Refresh
         </Button>
@@ -69,9 +64,7 @@ export function ApiStatus() {
 
         {isSuccess && healthData && (
           <>
-            <p className="text-muted-foreground text-sm">
-              {healthData.message || 'API Connected'}
-            </p>
+            <p className="text-muted-foreground text-sm">{healthData.message || 'API Connected'}</p>
             {healthData.timestamp && (
               <p className="text-muted-foreground text-xs">
                 Last checked: {new Date(healthData.timestamp).toLocaleString()}
@@ -82,10 +75,7 @@ export function ApiStatus() {
       </div>
 
       <div className="text-muted-foreground text-xs">
-        <p>
-          Server URL:{' '}
-          {process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}
-        </p>
+        <p>Server URL: {process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}</p>
         <p>RPC Type Safety: ✅ Enabled</p>
       </div>
     </div>

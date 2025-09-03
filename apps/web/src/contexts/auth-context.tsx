@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  createContext,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
 
 // User interface based on design document
 export interface User {

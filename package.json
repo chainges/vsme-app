@@ -7,6 +7,11 @@
   ],
   "scripts": {
     "check": "biome check --write .",
+    "check:ci": "biome check .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
@@ -23,6 +28,7 @@
   "dependencies": {},
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
+    "jsdom": "^26.1.0",
     "turbo": "^2.5.5",
     "ultracite": "5.1.2"
   },
