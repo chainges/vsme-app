@@ -45,6 +45,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
     isSubmitting: false,
     isComplete: false,
   })
+  const [isInitialized, setIsInitialized] = useState(false)
 
   // Track previous step to avoid unnecessary resets
   const prevStepRef = useRef(step)
@@ -60,10 +61,16 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
 
   // Load initial form data on mount
   useEffect(() => {
+    console.log('Loading initial form data...')
     const initialData = loadFormData()
+    console.log('Initial data loaded:', initialData)
     if (initialData) {
       setFormData(initialData)
+      console.log('Form data set to:', initialData)
+    } else {
+      console.log('No initial data found')
     }
+    setIsInitialized(true)
   }, [loadFormData])
 
   // Memoize helper function to extract default values
@@ -78,8 +85,12 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
 
   // Memoize default values to prevent infinite re-renders
   const defaultValues = useMemo(() => {
+    // Only calculate defaults after initialization to ensure localStorage data is loaded
+    if (!isInitialized) {
+      return {}
+    }
     return getSchemaDefaults(formData)
-  }, [getSchemaDefaults, formData])
+  }, [getSchemaDefaults, formData, isInitialized])
 
   // Setup form with the current step schema
   // Special handling for sustainability initiatives step (step 2) which doesn't have traditional fields
@@ -91,14 +102,24 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
     },
   })
 
+  // Reset form when initialization is complete and data is available
+  useEffect(() => {
+    if (isInitialized) {
+      const newDefaults = getSchemaDefaults(formData)
+      console.log(`Initializing form for step ${step} with defaults:`, newDefaults)
+      form.reset(newDefaults)
+    }
+  }, [isInitialized, step, form, getSchemaDefaults, formData])
+
   // Reset form only when step actually changes
   useEffect(() => {
-    if (prevStepRef.current !== step) {
+    if (prevStepRef.current !== step && isInitialized) {
       const newDefaults = getSchemaDefaults(formData)
+      console.log(`Resetting form for step ${step} with defaults:`, newDefaults)
       form.reset(newDefaults)
       prevStepRef.current = step
     }
-  }, [step, form, getSchemaDefaults, formData])
+  }, [step, form, getSchemaDefaults, formData, isInitialized])
 
   // Calculated properties
   const isFirstStep = step === 0
@@ -112,7 +133,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
     console.log('Form errors:', form.formState.errors)
 
     const updatedData = { ...formData, ...data }
-    console.log('Updated form data:', updatedData)
+    //console.log('Updated form data:', updatedData)
     setFormData(updatedData)
 
     // Special validation for sustainability initiatives step
