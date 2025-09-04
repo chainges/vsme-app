@@ -47,7 +47,9 @@ Epic 2 focuses on enabling company profile creation. It builds on secure authent
   - The overall user interface is intuitive and accessible.
 
 ## Dependencies and Considerations
-- **Dependency:** Epic 1: Production-Ready Authentication must be completed to ensure secure access with Clerk.
+- **Dependency:** 
+  - Epic 1: Production-Ready Authentication must be completed to ensure secure access with Clerk.
+  - Epic 1.5: Data Fetching Strategy
 - **Integration:** Requires secure integration with external systems (brreg.no API, Scope321 database).
 - **Compliance:** Must adhere to GDPR and other data protection regulations.
 
