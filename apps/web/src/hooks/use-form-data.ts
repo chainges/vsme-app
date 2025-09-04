@@ -100,7 +100,8 @@ export const useFormData = () => {
 
   // Helper function for company info step defaults
   const getCompanyInfoDefaults = useCallback(
-    (formData: any) => ({
+    (formData: any) => (
+      {
       ...formData,
       // Static defaults
       country: formData.country || 'norway',
@@ -111,8 +112,10 @@ export const useFormData = () => {
         balanceSheetSize: formData.balanceSheetSize || companyData.balanceSheetSize,
         turnover: formData.turnover || companyData.turnover,
         numberOfEmployees: formData.numberOfEmployees || companyData.numberOfEmployees,
-      }),
-    }),
+      }
+      ),
+      }
+  ),
     [companyData]
   )
 

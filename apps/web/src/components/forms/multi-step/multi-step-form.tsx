@@ -86,6 +86,8 @@ export default function MultiStepForm({ className, onSubmit }: MultiStepFormProp
     onNext: handleSustainabilityNext,
   }
 
+//  console.log("Form data:", form.getValues())
+
   return (
     <div className={cn('mx-auto w-full max-w-xl rounded-lg bg-card/40 p-6 shadow-lg', className)}>
       {submissionState.isComplete ? (

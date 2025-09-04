@@ -40,8 +40,20 @@ export function loadFormData(): FormData | null {
     const storedData = localStorage.getItem(FORM_DATA_STORAGE_KEY)
     if (storedData) {
       const parsedData = JSON.parse(storedData)
-      console.log('Form data loaded from localStorage:', parsedData)
-      return parsedData
+      console.log('Raw data loaded from localStorage:', parsedData)
+
+      // Flatten the step-based structure into a single object
+      const flattenedData: any = {}
+
+      // Iterate through each step and merge its data
+      Object.keys(parsedData).forEach(stepId => {
+        if (typeof parsedData[stepId] === 'object' && parsedData[stepId] !== null) {
+          Object.assign(flattenedData, parsedData[stepId])
+        }
+      })
+
+      console.log('Flattened form data:', flattenedData)
+      return flattenedData
     }
     return null
   } catch (error) {

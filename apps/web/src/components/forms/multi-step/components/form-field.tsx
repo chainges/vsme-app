@@ -25,6 +25,10 @@ interface FormFieldProps {
 export function FormField({ field, control, register, errors }: FormFieldProps) {
   const hasError = Boolean(errors[field.name])
 
+  if(field.type === 'select') {
+    console.log('Select field:', field, control)
+  }
+
   return (
     <div className="space-y-2" key={field.name}>
       <Label htmlFor={field.name}>{field.label}</Label>
