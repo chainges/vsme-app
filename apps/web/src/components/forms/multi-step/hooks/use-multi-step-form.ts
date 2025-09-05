@@ -5,6 +5,7 @@ import { useFormData } from '../../../../hooks/use-form-data'
 import { useFormDataPersistence } from '../../../../hooks/use-form-data-persistence'
 import { stepConfigurations } from '../schemas'
 import type { FormData, FormSubmissionState } from '../types'
+import { FORM_DATA_STORAGE_KEY } from '@/lib/forms/storage/form-storage'
 
 export interface UseMultiStepFormProps {
   onSubmit?: (data: FormData) => void
@@ -51,7 +52,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
   const prevStepRef = useRef(step)
 
   // Use the form data hook for enriched defaults
-  const { getEnrichedDefaults } = useFormData()
+  //const { getEnrichedDefaults } = useFormData()
 
   // Use the form data persistence hook
   const { saveStepData, loadFormData } = useFormDataPersistence()
@@ -60,66 +61,66 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
   const currentStepConfig = stepConfigurations[step]
 
   // Load initial form data on mount
-  useEffect(() => {
-    console.log('Loading initial form data...')
-    const initialData = loadFormData()
-    console.log('Initial data loaded:', initialData)
-    if (initialData) {
-      setFormData(initialData)
-      console.log('Form data set to:', initialData)
-    } else {
-      console.log('No initial data found')
+  // useEffect(() => {
+  //   const initialData = loadFormData()
+  //   if (initialData) {
+  //     console.log('Initial data loaded:', initialData)
+  //     setFormData(initialData)
+  //   } else {
+  //     console.log('No initial data found')
+  //   }
+  //   setIsInitialized(true)
+  // }, [loadFormData])
+
+
+  const getDataFromLocalStorage = ()=>{
+    const stepIds = [
+      'company-info',
+      'business-model',
+      'sustainability-initiatives',
+      'sustainability',
+    ]
+
+    const storedData = localStorage.getItem(FORM_DATA_STORAGE_KEY)
+
+    if (storedData) {
+      const parsedData = JSON.parse(storedData)
+      return parsedData[stepIds[step]]
     }
-    setIsInitialized(true)
-  }, [loadFormData])
+    return {}
+  }
 
-  // Memoize helper function to extract default values
-  const getSchemaDefaults = useCallback(
-    (existingData: any = {}) => {
-      const defaults = getEnrichedDefaults(step, existingData)
-      console.log(`Applied defaults for step ${step}:`, defaults)
-      return defaults
-    },
-    [step, getEnrichedDefaults]
-  )
+  // Get localStorage data for current step to use as defaultValues
+  const getDefaultValues = () => {
+    const stepIds = [
+      'company-info',
+      'business-model',
+      'sustainability-initiatives',
+      'sustainability',
+    ]
 
-  // Memoize default values to prevent infinite re-renders
-  const defaultValues = useMemo(() => {
-    // Only calculate defaults after initialization to ensure localStorage data is loaded
-    if (!isInitialized) {
-      return {}
+    const storedData = localStorage.getItem(FORM_DATA_STORAGE_KEY)
+
+    if (storedData) {
+      const parsedData = JSON.parse(storedData)
+      return parsedData[stepIds[step]] || {}
     }
-    return getSchemaDefaults(formData)
-  }, [getSchemaDefaults, formData, isInitialized])
+    return {}
+  }
 
-  // Setup form with the current step schema
+  // Setup form with the current step schema and localStorage data as defaultValues
   // Special handling for sustainability initiatives step (step 2) which doesn't have traditional fields
   const form = useForm<any>({
     resolver: zodResolver(currentStepConfig.schema as any),
-    defaultValues: {
-      ...defaultValues,
-      initiatives: defaultValues.initiatives || [],
-    },
+    defaultValues: getDefaultValues(),
   })
 
-  // Reset form when initialization is complete and data is available
+  // Reset form when step changes to load new step's data
   useEffect(() => {
-    if (isInitialized) {
-      const newDefaults = getSchemaDefaults(formData)
-      console.log(`Initializing form for step ${step} with defaults:`, newDefaults)
-      form.reset(newDefaults)
-    }
-  }, [isInitialized, step, form, getSchemaDefaults, formData])
-
-  // Reset form only when step actually changes
-  useEffect(() => {
-    if (prevStepRef.current !== step && isInitialized) {
-      const newDefaults = getSchemaDefaults(formData)
-      console.log(`Resetting form for step ${step} with defaults:`, newDefaults)
+      const newDefaults = getDataFromLocalStorage()
       form.reset(newDefaults)
       prevStepRef.current = step
-    }
-  }, [step, form, getSchemaDefaults, formData, isInitialized])
+  }, [step])
 
   // Calculated properties
   const isFirstStep = step === 0
@@ -128,11 +129,12 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
 
   // Handle next step
   const handleNextStep = async (data: any) => {
-    console.log('Form submission data:', data)
-    console.log('Current step:', step)
-    console.log('Form errors:', form.formState.errors)
+    //console.log('Form submission data:', data)
+    //console.log('Current step:', step)
+    //console.log('Form errors:', form.formState.errors)
 
     const updatedData = { ...formData, ...data }
+
     //console.log('Updated form data:', updatedData)
     setFormData(updatedData)
 
@@ -198,7 +200,7 @@ export function useMultiStepForm({ onSubmit }: UseMultiStepFormProps = {}): UseM
     // Note: We don't clear formData to maintain persistence as required
     setSubmissionState({ isSubmitting: false, isComplete: false })
     // Reset form to initial values but keep existing data
-    const newDefaults = getSchemaDefaults(formData)
+    const newDefaults = {}
     form.reset(newDefaults)
   }
 

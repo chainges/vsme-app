@@ -12,7 +12,6 @@ export function saveStepData(stepId: string, stepData: Record<string, any>): voi
   try {
     // Get existing data from localStorage
     const existingData = loadFormData() || {}
-
     // Merge the new step data with existing data
     const updatedData = {
       ...existingData,
@@ -40,20 +39,20 @@ export function loadFormData(): FormData | null {
     const storedData = localStorage.getItem(FORM_DATA_STORAGE_KEY)
     if (storedData) {
       const parsedData = JSON.parse(storedData)
-      console.log('Raw data loaded from localStorage:', parsedData)
+      //console.log('Raw data loaded from localStorage:', parsedData)
 
       // Flatten the step-based structure into a single object
-      const flattenedData: any = {}
+      // const flattenedData: any = {}
 
-      // Iterate through each step and merge its data
-      Object.keys(parsedData).forEach(stepId => {
-        if (typeof parsedData[stepId] === 'object' && parsedData[stepId] !== null) {
-          Object.assign(flattenedData, parsedData[stepId])
-        }
-      })
+      // // Iterate through each step and merge its data
+      // Object.keys(parsedData).forEach(stepId => {
+      //   if (typeof parsedData[stepId] === 'object' && parsedData[stepId] !== null) {
+      //     Object.assign(flattenedData, parsedData[stepId])
+      //   }
+      // })
 
-      console.log('Flattened form data:', flattenedData)
-      return flattenedData
+      // console.log('Flattened form data:', flattenedData)
+      return parsedData
     }
     return null
   } catch (error) {
@@ -69,7 +68,7 @@ export function loadFormData(): FormData | null {
 export function clearFormData(): void {
   try {
     localStorage.removeItem(FORM_DATA_STORAGE_KEY)
-    console.log('Form data cleared from localStorage')
+    //console.log('Form data cleared from localStorage')
   } catch (error) {
     console.error('Error clearing form data from localStorage:', error)
   }
@@ -97,7 +96,7 @@ export function updateFieldData(stepId: string, fieldName: string, value: any): 
 
     // Save the updated data back to localStorage
     localStorage.setItem(FORM_DATA_STORAGE_KEY, JSON.stringify(updatedData))
-    console.log(`Field "${fieldName}" in step "${stepId}" updated in localStorage`, updatedData)
+    //console.log(`Field "${fieldName}" in step "${stepId}" updated in localStorage`, updatedData)
   } catch (error) {
     console.error('Error updating field data in localStorage:', error)
   }

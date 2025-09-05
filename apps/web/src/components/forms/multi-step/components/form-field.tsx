@@ -22,13 +22,10 @@ interface FormFieldProps {
   errors: any
 }
 
+
 export function FormField({ field, control, register, errors }: FormFieldProps) {
   const hasError = Boolean(errors[field.name])
-
-  if(field.type === 'select') {
-    console.log('Select field:', field, control)
-  }
-
+  //console.log('Field name:', field)
   return (
     <div className="space-y-2" key={field.name}>
       <Label htmlFor={field.name}>{field.label}</Label>
@@ -37,8 +34,10 @@ export function FormField({ field, control, register, errors }: FormFieldProps) 
         <Controller
           control={control}
           name={field.name}
-          render={({ field: controllerField }) => (
-            <Select onValueChange={controllerField.onChange} value={controllerField.value || ''}>
+          render={({ field: controllerField }) => {
+            return (
+              (
+            <Select onValueChange={controllerField.onChange} value={controllerField.value}>
               <SelectTrigger
                 className={cn('w-full', hasError && 'border-destructive')}
                 id={field.name}
@@ -53,7 +52,9 @@ export function FormField({ field, control, register, errors }: FormFieldProps) 
                 ))}
               </SelectContent>
             </Select>
-          )}
+          )
+            )
+          }}
         />
       )}
 
